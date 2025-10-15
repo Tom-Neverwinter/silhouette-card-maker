@@ -15,6 +15,7 @@ $script:selectedFile = $null
 $script:originalPath = ""
 $script:targetFolder = ""
 $script:detectedFormat = ""
+$script:decklistBaseName = ""  # Store the base name for PDF renaming
 $script:defaultDecklistFolders = @{}  # Hash table to store per-plugin default folders
 $script:generalDecklistLocation = ""  # General location where all decklists are stored
 $script:backImages = @{}  # Hash table to store per-plugin back images
@@ -1309,21 +1310,34 @@ function Save-OffsetData {
     Save-Settings -defaultDecklistFolders $script:defaultDecklistFolders -targetFolder $targetTextBox.Text -generalDecklistLocation $script:generalDecklistLocation -backImages $script:backImages -outputPath $script:outputPath -xOffset $xOffsetTextBox.Text -yOffset $yOffsetTextBox.Text -loadOffset $loadOffsetCheck.Checked -pluginOptions $script:pluginOptions
     
     # Also save to data/offset_data.json for Python scripts
-    if ($targetTextBox.Text -and $xOffsetTextBox.Text -and $yOffsetTextBox.Text) {
+    if ($targetTextBox.Text) {
         try {
+            # Parse offset values, default to 0 if empty or invalid
+            $xOffset = 0
+            $yOffset = 0
+            
+            if ($xOffsetTextBox.Text -and [int]::TryParse($xOffsetTextBox.Text, [ref]$xOffset)) {
+                # Successfully parsed X offset
+            } else {
+                $xOffset = 0
+            }
+            
+            if ($yOffsetTextBox.Text -and [int]::TryParse($yOffsetTextBox.Text, [ref]$yOffset)) {
+                # Successfully parsed Y offset
+            } else {
+                $yOffset = 0
+            }
+            
             $dataDir = Join-Path $targetTextBox.Text "data"
             if (-not (Test-Path $dataDir)) {
                 New-Item -ItemType Directory -Path $dataDir -Force | Out-Null
             }
             
-            $offsetData = @{
-                x_offset = [int]$xOffsetTextBox.Text
-                y_offset = [int]$yOffsetTextBox.Text
-            }
-            
-            $offsetJson = $offsetData | ConvertTo-Json -Depth 2
+            # Create JSON with proper integer values (UTF8 without BOM)
             $offsetFile = Join-Path $dataDir "offset_data.json"
-            $offsetJson | Set-Content -Path $offsetFile -Encoding UTF8
+            $jsonContent = "{`"x_offset`":$xOffset,`"y_offset`":$yOffset}"
+            $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+            [System.IO.File]::WriteAllText($offsetFile, $jsonContent, $utf8NoBom)
         }
         catch {
             # Silently continue if offset file can't be saved
@@ -1862,6 +1876,8 @@ $fetchCardsButton.Add_Click({
         Remove-OldDecklists -targetFolder $script:targetFolder
         
         $fileName = Split-Path $script:selectedFile -Leaf
+        # Save the base name for PDF renaming later
+        $script:decklistBaseName = [System.IO.Path]::GetFileNameWithoutExtension($script:selectedFile)
         
         # Create game/decklist directory if it doesn't exist
         $decklistDir = Join-Path $script:targetFolder "game\decklist"
@@ -2066,6 +2082,56 @@ $createPdfButton.Add_Click({
         }
         if ($loadOffsetCheck.Checked) {
             $pdfArgs += " --load_offset"
+            
+            # Ensure offset file exists before running PDF creation
+            try {
+                $xOffset = 0
+                $yOffset = 0
+                
+                if ($xOffsetTextBox.Text -and [int]::TryParse($xOffsetTextBox.Text, [ref]$xOffset)) {
+                    # Successfully parsed X offset
+                } else {
+                    $xOffset = 0
+                }
+                
+                if ($yOffsetTextBox.Text -and [int]::TryParse($yOffsetTextBox.Text, [ref]$yOffset)) {
+                    # Successfully parsed Y offset
+                } else {
+                    $yOffset = 0
+                }
+                
+                $dataDir = Join-Path $script:targetFolder "data"
+                if (-not (Test-Path $dataDir)) {
+                    New-Item -ItemType Directory -Path $dataDir -Force | Out-Null
+                }
+                
+                # Create JSON with proper integer values (UTF8 without BOM)
+                $offsetFile = Join-Path $dataDir "offset_data.json"
+                $jsonContent = "{`"x_offset`":$xOffset,`"y_offset`":$yOffset}"
+                $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+                [System.IO.File]::WriteAllText($offsetFile, $jsonContent, $utf8NoBom)
+                
+                # Verify file was created
+                if (Test-Path $offsetFile) {
+                    $fileContent = [System.IO.File]::ReadAllText($offsetFile)
+                    Write-Host "Offset file created successfully at: $offsetFile"
+                    Write-Host "Content: $fileContent"
+                    Write-Host "Target folder (Python working dir): $script:targetFolder"
+                    
+                    # Check for BOM
+                    $bytes = [System.IO.File]::ReadAllBytes($offsetFile)
+                    if ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) {
+                        Write-Host "WARNING: File has UTF-8 BOM!"
+                    } else {
+                        Write-Host "File encoding OK (no BOM)"
+                    }
+                } else {
+                    Write-Host "WARNING: Offset file was not created at: $offsetFile"
+                }
+            }
+            catch {
+                Write-Host "ERROR creating offset file: $($_.Exception.Message)"
+            }
         }
         if ($pdfNameTextBox.Text) {
             $pdfArgs += " --name `"$($pdfNameTextBox.Text)`""
@@ -2126,23 +2192,33 @@ exit `$LASTEXITCODE
         Remove-Item $tempScript -ErrorAction SilentlyContinue
         
         if ($result.ExitCode -eq 0) {
+            # Wait for PDF compilation and offset application to complete
+            Start-Sleep -Seconds 10
+            
             # Rename PDF to match decklist filename
             $pdfPath = Join-Path $script:targetFolder "game\output\game.pdf"
             $finalPdfPath = $pdfPath
             
-            if ($script:selectedFile -and (Test-Path $pdfPath)) {
+            if ($script:decklistBaseName -and (Test-Path $pdfPath)) {
                 try {
-                    $decklistBaseName = [System.IO.Path]::GetFileNameWithoutExtension($script:selectedFile)
                     $outputDir = Join-Path $script:targetFolder "game\output"
-                    $newPdfPath = Join-Path $outputDir "$decklistBaseName.pdf"
+                    $newPdfPath = Join-Path $outputDir "$script:decklistBaseName.pdf"
+                    
+                    Write-Host "Attempting to rename PDF..."
+                    Write-Host "From: $pdfPath"
+                    Write-Host "To: $newPdfPath"
                     
                     # Rename the PDF
                     Move-Item -Path $pdfPath -Destination $newPdfPath -Force
                     $finalPdfPath = $newPdfPath
+                    Write-Host "PDF renamed successfully!"
                 }
                 catch {
-                    # If rename fails, keep original name
+                    Write-Host "ERROR renaming PDF: $($_.Exception.Message)"
                 }
+            }
+            else {
+                Write-Host "Rename skipped - decklistBaseName: $script:decklistBaseName, PDF exists: $(Test-Path $pdfPath)"
             }
             
             # Clean up decklist after successful PDF creation
