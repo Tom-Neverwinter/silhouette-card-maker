@@ -3,6 +3,7 @@ from typing import List, Set, Tuple
 import re
 import requests
 import time
+from urllib.parse import quote
 
 double_sided_layouts = ['transform', 'modal_dfc', 'double_faced_token']
 
@@ -117,13 +118,39 @@ def fetch_card(
         if name == "":
             raise Exception()
 
-        # Filter out symbols from card names
+        # URL-encode the card name for the API query
+        encoded_card_name = quote(name)
+
+        card_info_query = f'https://api.scryfall.com/cards/named?exact={encoded_card_name}'
+
+        # Query for card info - try exact match first, then fallbacks if that fails
+        try:
+            card_json = request_scryfall(card_info_query).json()
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 404:
+                # Check if this might be a commander + background pairing (e.g., "Forge, Neverwinter Charlatan")
+                if ',' in name:
+                    first_part = name.split(',')[0].strip()
+                    encoded_first_part = quote(first_part)
+                    try:
+                        card_info_query = f'https://api.scryfall.com/cards/named?exact={encoded_first_part}'
+                        card_json = request_scryfall(card_info_query).json()
+                        print(f'Note: Using first part of "{name}" -> "{card_json["name"]}"')
+                    except requests.exceptions.HTTPError:
+                        # If that also fails, try fuzzy search on the full name
+                        card_info_query = f'https://api.scryfall.com/cards/named?fuzzy={encoded_card_name}'
+                        card_json = request_scryfall(card_info_query).json()
+                        print(f'Note: Using fuzzy match for "{name}" -> "{card_json["name"]}"')
+                else:
+                    # Try fuzzy search as fallback
+                    card_info_query = f'https://api.scryfall.com/cards/named?fuzzy={encoded_card_name}'
+                    card_json = request_scryfall(card_info_query).json()
+                    print(f'Note: Using fuzzy match for "{name}" -> "{card_json["name"]}"')
+            else:
+                raise
+        
+        # Filter out symbols from card names for file naming
         clear_card_name = remove_nonalphanumeric(name)
-
-        card_info_query = f'https://api.scryfall.com/cards/named?exact={clear_card_name}'
-
-        # Query for card info
-        card_json = request_scryfall(card_info_query).json()
 
         set = card_json["set"]
         collector_number = card_json["collector_number"]
