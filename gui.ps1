@@ -19,6 +19,10 @@ $script:defaultDecklistFolders = @{}  # Hash table to store per-plugin default f
 $script:generalDecklistLocation = ""  # General location where all decklists are stored
 $script:backImages = @{}  # Hash table to store per-plugin back images
 $script:outputPath = ""  # Custom output path for PDFs
+$script:pluginOptions = @{}  # Hash table to store per-plugin checkbox states
+$script:xOffset = ""
+$script:yOffset = ""
+$script:loadOffset = $false
 
 # Settings file path
 $script:settingsFile = Join-Path $env:APPDATA "SilhouetteCardMaker\settings.json"
@@ -28,6 +32,15 @@ function Load-Settings {
     if (Test-Path $script:settingsFile) {
         try {
             $settings = Get-Content $script:settingsFile -Raw | ConvertFrom-Json
+            $script:defaultDecklistFolders = $settings.defaultDecklistFolders
+            $script:targetFolder = $settings.targetFolder
+            $script:generalDecklistLocation = $settings.generalDecklistLocation
+            $script:backImages = $settings.backImages
+            $script:outputPath = $settings.outputPath
+            $script:xOffset = $settings.xOffset
+            $script:yOffset = $settings.yOffset
+            $script:loadOffset = $settings.loadOffset
+            $script:pluginOptions = $settings.pluginOptions
             return $settings
         }
         catch {
@@ -44,7 +57,11 @@ function Save-Settings {
         [string]$targetFolder,
         [string]$generalDecklistLocation,
         [hashtable]$backImages,
-        [string]$outputPath
+        [string]$outputPath,
+        [string]$xOffset,
+        [string]$yOffset,
+        [bool]$loadOffset,
+        [hashtable]$pluginOptions
     )
     
     try {
@@ -59,6 +76,10 @@ function Save-Settings {
             generalDecklistLocation = $generalDecklistLocation
             backImages = $backImages
             outputPath = $outputPath
+            xOffset = $xOffset
+            yOffset = $yOffset
+            loadOffset = $loadOffset
+            pluginOptions = $pluginOptions
         }
         
         $settings | ConvertTo-Json -Depth 3 | Set-Content $script:settingsFile -Encoding UTF8
@@ -506,7 +527,7 @@ $generalLocationButton.Add_Click({
         $generalLocationTextBox.Text = $folderBrowser.SelectedPath
         
         # Save settings
-        Save-Settings -defaultDecklistFolders $script:defaultDecklistFolders -targetFolder $targetTextBox.Text -generalDecklistLocation $script:generalDecklistLocation -backImages $script:backImages -outputPath $script:outputPath
+        Save-Settings -defaultDecklistFolders $script:defaultDecklistFolders -targetFolder $targetTextBox.Text -generalDecklistLocation $script:generalDecklistLocation -backImages $script:backImages -outputPath $script:outputPath -xOffset $xOffsetTextBox.Text -yOffset $yOffsetTextBox.Text -loadOffset $loadOffsetCheck.Checked -pluginOptions $script:pluginOptions
         
         $statusLabel.Text = "General decklists location set to: $($folderBrowser.SelectedPath)"
         $statusLabel.ForeColor = [System.Drawing.Color]::Green
@@ -550,7 +571,7 @@ $defaultFolderButton.Add_Click({
         $defaultFolderTextBox.Text = $folderBrowser.SelectedPath
         
         # Save settings
-        Save-Settings -defaultDecklistFolders $script:defaultDecklistFolders -targetFolder $targetTextBox.Text -generalDecklistLocation $script:generalDecklistLocation -backImages $script:backImages -outputPath $script:outputPath
+        Save-Settings -defaultDecklistFolders $script:defaultDecklistFolders -targetFolder $targetTextBox.Text -generalDecklistLocation $script:generalDecklistLocation -backImages $script:backImages -outputPath $script:outputPath -xOffset $xOffsetTextBox.Text -yOffset $yOffsetTextBox.Text -loadOffset $loadOffsetCheck.Checked -pluginOptions $script:pluginOptions
         
         $statusLabel.Text = "Default decklist folder for $currentPlugin set to: $($folderBrowser.SelectedPath)"
         $statusLabel.ForeColor = [System.Drawing.Color]::Green
@@ -591,7 +612,7 @@ $backImageButton.Add_Click({
         $backImageTextBox.Text = $openFileDialog.FileName
         
         # Save settings
-        Save-Settings -defaultDecklistFolders $script:defaultDecklistFolders -targetFolder $targetTextBox.Text -generalDecklistLocation $script:generalDecklistLocation -backImages $script:backImages -outputPath $script:outputPath
+        Save-Settings -defaultDecklistFolders $script:defaultDecklistFolders -targetFolder $targetTextBox.Text -generalDecklistLocation $script:generalDecklistLocation -backImages $script:backImages -outputPath $script:outputPath -xOffset $xOffsetTextBox.Text -yOffset $yOffsetTextBox.Text -loadOffset $loadOffsetCheck.Checked -pluginOptions $script:pluginOptions
         
         $statusLabel.Text = "Card back image set for $currentPlugin"
         $statusLabel.ForeColor = [System.Drawing.Color]::Green
@@ -826,7 +847,6 @@ $swuOption1 = New-Object System.Windows.Forms.CheckBox
 $swuOption1.Location = New-Object System.Drawing.Point(20, 25)
 $swuOption1.Size = New-Object System.Drawing.Size(250, 20)
 $swuOption1.Text = "Include hyperspace art (-h)"
-$swuOption1.Visible = $false
 $optionsGroup.Controls.Add($swuOption1)
 
 # Info label
@@ -835,6 +855,95 @@ $infoLabel.Location = New-Object System.Drawing.Point(20, 120)
 $infoLabel.Size = New-Object System.Drawing.Size(520, 50)
 $infoLabel.Text = ""
 $optionsGroup.Controls.Add($infoLabel)
+
+# Helper function to save current plugin options
+function Save-CurrentPluginOptions {
+    param([string]$pluginName)
+    
+    if ($pluginName -eq '-- Select a Game Plugin --') { return }
+    
+    $options = @{}
+    switch ($pluginName) {
+        'Magic: The Gathering' {
+            $options = @{
+                option1 = $mtgOption1.Checked
+                option2 = $mtgOption2.Checked
+                option3 = $mtgOption3.Checked
+                option4 = $mtgOption4.Checked
+                preferSet = $preferSetTextBox.Text
+            }
+        }
+        'Yu-Gi-Oh!' {
+            $options = @{
+                option1 = $yugiohOption1.Checked
+                option2 = $yugiohOption2.Checked
+                option3 = $yugiohOption3.Checked
+                option4 = $yugiohOption4.Checked
+            }
+        }
+        'Lorcana' {
+            $options = @{ option1 = $lorcanaOption1.Checked }
+        }
+        'Riftbound' {
+            $options = @{ option1 = $riftboundOption1.Checked }
+        }
+        'Digimon' {
+            $options = @{ option1 = $digimonOption1.Checked }
+        }
+        'Gundam' {
+            $options = @{ option1 = $gundamOption1.Checked }
+        }
+        'Star Wars Unlimited' {
+            $options = @{ option1 = $swuOption1.Checked }
+        }
+    }
+    
+    if ($options.Count -gt 0) {
+        $script:pluginOptions[$pluginName] = $options
+        Save-Settings -defaultDecklistFolders $script:defaultDecklistFolders -targetFolder $targetTextBox.Text -generalDecklistLocation $script:generalDecklistLocation -backImages $script:backImages -outputPath $script:outputPath -xOffset $xOffsetTextBox.Text -yOffset $yOffsetTextBox.Text -loadOffset $loadOffsetCheck.Checked -pluginOptions $script:pluginOptions
+    }
+}
+
+# Helper function to load plugin options
+function Get-PluginOptions {
+    param([string]$pluginName)
+    
+    if ($pluginName -eq '-- Select a Game Plugin --') { return }
+    if (-not $script:pluginOptions -or -not $script:pluginOptions.ContainsKey($pluginName)) { return }
+    
+    $options = $script:pluginOptions[$pluginName]
+    
+    switch ($pluginName) {
+        'Magic: The Gathering' {
+            if ($options.PSObject.Properties.Name -contains 'option1') { $mtgOption1.Checked = $options.option1 }
+            if ($options.PSObject.Properties.Name -contains 'option2') { $mtgOption2.Checked = $options.option2 }
+            if ($options.PSObject.Properties.Name -contains 'option3') { $mtgOption3.Checked = $options.option3 }
+            if ($options.PSObject.Properties.Name -contains 'option4') { $mtgOption4.Checked = $options.option4 }
+            if ($options.PSObject.Properties.Name -contains 'preferSet') { $preferSetTextBox.Text = $options.preferSet }
+        }
+        'Yu-Gi-Oh!' {
+            if ($options.PSObject.Properties.Name -contains 'option1') { $yugiohOption1.Checked = $options.option1 }
+            if ($options.PSObject.Properties.Name -contains 'option2') { $yugiohOption2.Checked = $options.option2 }
+            if ($options.PSObject.Properties.Name -contains 'option3') { $yugiohOption3.Checked = $options.option3 }
+            if ($options.PSObject.Properties.Name -contains 'option4') { $yugiohOption4.Checked = $options.option4 }
+        }
+        'Lorcana' {
+            if ($options.PSObject.Properties.Name -contains 'option1') { $lorcanaOption1.Checked = $options.option1 }
+        }
+        'Riftbound' {
+            if ($options.PSObject.Properties.Name -contains 'option1') { $riftboundOption1.Checked = $options.option1 }
+        }
+        'Digimon' {
+            if ($options.PSObject.Properties.Name -contains 'option1') { $digimonOption1.Checked = $options.option1 }
+        }
+        'Gundam' {
+            if ($options.PSObject.Properties.Name -contains 'option1') { $gundamOption1.Checked = $options.option1 }
+        }
+        'Star Wars Unlimited' {
+            if ($options.PSObject.Properties.Name -contains 'option1') { $swuOption1.Checked = $options.option1 }
+        }
+    }
+}
 
 # Update UI based on plugin selection
 $pluginCombo.Add_SelectedIndexChanged({
@@ -1053,7 +1162,28 @@ $pluginCombo.Add_SelectedIndexChanged({
             $infoLabel.Text = "Star Wars Unlimited plugin supports SWUDB JSON, Melee, and Picklist formats."
         }
     }
+    
+    # Load saved options for the selected plugin
+    Get-PluginOptions -pluginName $plugin
 })
+
+# Add event handlers to all plugin option checkboxes to save when changed
+$mtgOption1.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Magic: The Gathering' })
+$mtgOption2.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Magic: The Gathering' })
+$mtgOption3.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Magic: The Gathering' })
+$mtgOption4.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Magic: The Gathering' })
+$preferSetTextBox.Add_TextChanged({ Save-CurrentPluginOptions -pluginName 'Magic: The Gathering' })
+
+$yugiohOption1.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Yu-Gi-Oh!' })
+$yugiohOption2.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Yu-Gi-Oh!' })
+$yugiohOption3.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Yu-Gi-Oh!' })
+$yugiohOption4.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Yu-Gi-Oh!' })
+
+$lorcanaOption1.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Lorcana' })
+$riftboundOption1.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Riftbound' })
+$digimonOption1.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Digimon' })
+$gundamOption1.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Gundam' })
+$swuOption1.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Star Wars Unlimited' })
 
 # Load saved settings
 $savedSettings = Load-Settings
@@ -1090,6 +1220,14 @@ if ($savedSettings) {
     if ($savedSettings.outputPath) {
         $script:outputPath = $savedSettings.outputPath
     }
+    
+    # Load per-plugin options - convert PSCustomObject back to hashtable
+    if ($savedSettings.pluginOptions) {
+        $script:pluginOptions = @{}
+        $savedSettings.pluginOptions.PSObject.Properties | ForEach-Object {
+            $script:pluginOptions[$_.Name] = $_.Value
+        }
+    }
 }
 
 # Don't trigger initial update - let user select a plugin first
@@ -1110,47 +1248,21 @@ $mainTabControl.Controls.Add($offsetPdfTab)
 # Offset PDF Description
 $offsetDescLabel = New-Object System.Windows.Forms.Label
 $offsetDescLabel.Location = New-Object System.Drawing.Point(10, 10)
-$offsetDescLabel.Size = New-Object System.Drawing.Size(680, 60)
-$offsetDescLabel.Text = "Offset PDF compensates for printer alignment issues when printing double-sided cards.`nUse the calibration sheets in the 'calibration' folder to determine your printer's offset.`nPrint the calibration sheet, shine a light through it, and note which squares align."
+$offsetDescLabel.Size = New-Object System.Drawing.Size(680, 75)
+$offsetDescLabel.Text = "Offset PDF compensates for printer alignment issues when printing double-sided cards.`n`nCalibration: Print a calibration sheet from the 'calibration' folder double-sided. Hold it up to light and see which grid marks align with the back marks. The aligned coordinates (e.g., 10,0) are your offset values in millimeters.`n`nEnter those values below to adjust ALL pages in your PDF at once."
 $offsetDescLabel.ForeColor = [System.Drawing.Color]::LightGray
 $offsetPdfTab.Controls.Add($offsetDescLabel)
 
-# Input PDF Path
-$offsetInputLabel = New-Object System.Windows.Forms.Label
-$offsetInputLabel.Location = New-Object System.Drawing.Point(10, 80)
-$offsetInputLabel.Size = New-Object System.Drawing.Size(120, 18)
-$offsetInputLabel.Text = "Input PDF:"
-$offsetInputLabel.ForeColor = [System.Drawing.Color]::White
-$offsetPdfTab.Controls.Add($offsetInputLabel)
-
-$offsetInputTextBox = New-Object System.Windows.Forms.TextBox
-$offsetInputTextBox.Location = New-Object System.Drawing.Point(140, 78)
-$offsetInputTextBox.Size = New-Object System.Drawing.Size(430, 22)
-$offsetInputTextBox.BackColor = [System.Drawing.Color]::FromArgb(51, 51, 55)
-$offsetInputTextBox.ForeColor = [System.Drawing.Color]::White
-$offsetInputTextBox.BorderStyle = 'FixedSingle'
-$offsetInputTextBox.ReadOnly = $true
-$offsetPdfTab.Controls.Add($offsetInputTextBox)
-
-$offsetInputButton = New-Object System.Windows.Forms.Button
-$offsetInputButton.Location = New-Object System.Drawing.Point(580, 77)
-$offsetInputButton.Size = New-Object System.Drawing.Size(110, 23)
-$offsetInputButton.Text = "Browse..."
-$offsetInputButton.BackColor = [System.Drawing.Color]::FromArgb(62, 62, 66)
-$offsetInputButton.ForeColor = [System.Drawing.Color]::White
-$offsetInputButton.FlatStyle = 'Flat'
-$offsetPdfTab.Controls.Add($offsetInputButton)
-
 # X Offset
 $xOffsetLabel = New-Object System.Windows.Forms.Label
-$xOffsetLabel.Location = New-Object System.Drawing.Point(10, 115)
+$xOffsetLabel.Location = New-Object System.Drawing.Point(10, 100)
 $xOffsetLabel.Size = New-Object System.Drawing.Size(120, 18)
 $xOffsetLabel.Text = "X Offset (mm):"
 $xOffsetLabel.ForeColor = [System.Drawing.Color]::White
 $offsetPdfTab.Controls.Add($xOffsetLabel)
 
 $xOffsetTextBox = New-Object System.Windows.Forms.TextBox
-$xOffsetTextBox.Location = New-Object System.Drawing.Point(140, 113)
+$xOffsetTextBox.Location = New-Object System.Drawing.Point(140, 98)
 $xOffsetTextBox.Size = New-Object System.Drawing.Size(80, 22)
 $xOffsetTextBox.BackColor = [System.Drawing.Color]::FromArgb(51, 51, 55)
 $xOffsetTextBox.ForeColor = [System.Drawing.Color]::White
@@ -1160,14 +1272,14 @@ $offsetPdfTab.Controls.Add($xOffsetTextBox)
 
 # Y Offset
 $yOffsetLabel = New-Object System.Windows.Forms.Label
-$yOffsetLabel.Location = New-Object System.Drawing.Point(240, 115)
+$yOffsetLabel.Location = New-Object System.Drawing.Point(240, 100)
 $yOffsetLabel.Size = New-Object System.Drawing.Size(100, 18)
 $yOffsetLabel.Text = "Y Offset (mm):"
 $yOffsetLabel.ForeColor = [System.Drawing.Color]::White
 $offsetPdfTab.Controls.Add($yOffsetLabel)
 
 $yOffsetTextBox = New-Object System.Windows.Forms.TextBox
-$yOffsetTextBox.Location = New-Object System.Drawing.Point(350, 113)
+$yOffsetTextBox.Location = New-Object System.Drawing.Point(350, 98)
 $yOffsetTextBox.Size = New-Object System.Drawing.Size(80, 22)
 $yOffsetTextBox.BackColor = [System.Drawing.Color]::FromArgb(51, 51, 55)
 $yOffsetTextBox.ForeColor = [System.Drawing.Color]::White
@@ -1177,73 +1289,83 @@ $offsetPdfTab.Controls.Add($yOffsetTextBox)
 
 # Save Offset Checkbox
 $saveOffsetCheck = New-Object System.Windows.Forms.CheckBox
-$saveOffsetCheck.Location = New-Object System.Drawing.Point(450, 115)
+$saveOffsetCheck.Location = New-Object System.Drawing.Point(450, 100)
 $saveOffsetCheck.Size = New-Object System.Drawing.Size(200, 18)
 $saveOffsetCheck.Text = "Save offset for future use"
 $saveOffsetCheck.ForeColor = [System.Drawing.Color]::White
 $offsetPdfTab.Controls.Add($saveOffsetCheck)
 
-# Output PDF Path
-$offsetOutputLabel = New-Object System.Windows.Forms.Label
-$offsetOutputLabel.Location = New-Object System.Drawing.Point(10, 150)
-$offsetOutputLabel.Size = New-Object System.Drawing.Size(120, 18)
-$offsetOutputLabel.Text = "Output PDF (optional):"
-$offsetOutputLabel.ForeColor = [System.Drawing.Color]::White
-$offsetPdfTab.Controls.Add($offsetOutputLabel)
-
-$offsetOutputTextBox = New-Object System.Windows.Forms.TextBox
-$offsetOutputTextBox.Location = New-Object System.Drawing.Point(140, 148)
-$offsetOutputTextBox.Size = New-Object System.Drawing.Size(430, 22)
-$offsetOutputTextBox.BackColor = [System.Drawing.Color]::FromArgb(51, 51, 55)
-$offsetOutputTextBox.ForeColor = [System.Drawing.Color]::White
-$offsetOutputTextBox.BorderStyle = 'FixedSingle'
-$offsetOutputTextBox.ReadOnly = $true
-$offsetPdfTab.Controls.Add($offsetOutputTextBox)
-
-$offsetOutputButton = New-Object System.Windows.Forms.Button
-$offsetOutputButton.Location = New-Object System.Drawing.Point(580, 147)
-$offsetOutputButton.Size = New-Object System.Drawing.Size(110, 23)
-$offsetOutputButton.Text = "Browse..."
-$offsetOutputButton.BackColor = [System.Drawing.Color]::FromArgb(62, 62, 66)
-$offsetOutputButton.ForeColor = [System.Drawing.Color]::White
-$offsetOutputButton.FlatStyle = 'Flat'
-$offsetPdfTab.Controls.Add($offsetOutputButton)
-
-# PPI
-$offsetPpiLabel = New-Object System.Windows.Forms.Label
-$offsetPpiLabel.Location = New-Object System.Drawing.Point(10, 185)
-$offsetPpiLabel.Size = New-Object System.Drawing.Size(120, 18)
-$offsetPpiLabel.Text = "PPI (Pixels/Inch):"
-$offsetPpiLabel.ForeColor = [System.Drawing.Color]::White
-$offsetPdfTab.Controls.Add($offsetPpiLabel)
-
-$offsetPpiTextBox = New-Object System.Windows.Forms.TextBox
-$offsetPpiTextBox.Location = New-Object System.Drawing.Point(140, 183)
-$offsetPpiTextBox.Size = New-Object System.Drawing.Size(80, 22)
-$offsetPpiTextBox.BackColor = [System.Drawing.Color]::FromArgb(51, 51, 55)
-$offsetPpiTextBox.ForeColor = [System.Drawing.Color]::White
-$offsetPpiTextBox.BorderStyle = 'FixedSingle'
-$offsetPpiTextBox.Text = "300"
-$offsetPdfTab.Controls.Add($offsetPpiTextBox)
-
 # Load Saved Offsets (for create_pdf.py)
 $loadOffsetCheck = New-Object System.Windows.Forms.CheckBox
-$loadOffsetCheck.Location = New-Object System.Drawing.Point(10, 265)
+$loadOffsetCheck.Location = New-Object System.Drawing.Point(10, 140)
 $loadOffsetCheck.Size = New-Object System.Drawing.Size(680, 18)
 $loadOffsetCheck.Text = "Auto-apply saved offset when creating PDFs (--load_offset)"
 $loadOffsetCheck.ForeColor = [System.Drawing.Color]::LightGray
 $offsetPdfTab.Controls.Add($loadOffsetCheck)
 
-# Apply Offset Button
-$applyOffsetButton = New-Object System.Windows.Forms.Button
-$applyOffsetButton.Location = New-Object System.Drawing.Point(10, 220)
-$applyOffsetButton.Size = New-Object System.Drawing.Size(680, 35)
-$applyOffsetButton.Text = "Apply Offset to PDF"
-$applyOffsetButton.BackColor = [System.Drawing.Color]::FromArgb(156, 39, 176)
-$applyOffsetButton.ForeColor = [System.Drawing.Color]::White
-$applyOffsetButton.FlatStyle = 'Flat'
-$applyOffsetButton.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
-$offsetPdfTab.Controls.Add($applyOffsetButton)
+# Helper function to save offset to both GUI settings and Python JSON file
+function Save-OffsetData {
+    # Save to GUI settings
+    Save-Settings -defaultDecklistFolders $script:defaultDecklistFolders -targetFolder $targetTextBox.Text -generalDecklistLocation $script:generalDecklistLocation -backImages $script:backImages -outputPath $script:outputPath -xOffset $xOffsetTextBox.Text -yOffset $yOffsetTextBox.Text -loadOffset $loadOffsetCheck.Checked -pluginOptions $script:pluginOptions
+    
+    # Also save to data/offset_data.json for Python scripts
+    if ($targetTextBox.Text -and $xOffsetTextBox.Text -and $yOffsetTextBox.Text) {
+        try {
+            $dataDir = Join-Path $targetTextBox.Text "data"
+            if (-not (Test-Path $dataDir)) {
+                New-Item -ItemType Directory -Path $dataDir -Force | Out-Null
+            }
+            
+            $offsetData = @{
+                x_offset = [int]$xOffsetTextBox.Text
+                y_offset = [int]$yOffsetTextBox.Text
+            }
+            
+            $offsetJson = $offsetData | ConvertTo-Json -Depth 2
+            $offsetFile = Join-Path $dataDir "offset_data.json"
+            $offsetJson | Set-Content -Path $offsetFile -Encoding UTF8
+        }
+        catch {
+            # Silently continue if offset file can't be saved
+        }
+    }
+}
+
+# Event handlers for offset controls to save settings
+$xOffsetTextBox.Add_TextChanged({
+    if ($saveOffsetCheck.Checked) {
+        Save-OffsetData
+    }
+})
+
+$yOffsetTextBox.Add_TextChanged({
+    if ($saveOffsetCheck.Checked) {
+        Save-OffsetData
+    }
+})
+
+$saveOffsetCheck.Add_CheckedChanged({
+    if ($saveOffsetCheck.Checked) {
+        Save-OffsetData
+    }
+})
+
+$loadOffsetCheck.Add_CheckedChanged({
+    Save-Settings -defaultDecklistFolders $script:defaultDecklistFolders -targetFolder $targetTextBox.Text -generalDecklistLocation $script:generalDecklistLocation -backImages $script:backImages -outputPath $script:outputPath -xOffset $xOffsetTextBox.Text -yOffset $yOffsetTextBox.Text -loadOffset $loadOffsetCheck.Checked -pluginOptions $script:pluginOptions
+})
+
+# Load offset values from saved settings (must be done after controls are created)
+if ($savedSettings) {
+    if ($savedSettings.xOffset) {
+        $xOffsetTextBox.Text = $savedSettings.xOffset
+    }
+    if ($savedSettings.yOffset) {
+        $yOffsetTextBox.Text = $savedSettings.yOffset
+    }
+    if ($savedSettings.PSObject.Properties.Name -contains 'loadOffset') {
+        $loadOffsetCheck.Checked = $savedSettings.loadOffset
+    }
+}
 
 # ===== TAB 4: DECKLISTS =====
 $decklistsTab = New-Object System.Windows.Forms.TabPage
@@ -1522,7 +1644,7 @@ $qualityTextBox.Size = New-Object System.Drawing.Size(80, 22)
 $qualityTextBox.BackColor = [System.Drawing.Color]::FromArgb(51, 51, 55)
 $qualityTextBox.ForeColor = [System.Drawing.Color]::White
 $qualityTextBox.BorderStyle = 'FixedSingle'
-$qualityTextBox.Text = "95"
+$qualityTextBox.Text = "100"
 $pdfOptionsTab.Controls.Add($qualityTextBox)
 
 # Crop
@@ -1588,7 +1710,7 @@ $outputPathButton.Add_Click({
         $outputPathTextBox.Text = $folderBrowser.SelectedPath
         
         # Save settings
-        Save-Settings -defaultDecklistFolders $script:defaultDecklistFolders -targetFolder $targetTextBox.Text -generalDecklistLocation $script:generalDecklistLocation -backImages $script:backImages -outputPath $script:outputPath
+        Save-Settings -defaultDecklistFolders $script:defaultDecklistFolders -targetFolder $targetTextBox.Text -generalDecklistLocation $script:generalDecklistLocation -backImages $script:backImages -outputPath $script:outputPath -xOffset $xOffsetTextBox.Text -yOffset $yOffsetTextBox.Text -loadOffset $loadOffsetCheck.Checked -pluginOptions $script:pluginOptions
         
         $statusLabel.Text = "Output path set to: $($folderBrowser.SelectedPath)"
         $statusLabel.ForeColor = [System.Drawing.Color]::Green
@@ -1709,7 +1831,30 @@ $fetchCardsButton.Add_Click({
     }
     
     try {
-        # Clean up any old decklist files first
+        # Clear out old card images before fetching new ones
+        $statusLabel.Text = "Clearing old card images..."
+        $statusLabel.ForeColor = [System.Drawing.Color]::Blue
+        $form.Refresh()
+        
+        $foldersToClean = @(
+            "game\front",
+            "game\back",
+            "game\double_sided"
+        )
+        
+        foreach ($folder in $foldersToClean) {
+            $fullPath = Join-Path $script:targetFolder $folder
+            if (Test-Path $fullPath) {
+                try {
+                    Get-ChildItem -Path $fullPath -File -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
+                }
+                catch {
+                    # Continue even if some files can't be deleted
+                }
+            }
+        }
+        
+        # Clean up any old decklist files
         $statusLabel.Text = "Cleaning up old decklists..."
         $statusLabel.ForeColor = [System.Drawing.Color]::Blue
         $form.Refresh()
@@ -1952,7 +2097,7 @@ $createPdfButton.Add_Click({
         if ($ppiTextBox.Text -and $ppiTextBox.Text -ne '300') {
             $pdfArgs += " --ppi $($ppiTextBox.Text)"
         }
-        if ($qualityTextBox.Text -and $qualityTextBox.Text -ne '95') {
+        if ($qualityTextBox.Text -and $qualityTextBox.Text -ne '100') {
             $pdfArgs += " --quality $($qualityTextBox.Text)"
         }
         if ($cropTextBox.Text) {
@@ -1981,6 +2126,25 @@ exit `$LASTEXITCODE
         Remove-Item $tempScript -ErrorAction SilentlyContinue
         
         if ($result.ExitCode -eq 0) {
+            # Rename PDF to match decklist filename
+            $pdfPath = Join-Path $script:targetFolder "game\output\game.pdf"
+            $finalPdfPath = $pdfPath
+            
+            if ($script:selectedFile -and (Test-Path $pdfPath)) {
+                try {
+                    $decklistBaseName = [System.IO.Path]::GetFileNameWithoutExtension($script:selectedFile)
+                    $outputDir = Join-Path $script:targetFolder "game\output"
+                    $newPdfPath = Join-Path $outputDir "$decklistBaseName.pdf"
+                    
+                    # Rename the PDF
+                    Move-Item -Path $pdfPath -Destination $newPdfPath -Force
+                    $finalPdfPath = $newPdfPath
+                }
+                catch {
+                    # If rename fails, keep original name
+                }
+            }
+            
             # Clean up decklist after successful PDF creation
             if ($script:selectedFile -and $script:originalPath) {
                 try {
@@ -1998,8 +2162,7 @@ exit `$LASTEXITCODE
                 }
             }
             
-            $pdfPath = Join-Path $script:targetFolder "game\output\game.pdf"
-            $statusLabel.Text = "Success: PDF created!`nLocation: $pdfPath`nDecklist cleaned up."
+            $statusLabel.Text = "Success: PDF created!`nLocation: $finalPdfPath`nDecklist cleaned up."
             $statusLabel.ForeColor = [System.Drawing.Color]::Green
         }
         else {
@@ -2013,131 +2176,6 @@ exit `$LASTEXITCODE
     }
 })
 
-# Offset PDF Button Handlers
-$offsetInputButton.Add_Click({
-    $openFileDialog = New-Object System.Windows.Forms.OpenFileDialog
-    $openFileDialog.Filter = "PDF files (*.pdf)|*.pdf|All files (*.*)|*.*"
-    $openFileDialog.Title = "Select Input PDF"
-    
-    # Default to game/output folder
-    if ($script:targetFolder -and (Test-Path (Join-Path $script:targetFolder "game\output"))) {
-        $openFileDialog.InitialDirectory = Join-Path $script:targetFolder "game\output"
-    }
-    
-    if ($openFileDialog.ShowDialog() -eq 'OK') {
-        $offsetInputTextBox.Text = $openFileDialog.FileName
-        
-        # Auto-suggest output filename
-        $inputFile = $openFileDialog.FileName
-        $directory = Split-Path $inputFile -Parent
-        $filename = [System.IO.Path]::GetFileNameWithoutExtension($inputFile)
-        $extension = [System.IO.Path]::GetExtension($inputFile)
-        $suggestedOutput = Join-Path $directory ($filename + "_offset" + $extension)
-        $offsetOutputTextBox.Text = $suggestedOutput
-    }
-})
-
-$offsetOutputButton.Add_Click({
-    $saveFileDialog = New-Object System.Windows.Forms.SaveFileDialog
-    $saveFileDialog.Filter = "PDF files (*.pdf)|*.pdf|All files (*.*)|*.*"
-    $saveFileDialog.Title = "Save Offset PDF As"
-    $saveFileDialog.DefaultExt = "pdf"
-    
-    # Default to same directory as input
-    if ($offsetInputTextBox.Text -and (Test-Path (Split-Path $offsetInputTextBox.Text -Parent))) {
-        $saveFileDialog.InitialDirectory = Split-Path $offsetInputTextBox.Text -Parent
-        $inputFilename = [System.IO.Path]::GetFileNameWithoutExtension($offsetInputTextBox.Text)
-        $saveFileDialog.FileName = $inputFilename + "_offset.pdf"
-    }
-    
-    if ($saveFileDialog.ShowDialog() -eq 'OK') {
-        $offsetOutputTextBox.Text = $saveFileDialog.FileName
-    }
-})
-
-$applyOffsetButton.Add_Click({
-    $script:targetFolder = $targetTextBox.Text
-    if (-not $script:targetFolder) {
-        $statusLabel.Text = "Error: Please enter Silhouette Card Maker folder path"
-        $statusLabel.ForeColor = [System.Drawing.Color]::Red
-        return
-    }
-    
-    if (-not (Test-Path $script:targetFolder)) {
-        $statusLabel.Text = "Error: Silhouette Card Maker folder does not exist"
-        $statusLabel.ForeColor = [System.Drawing.Color]::Red
-        return
-    }
-    
-    if (-not $offsetInputTextBox.Text -or -not (Test-Path $offsetInputTextBox.Text)) {
-        $statusLabel.Text = "Error: Please select a valid input PDF"
-        $statusLabel.ForeColor = [System.Drawing.Color]::Red
-        return
-    }
-    
-    try {
-        $statusLabel.Text = "Applying offset to PDF... Please wait"
-        $statusLabel.ForeColor = [System.Drawing.Color]::Blue
-        $form.Refresh()
-        
-        # Check if venv exists
-        $venvPath = Join-Path $script:targetFolder "venv"
-        $activateScript = Join-Path $venvPath "Scripts\Activate.ps1"
-        
-        if (-not (Test-Path $activateScript)) {
-            $statusLabel.Text = "Error: Virtual environment not found at $venvPath`nPlease run the installation instructions first"
-            $statusLabel.ForeColor = [System.Drawing.Color]::Red
-            return
-        }
-        
-        # Build offset_pdf.py command
-        $offsetArgs = "offset_pdf.py --pdf_path `"$($offsetInputTextBox.Text)`""
-        
-        if ($xOffsetTextBox.Text) {
-            $offsetArgs += " --x_offset $($xOffsetTextBox.Text)"
-        }
-        if ($yOffsetTextBox.Text) {
-            $offsetArgs += " --y_offset $($yOffsetTextBox.Text)"
-        }
-        if ($saveOffsetCheck.Checked) {
-            $offsetArgs += " --save"
-        }
-        if ($offsetOutputTextBox.Text) {
-            $offsetArgs += " --output_pdf_path `"$($offsetOutputTextBox.Text)`""
-        }
-        if ($offsetPpiTextBox.Text -and $offsetPpiTextBox.Text -ne '300') {
-            $offsetArgs += " --ppi $($offsetPpiTextBox.Text)"
-        }
-        
-        $commandLabel.Text = "Command: python $offsetArgs"
-        
-        # Create a temporary script to activate venv and run offset_pdf.py
-        $tempScript = Join-Path $env:TEMP "run_offset_pdf.ps1"
-        "Set-Location '$($script:targetFolder)'" | Out-File -FilePath $tempScript -Encoding UTF8
-        "& '$activateScript'" | Out-File -FilePath $tempScript -Encoding UTF8 -Append
-        "python $offsetArgs" | Out-File -FilePath $tempScript -Encoding UTF8 -Append
-        "exit `$LASTEXITCODE" | Out-File -FilePath $tempScript -Encoding UTF8 -Append
-        
-        $result = Start-Process -FilePath "powershell.exe" -ArgumentList "-ExecutionPolicy", "Bypass", "-File", $tempScript -Wait -PassThru -NoNewWindow
-        
-        # Temporarily keep the script for debugging - comment out the delete
-        # Remove-Item $tempScript -ErrorAction SilentlyContinue
-        
-        if ($result.ExitCode -eq 0) {
-            $outputFile = if ($offsetOutputTextBox.Text) { $offsetOutputTextBox.Text } else { "game/output/game_offset.pdf" }
-            $statusLabel.Text = "Success: Offset applied!`nOutput: $outputFile`nTemp script: $tempScript"
-            $statusLabel.ForeColor = [System.Drawing.Color]::Green
-        }
-        else {
-            $statusLabel.Text = "Warning: Script exited with code $($result.ExitCode)`nTemp script: $tempScript"
-            $statusLabel.ForeColor = [System.Drawing.Color]::Orange
-        }
-    }
-    catch {
-        $statusLabel.Text = "Error: Failed to apply offset`n$($_.Exception.Message)"
-        $statusLabel.ForeColor = [System.Drawing.Color]::Red
-    }
-})
 
 # Clear Game Folders Button Handler
 $clearFoldersButton.Add_Click({
