@@ -1,6 +1,9 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
+# Import plugin management system
+. "$PSScriptRoot\simple_plugin_manager.ps1"
+
 # Create the main form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Silhouette Card Maker - Plugin Manager"
@@ -414,7 +417,23 @@ $pluginCombo.DropDownStyle = 'DropDownList'
 $pluginCombo.BackColor = [System.Drawing.Color]::FromArgb(51, 51, 55)
 $pluginCombo.ForeColor = [System.Drawing.Color]::White
 $pluginCombo.FlatStyle = 'Flat'
-$pluginCombo.Items.AddRange(@('-- Select a Game Plugin --', 'Magic: The Gathering', 'Yu-Gi-Oh!', 'Altered', 'Digimon', 'Dragon Ball Super', 'Flesh and Blood', 'Grand Archive', 'Gundam', 'Lorcana', 'Netrunner', 'One Piece', 'Riftbound', 'Star Wars Unlimited'))
+# Initialize plugin system and populate plugin combo
+try {
+    Initialize-PluginSystem
+    $enabledPluginNames = Export-PluginListForGUI
+    if ($enabledPluginNames -and $enabledPluginNames.Count -gt 0) {
+        $pluginCombo.Items.AddRange($enabledPluginNames)
+    } else {
+        # Fallback to hardcoded list if plugin system fails
+        $fallbackPlugins = @('-- Select a Game Plugin --', 'Magic: The Gathering', 'Yu-Gi-Oh!', 'Altered', 'Cards Against Humanity', 'CCGTrader', 'CF Vanguard', 'Digimon', 'Dragon Ball Super', 'Flesh and Blood', 'Fluxx', 'Force of Will', 'Grand Archive', 'Gundam', 'Lorcana', 'Marvel Champions', 'MetaZoo', 'Munchkin', 'Netrunner', 'One Piece', 'Pokemon', 'Riftbound', 'Shadowverse Evolve', 'Star Realms', 'Star Wars Unlimited', 'Union Arena', 'Universus', 'Weiss Schwarz')
+        $pluginCombo.Items.AddRange($fallbackPlugins)
+    }
+} catch {
+    Write-Warning "Failed to initialize plugin system: $($_.Exception.Message)"
+    # Fallback to hardcoded list
+    $fallbackPlugins = @('-- Select a Game Plugin --', 'Magic: The Gathering', 'Yu-Gi-Oh!', 'Altered', 'Cards Against Humanity', 'CCGTrader', 'CF Vanguard', 'Digimon', 'Dragon Ball Super', 'Flesh and Blood', 'Fluxx', 'Force of Will', 'Grand Archive', 'Gundam', 'Lorcana', 'Marvel Champions', 'MetaZoo', 'Munchkin', 'Netrunner', 'One Piece', 'Pokemon', 'Riftbound', 'Shadowverse Evolve', 'Star Realms', 'Star Wars Unlimited', 'Union Arena', 'Universus', 'Weiss Schwarz')
+    $pluginCombo.Items.AddRange($fallbackPlugins)
+}
 $pluginCombo.SelectedIndex = 0
 $cardFetchTab.Controls.Add($pluginCombo)
 
@@ -1162,6 +1181,160 @@ $pluginCombo.Add_SelectedIndexChanged({
             $defaultFolderLabel.Text = "Star Wars Unlimited-Specific Folder (optional):"
             $infoLabel.Text = "Star Wars Unlimited plugin supports SWUDB JSON, Melee, and Picklist formats."
         }
+        'Cards Against Humanity' {
+            $formatCombo.Items.Clear()
+            $formatCombo.Items.AddRange(@('cah_api', 'cah_scraper'))
+            $formatCombo.SelectedIndex = 0
+            $formatLabel.Visible = $true
+            $formatCombo.Visible = $true
+            $optionsGroup.Visible = $true
+            
+            $defaultFolderLabel.Text = "Cards Against Humanity-Specific Folder (optional):"
+            $infoLabel.Text = "Cards Against Humanity plugin supports CAH API and scraper formats."
+        }
+        'CCGTrader' {
+            $formatCombo.Items.Clear()
+            $formatCombo.Items.AddRange(@('universal', 'cross_game', 'popular_games'))
+            $formatCombo.SelectedIndex = 0
+            $formatLabel.Visible = $true
+            $formatCombo.Visible = $true
+            $optionsGroup.Visible = $true
+            
+            $defaultFolderLabel.Text = "CCGTrader-Specific Folder (optional):"
+            $infoLabel.Text = "CCGTrader plugin supports universal CCG card scraping from multiple games."
+        }
+        'CF Vanguard' {
+            $formatCombo.Items.Clear()
+            $formatCombo.Items.AddRange(@('cfv_api', 'cfv_scraper'))
+            $formatCombo.SelectedIndex = 0
+            $formatLabel.Visible = $true
+            $formatCombo.Visible = $true
+            $optionsGroup.Visible = $true
+            
+            $defaultFolderLabel.Text = "CF Vanguard-Specific Folder (optional):"
+            $infoLabel.Text = "CF Vanguard plugin supports CF Vanguard API and scraper formats."
+        }
+        'Fluxx' {
+            $formatCombo.Items.Clear()
+            $formatCombo.Items.AddRange(@('looney', 'fluxx_api', 'fluxx_scraper'))
+            $formatCombo.SelectedIndex = 0
+            $formatLabel.Visible = $true
+            $formatCombo.Visible = $true
+            $optionsGroup.Visible = $true
+            
+            $defaultFolderLabel.Text = "Fluxx-Specific Folder (optional):"
+            $infoLabel.Text = "Fluxx plugin supports Looney Labs, Fluxx API, and scraper formats."
+        }
+        'Force of Will' {
+            $formatCombo.Items.Clear()
+            $formatCombo.Items.AddRange(@('fow_api', 'fow_scraper'))
+            $formatCombo.SelectedIndex = 0
+            $formatLabel.Visible = $true
+            $formatCombo.Visible = $true
+            $optionsGroup.Visible = $true
+            
+            $defaultFolderLabel.Text = "Force of Will-Specific Folder (optional):"
+            $infoLabel.Text = "Force of Will plugin supports FOW API and scraper formats."
+        }
+        'Marvel Champions' {
+            $formatCombo.Items.Clear()
+            $formatCombo.Items.AddRange(@('mc_api', 'mc_scraper'))
+            $formatCombo.SelectedIndex = 0
+            $formatLabel.Visible = $true
+            $formatCombo.Visible = $true
+            $optionsGroup.Visible = $true
+            
+            $defaultFolderLabel.Text = "Marvel Champions-Specific Folder (optional):"
+            $infoLabel.Text = "Marvel Champions plugin supports MC API and scraper formats."
+        }
+        'MetaZoo' {
+            $formatCombo.Items.Clear()
+            $formatCombo.Items.AddRange(@('mz_api', 'mz_scraper'))
+            $formatCombo.SelectedIndex = 0
+            $formatLabel.Visible = $true
+            $formatCombo.Visible = $true
+            $optionsGroup.Visible = $true
+            
+            $defaultFolderLabel.Text = "MetaZoo-Specific Folder (optional):"
+            $infoLabel.Text = "MetaZoo plugin supports MZ API and scraper formats."
+        }
+        'Munchkin' {
+            $formatCombo.Items.Clear()
+            $formatCombo.Items.AddRange(@('munchkin_api', 'munchkin_scraper'))
+            $formatCombo.SelectedIndex = 0
+            $formatLabel.Visible = $true
+            $formatCombo.Visible = $true
+            $optionsGroup.Visible = $true
+            
+            $defaultFolderLabel.Text = "Munchkin-Specific Folder (optional):"
+            $infoLabel.Text = "Munchkin plugin supports Munchkin API and scraper formats."
+        }
+        'Pokemon' {
+            $formatCombo.Items.Clear()
+            $formatCombo.Items.AddRange(@('pokemon_api', 'pokemon_scraper', 'limitless'))
+            $formatCombo.SelectedIndex = 0
+            $formatLabel.Visible = $true
+            $formatCombo.Visible = $true
+            $optionsGroup.Visible = $true
+            
+            $defaultFolderLabel.Text = "Pokemon-Specific Folder (optional):"
+            $infoLabel.Text = "Pokemon plugin supports Pokemon API, scraper, and Limitless formats."
+        }
+        'Shadowverse Evolve' {
+            $formatCombo.Items.Clear()
+            $formatCombo.Items.AddRange(@('sve_api', 'sve_scraper'))
+            $formatCombo.SelectedIndex = 0
+            $formatLabel.Visible = $true
+            $formatCombo.Visible = $true
+            $optionsGroup.Visible = $true
+            
+            $defaultFolderLabel.Text = "Shadowverse Evolve-Specific Folder (optional):"
+            $infoLabel.Text = "Shadowverse Evolve plugin supports SVE API and scraper formats."
+        }
+        'Star Realms' {
+            $formatCombo.Items.Clear()
+            $formatCombo.Items.AddRange(@('sr_api', 'sr_scraper', 'official_gallery', 'boardgamegeek', 'tier_list'))
+            $formatCombo.SelectedIndex = 0
+            $formatLabel.Visible = $true
+            $formatCombo.Visible = $true
+            $optionsGroup.Visible = $true
+            
+            $defaultFolderLabel.Text = "Star Realms-Specific Folder (optional):"
+            $infoLabel.Text = "Star Realms plugin supports SR API, scraper, official gallery, BoardGameGeek, and tier list formats."
+        }
+        'Union Arena' {
+            $formatCombo.Items.Clear()
+            $formatCombo.Items.AddRange(@('ua_api', 'ua_scraper'))
+            $formatCombo.SelectedIndex = 0
+            $formatLabel.Visible = $true
+            $formatCombo.Visible = $true
+            $optionsGroup.Visible = $true
+            
+            $defaultFolderLabel.Text = "Union Arena-Specific Folder (optional):"
+            $infoLabel.Text = "Union Arena plugin supports UA API and scraper formats."
+        }
+        'Universus' {
+            $formatCombo.Items.Clear()
+            $formatCombo.Items.AddRange(@('uvs_api', 'uvs_scraper'))
+            $formatCombo.SelectedIndex = 0
+            $formatLabel.Visible = $true
+            $formatCombo.Visible = $true
+            $optionsGroup.Visible = $true
+            
+            $defaultFolderLabel.Text = "Universus-Specific Folder (optional):"
+            $infoLabel.Text = "Universus plugin supports UVS API and scraper formats."
+        }
+        'Weiss Schwarz' {
+            $formatCombo.Items.Clear()
+            $formatCombo.Items.AddRange(@('ws_api', 'ws_scraper'))
+            $formatCombo.SelectedIndex = 0
+            $formatLabel.Visible = $true
+            $formatCombo.Visible = $true
+            $optionsGroup.Visible = $true
+            
+            $defaultFolderLabel.Text = "Weiss Schwarz-Specific Folder (optional):"
+            $infoLabel.Text = "Weiss Schwarz plugin supports WS API and scraper formats."
+        }
     }
     
     # Load saved options for the selected plugin
@@ -1185,6 +1358,29 @@ $riftboundOption1.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Ri
 $digimonOption1.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Digimon' })
 $gundamOption1.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Gundam' })
 $swuOption1.Add_CheckedChanged({ Save-CurrentPluginOptions -pluginName 'Star Wars Unlimited' })
+
+# Function to refresh plugin list
+function Refresh-PluginList {
+    try {
+        $enabledPluginNames = Export-PluginListForGUI
+        $currentSelection = $pluginCombo.SelectedItem
+        
+        $pluginCombo.Items.Clear()
+        if ($enabledPluginNames -and $enabledPluginNames.Count -gt 0) {
+            $pluginCombo.Items.AddRange($enabledPluginNames)
+            
+            # Try to restore previous selection
+            $newIndex = $enabledPluginNames.IndexOf($currentSelection)
+            if ($newIndex -ge 0) {
+                $pluginCombo.SelectedIndex = $newIndex
+            } else {
+                $pluginCombo.SelectedIndex = 0
+            }
+        }
+    } catch {
+        Write-Warning "Failed to refresh plugin list: $($_.Exception.Message)"
+    }
+}
 
 # Load saved settings
 $savedSettings = Load-Settings
@@ -1245,6 +1441,12 @@ $offsetPdfTab = New-Object System.Windows.Forms.TabPage
 $offsetPdfTab.Text = "Offset PDF"
 $offsetPdfTab.BackColor = [System.Drawing.Color]::FromArgb(37, 37, 38)
 $mainTabControl.Controls.Add($offsetPdfTab)
+
+# ===== TAB 4: BACK IMAGE SCRAPER =====
+$backImageScraperTab = New-Object System.Windows.Forms.TabPage
+$backImageScraperTab.Text = "Back Image Scraper"
+$backImageScraperTab.BackColor = [System.Drawing.Color]::FromArgb(37, 37, 38)
+$mainTabControl.Controls.Add($backImageScraperTab)
 
 # Offset PDF Description
 $offsetDescLabel = New-Object System.Windows.Forms.Label
@@ -1381,11 +1583,438 @@ if ($savedSettings) {
     }
 }
 
-# ===== TAB 4: DECKLISTS =====
+# Back Image Scraper Tab Content
+$backImageScraperTitle = New-Object System.Windows.Forms.Label
+$backImageScraperTitle.Location = New-Object System.Drawing.Point(10, 10)
+$backImageScraperTitle.Size = New-Object System.Drawing.Size(680, 25)
+$backImageScraperTitle.Text = "Card Back Image Scraper"
+$backImageScraperTitle.Font = New-Object System.Drawing.Font("Arial", 14, [System.Drawing.FontStyle]::Bold)
+$backImageScraperTitle.ForeColor = [System.Drawing.Color]::White
+$backImageScraperTab.Controls.Add($backImageScraperTitle)
+
+$backImageScraperDesc = New-Object System.Windows.Forms.Label
+$backImageScraperDesc.Location = New-Object System.Drawing.Point(10, 40)
+$backImageScraperDesc.Size = New-Object System.Drawing.Size(680, 50)
+$backImageScraperDesc.Text = "Download official card back images from various TCG sources.`nThese images can be used for double-sided card printing."
+$backImageScraperDesc.ForeColor = [System.Drawing.Color]::LightGray
+$backImageScraperTab.Controls.Add($backImageScraperDesc)
+
+# Output Directory
+$backOutputLabel = New-Object System.Windows.Forms.Label
+$backOutputLabel.Location = New-Object System.Drawing.Point(10, 100)
+$backOutputLabel.Size = New-Object System.Drawing.Size(200, 18)
+$backOutputLabel.Text = "Output Directory:"
+$backOutputLabel.ForeColor = [System.Drawing.Color]::White
+$backImageScraperTab.Controls.Add($backOutputLabel)
+
+$backOutputTextBox = New-Object System.Windows.Forms.TextBox
+$backOutputTextBox.Location = New-Object System.Drawing.Point(10, 120)
+$backOutputTextBox.Size = New-Object System.Drawing.Size(500, 22)
+$backOutputTextBox.BackColor = [System.Drawing.Color]::FromArgb(51, 51, 55)
+$backOutputTextBox.ForeColor = [System.Drawing.Color]::White
+$backOutputTextBox.BorderStyle = 'FixedSingle'
+$backOutputTextBox.Text = "game/back"
+$backImageScraperTab.Controls.Add($backOutputTextBox)
+
+$backOutputButton = New-Object System.Windows.Forms.Button
+$backOutputButton.Location = New-Object System.Drawing.Point(520, 119)
+$backOutputButton.Size = New-Object System.Drawing.Size(100, 23)
+$backOutputButton.Text = "Browse..."
+$backOutputButton.BackColor = [System.Drawing.Color]::FromArgb(62, 62, 66)
+$backOutputButton.ForeColor = [System.Drawing.Color]::White
+$backOutputButton.FlatStyle = 'Flat'
+$backImageScraperTab.Controls.Add($backOutputButton)
+
+# Game Selection
+$backGameLabel = New-Object System.Windows.Forms.Label
+$backGameLabel.Location = New-Object System.Drawing.Point(10, 150)
+$backGameLabel.Size = New-Object System.Drawing.Size(200, 18)
+$backGameLabel.Text = "Select Game (optional):"
+$backGameLabel.ForeColor = [System.Drawing.Color]::White
+$backImageScraperTab.Controls.Add($backGameLabel)
+
+$backGameCombo = New-Object System.Windows.Forms.ComboBox
+$backGameCombo.Location = New-Object System.Drawing.Point(10, 170)
+$backGameCombo.Size = New-Object System.Drawing.Size(300, 25)
+$backGameCombo.DropDownStyle = 'DropDownList'
+$backGameCombo.BackColor = [System.Drawing.Color]::FromArgb(51, 51, 55)
+$backGameCombo.ForeColor = [System.Drawing.Color]::White
+$backGameCombo.FlatStyle = 'Flat'
+$backGameCombo.Items.AddRange(@('-- All Games --', 'Magic: The Gathering', 'Pokemon TCG', 'Yu-Gi-Oh!', 'Lorcana', 'Flesh and Blood', 'Digimon TCG', 'One Piece TCG', 'Gundam TCG', 'Star Wars Unlimited', 'Altered TCG'))
+$backGameCombo.SelectedIndex = 0
+$backImageScraperTab.Controls.Add($backGameCombo)
+
+# Scrape Buttons
+$scrapeSpecificButton = New-Object System.Windows.Forms.Button
+$scrapeSpecificButton.Location = New-Object System.Drawing.Point(10, 210)
+$scrapeSpecificButton.Size = New-Object System.Drawing.Size(150, 30)
+$scrapeSpecificButton.Text = "Scrape Selected Game"
+$scrapeSpecificButton.BackColor = [System.Drawing.Color]::FromArgb(62, 62, 66)
+$scrapeSpecificButton.ForeColor = [System.Drawing.Color]::White
+$scrapeSpecificButton.FlatStyle = 'Flat'
+$backImageScraperTab.Controls.Add($scrapeSpecificButton)
+
+$scrapeAllButton = New-Object System.Windows.Forms.Button
+$scrapeAllButton.Location = New-Object System.Drawing.Point(170, 210)
+$scrapeAllButton.Size = New-Object System.Drawing.Size(150, 30)
+$scrapeAllButton.Text = "Scrape All Games"
+$scrapeAllButton.BackColor = [System.Drawing.Color]::FromArgb(62, 62, 66)
+$scrapeAllButton.ForeColor = [System.Drawing.Color]::White
+$scrapeAllButton.FlatStyle = 'Flat'
+$backImageScraperTab.Controls.Add($scrapeAllButton)
+
+$listGamesButton = New-Object System.Windows.Forms.Button
+$listGamesButton.Location = New-Object System.Drawing.Point(330, 210)
+$listGamesButton.Size = New-Object System.Drawing.Size(120, 30)
+$listGamesButton.Text = "List Games"
+$listGamesButton.BackColor = [System.Drawing.Color]::FromArgb(62, 62, 66)
+$listGamesButton.ForeColor = [System.Drawing.Color]::White
+$listGamesButton.FlatStyle = 'Flat'
+$backImageScraperTab.Controls.Add($listGamesButton)
+
+# Status and Results
+$backStatusLabel = New-Object System.Windows.Forms.Label
+$backStatusLabel.Location = New-Object System.Drawing.Point(10, 250)
+$backStatusLabel.Size = New-Object System.Drawing.Size(680, 20)
+$backStatusLabel.Text = "Ready to scrape back images..."
+$backStatusLabel.ForeColor = [System.Drawing.Color]::Green
+$backImageScraperTab.Controls.Add($backStatusLabel)
+
+$backResultsTextBox = New-Object System.Windows.Forms.TextBox
+$backResultsTextBox.Location = New-Object System.Drawing.Point(10, 280)
+$backResultsTextBox.Size = New-Object System.Drawing.Size(680, 150)
+$backResultsTextBox.BackColor = [System.Drawing.Color]::FromArgb(30, 30, 30)
+$backResultsTextBox.ForeColor = [System.Drawing.Color]::White
+$backResultsTextBox.BorderStyle = 'FixedSingle'
+$backResultsTextBox.Multiline = $true
+$backResultsTextBox.ScrollBars = 'Vertical'
+$backResultsTextBox.ReadOnly = $true
+$backImageScraperTab.Controls.Add($backResultsTextBox)
+
+# Back Image Scraper Event Handlers
+$backOutputButton.Add_Click({
+    $folderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog
+    $folderBrowser.Description = "Select output directory for back images"
+    
+    if ($folderBrowser.ShowDialog() -eq 'OK') {
+        $backOutputTextBox.Text = $folderBrowser.SelectedPath
+    }
+})
+
+$scrapeSpecificButton.Add_Click({
+    $selectedGame = $backGameCombo.SelectedItem
+    if ($selectedGame -eq '-- All Games --') {
+        $backStatusLabel.Text = "Error: Please select a specific game"
+        $backStatusLabel.ForeColor = [System.Drawing.Color]::Red
+        return
+    }
+    
+    $backStatusLabel.Text = "Scraping back image for $selectedGame..."
+    $backStatusLabel.ForeColor = [System.Drawing.Color]::Blue
+    $form.Refresh()
+    
+    $outputDir = $backOutputTextBox.Text
+    if (-not $outputDir) {
+        $outputDir = "game/back"
+    }
+    
+    $pythonArgs = "back_image_scraper.py scrape --game `"$selectedGame`" --output-dir `"$outputDir`""
+    
+    $backResultsTextBox.Text = "Running: python $pythonArgs`n`n"
+    $form.Refresh()
+    
+    try {
+        $processInfo = New-Object System.Diagnostics.ProcessStartInfo
+        $processInfo.FileName = "python"
+        $processInfo.Arguments = $pythonArgs
+        $processInfo.RedirectStandardOutput = $true
+        $processInfo.RedirectStandardError = $true
+        $processInfo.UseShellExecute = $false
+        $processInfo.CreateNoWindow = $true
+        
+        $process = New-Object System.Diagnostics.Process
+        $process.StartInfo = $processInfo
+        $process.Start() | Out-Null
+        
+        $output = $process.StandardOutput.ReadToEnd()
+        $error = $process.StandardError.ReadToEnd()
+        $process.WaitForExit()
+        
+        $backResultsTextBox.Text += $output
+        if ($error) {
+            $backResultsTextBox.Text += "`nErrors:`n$error"
+        }
+        
+        if ($process.ExitCode -eq 0) {
+            $backStatusLabel.Text = "Successfully scraped $selectedGame back image"
+            $backStatusLabel.ForeColor = [System.Drawing.Color]::Green
+        } else {
+            $backStatusLabel.Text = "Error scraping $selectedGame back image"
+            $backStatusLabel.ForeColor = [System.Drawing.Color]::Red
+        }
+    }
+    catch {
+        $backStatusLabel.Text = "Error running back image scraper: $($_.Exception.Message)"
+        $backStatusLabel.ForeColor = [System.Drawing.Color]::Red
+        $backResultsTextBox.Text += "`nError: $($_.Exception.Message)"
+    }
+})
+
+$scrapeAllButton.Add_Click({
+    $backStatusLabel.Text = "Scraping back images for all games..."
+    $backStatusLabel.ForeColor = [System.Drawing.Color]::Blue
+    $form.Refresh()
+    
+    $outputDir = $backOutputTextBox.Text
+    if (-not $outputDir) {
+        $outputDir = "game/back"
+    }
+    
+    $pythonArgs = "back_image_scraper.py scrape --all-games --output-dir `"$outputDir`" --create-index"
+    
+    $backResultsTextBox.Text = "Running: python $pythonArgs`n`n"
+    $form.Refresh()
+    
+    try {
+        $processInfo = New-Object System.Diagnostics.ProcessStartInfo
+        $processInfo.FileName = "python"
+        $processInfo.Arguments = $pythonArgs
+        $processInfo.RedirectStandardOutput = $true
+        $processInfo.RedirectStandardError = $true
+        $processInfo.UseShellExecute = $false
+        $processInfo.CreateNoWindow = $true
+        
+        $process = New-Object System.Diagnostics.Process
+        $process.StartInfo = $processInfo
+        $process.Start() | Out-Null
+        
+        $output = $process.StandardOutput.ReadToEnd()
+        $error = $process.StandardError.ReadToEnd()
+        $process.WaitForExit()
+        
+        $backResultsTextBox.Text += $output
+        if ($error) {
+            $backResultsTextBox.Text += "`nErrors:`n$error"
+        }
+        
+        if ($process.ExitCode -eq 0) {
+            $backStatusLabel.Text = "Successfully scraped all back images"
+            $backStatusLabel.ForeColor = [System.Drawing.Color]::Green
+        } else {
+            $backStatusLabel.Text = "Error scraping back images"
+            $backStatusLabel.ForeColor = [System.Drawing.Color]::Red
+        }
+    }
+    catch {
+        $backStatusLabel.Text = "Error running back image scraper: $($_.Exception.Message)"
+        $backStatusLabel.ForeColor = [System.Drawing.Color]::Red
+        $backResultsTextBox.Text += "`nError: $($_.Exception.Message)"
+    }
+})
+
+$listGamesButton.Add_Click({
+    $backStatusLabel.Text = "Listing supported games..."
+    $backStatusLabel.ForeColor = [System.Drawing.Color]::Blue
+    $form.Refresh()
+    
+    $pythonArgs = "back_image_scraper.py list-games"
+    
+    $backResultsTextBox.Text = "Running: python $pythonArgs`n`n"
+    $form.Refresh()
+    
+    try {
+        $processInfo = New-Object System.Diagnostics.ProcessStartInfo
+        $processInfo.FileName = "python"
+        $processInfo.Arguments = $pythonArgs
+        $processInfo.RedirectStandardOutput = $true
+        $processInfo.RedirectStandardError = $true
+        $processInfo.UseShellExecute = $false
+        $processInfo.CreateNoWindow = $true
+        
+        $process = New-Object System.Diagnostics.Process
+        $process.StartInfo = $processInfo
+        $process.Start() | Out-Null
+        
+        $output = $process.StandardOutput.ReadToEnd()
+        $error = $process.StandardError.ReadToEnd()
+        $process.WaitForExit()
+        
+        $backResultsTextBox.Text += $output
+        if ($error) {
+            $backResultsTextBox.Text += "`nErrors:`n$error"
+        }
+        
+        $backStatusLabel.Text = "Games list updated"
+        $backStatusLabel.ForeColor = [System.Drawing.Color]::Green
+    }
+    catch {
+        $backStatusLabel.Text = "Error listing games: $($_.Exception.Message)"
+        $backStatusLabel.ForeColor = [System.Drawing.Color]::Red
+        $backResultsTextBox.Text += "`nError: $($_.Exception.Message)"
+    }
+})
+
+# ===== TAB 5: DECKLISTS =====
 $decklistsTab = New-Object System.Windows.Forms.TabPage
 $decklistsTab.Text = "Decklists"
 $decklistsTab.BackColor = [System.Drawing.Color]::FromArgb(37, 37, 38)
 $mainTabControl.Controls.Add($decklistsTab)
+
+# ===== TAB 6: PLUGIN OPTIONS =====
+$pluginOptionsTab = New-Object System.Windows.Forms.TabPage
+$pluginOptionsTab.Text = "Plugin Options"
+$pluginOptionsTab.BackColor = [System.Drawing.Color]::FromArgb(37, 37, 38)
+$mainTabControl.Controls.Add($pluginOptionsTab)
+
+# Title
+$pluginTitleLabel = New-Object System.Windows.Forms.Label
+$pluginTitleLabel.Location = New-Object System.Drawing.Point(10, 10)
+$pluginTitleLabel.Size = New-Object System.Drawing.Size(680, 25)
+$pluginTitleLabel.Text = "Plugin Management - Enable/Disable Plugins"
+$pluginTitleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
+$pluginTitleLabel.ForeColor = [System.Drawing.Color]::White
+$pluginOptionsTab.Controls.Add($pluginTitleLabel)
+
+# Description
+$pluginDescLabel = New-Object System.Windows.Forms.Label
+$pluginDescLabel.Location = New-Object System.Drawing.Point(10, 40)
+$pluginDescLabel.Size = New-Object System.Drawing.Size(680, 40)
+$pluginDescLabel.Text = "Check/uncheck plugins to enable or disable them. Disabled plugins will not appear in the main interface."
+$pluginDescLabel.ForeColor = [System.Drawing.Color]::FromArgb(200, 200, 200)
+$pluginOptionsTab.Controls.Add($pluginDescLabel)
+
+# Plugin checkboxes container
+$pluginCheckboxPanel = New-Object System.Windows.Forms.Panel
+$pluginCheckboxPanel.Location = New-Object System.Drawing.Point(10, 90)
+$pluginCheckboxPanel.Size = New-Object System.Drawing.Size(680, 300)
+$pluginCheckboxPanel.BackColor = [System.Drawing.Color]::FromArgb(45, 45, 48)
+$pluginCheckboxPanel.BorderStyle = 'FixedSingle'
+$pluginCheckboxPanel.AutoScroll = $true
+$pluginOptionsTab.Controls.Add($pluginCheckboxPanel)
+
+# Action buttons
+$enableAllButton = New-Object System.Windows.Forms.Button
+$enableAllButton.Location = New-Object System.Drawing.Point(10, 400)
+$enableAllButton.Size = New-Object System.Drawing.Size(100, 30)
+$enableAllButton.Text = "Enable All"
+$enableAllButton.BackColor = [System.Drawing.Color]::FromArgb(0, 150, 0)
+$enableAllButton.ForeColor = [System.Drawing.Color]::White
+$enableAllButton.FlatStyle = 'Flat'
+$pluginOptionsTab.Controls.Add($enableAllButton)
+
+$disableAllButton = New-Object System.Windows.Forms.Button
+$disableAllButton.Location = New-Object System.Drawing.Point(120, 400)
+$disableAllButton.Size = New-Object System.Drawing.Size(100, 30)
+$disableAllButton.Text = "Disable All"
+$disableAllButton.BackColor = [System.Drawing.Color]::FromArgb(200, 0, 0)
+$disableAllButton.ForeColor = [System.Drawing.Color]::White
+$disableAllButton.FlatStyle = 'Flat'
+$pluginOptionsTab.Controls.Add($disableAllButton)
+
+$refreshPluginsButton = New-Object System.Windows.Forms.Button
+$refreshPluginsButton.Location = New-Object System.Drawing.Point(230, 400)
+$refreshPluginsButton.Size = New-Object System.Drawing.Size(100, 30)
+$refreshPluginsButton.Text = "Refresh"
+$refreshPluginsButton.BackColor = [System.Drawing.Color]::FromArgb(0, 120, 215)
+$refreshPluginsButton.ForeColor = [System.Drawing.Color]::White
+$refreshPluginsButton.FlatStyle = 'Flat'
+$pluginOptionsTab.Controls.Add($refreshPluginsButton)
+
+# Status label
+$pluginStatusLabel = New-Object System.Windows.Forms.Label
+$pluginStatusLabel.Location = New-Object System.Drawing.Point(10, 440)
+$pluginStatusLabel.Size = New-Object System.Drawing.Size(680, 20)
+$pluginStatusLabel.Text = "Loading plugins..."
+$pluginStatusLabel.ForeColor = [System.Drawing.Color]::FromArgb(200, 200, 200)
+$pluginOptionsTab.Controls.Add($pluginStatusLabel)
+
+# Store plugin checkboxes for management
+$script:pluginCheckboxes = @{}
+
+# Function to create plugin checkboxes
+function Create-PluginCheckboxes {
+    # Clear existing checkboxes
+    $pluginCheckboxPanel.Controls.Clear()
+    $script:pluginCheckboxes.Clear()
+    
+    $allPlugins = Get-AllPlugins
+    $enabledPlugins = Get-EnabledPlugins
+    $enabledPluginNames = $enabledPlugins.Name
+    
+    $y = 10
+    foreach ($plugin in $allPlugins) {
+        $isEnabled = $enabledPluginNames -contains $plugin.Name
+        
+        $checkbox = New-Object System.Windows.Forms.CheckBox
+        $checkbox.Location = New-Object System.Drawing.Point(10, $y)
+        $checkbox.Size = New-Object System.Drawing.Size(650, 20)
+        $checkbox.Text = "$($plugin.DisplayName) - $($plugin.Category) ($($plugin.CardSize))"
+        $checkbox.Checked = $isEnabled
+        $checkbox.ForeColor = [System.Drawing.Color]::White
+        $checkbox.BackColor = [System.Drawing.Color]::FromArgb(45, 45, 48)
+        $checkbox.Tag = $plugin.Name
+        
+        # Add event handler
+        $checkbox.Add_CheckedChanged({
+            $pluginName = $this.Tag
+            if ($this.Checked) {
+                Enable-Plugin -pluginName $pluginName
+                Write-Host "Enabled plugin: $pluginName"
+            } else {
+                Disable-Plugin -pluginName $pluginName
+                Write-Host "Disabled plugin: $pluginName"
+            }
+            # Refresh main plugin combo
+            Refresh-PluginList
+        })
+        
+        $pluginCheckboxPanel.Controls.Add($checkbox)
+        $script:pluginCheckboxes[$plugin.Name] = $checkbox
+        $y += 25
+    }
+    
+    # Update status
+    $enabledCount = ($allPlugins | Where-Object { $enabledPluginNames -contains $_.Name }).Count
+    $pluginStatusLabel.Text = "Found $($allPlugins.Count) plugins, $enabledCount enabled"
+}
+
+# Event handlers
+$enableAllButton.Add_Click({
+    $allPlugins = Get-AllPlugins
+    foreach ($plugin in $allPlugins) {
+        Enable-Plugin -pluginName $plugin.Name
+    }
+    Create-PluginCheckboxes
+    Refresh-PluginList
+    Write-Host "Enabled all plugins"
+})
+
+$disableAllButton.Add_Click({
+    $allPlugins = Get-AllPlugins
+    foreach ($plugin in $allPlugins) {
+        Disable-Plugin -pluginName $plugin.Name
+    }
+    Create-PluginCheckboxes
+    Refresh-PluginList
+    Write-Host "Disabled all plugins"
+})
+
+$refreshPluginsButton.Add_Click({
+    Create-PluginCheckboxes
+    Refresh-PluginList
+    Write-Host "Refreshed plugin list"
+})
+
+# Initialize plugin checkboxes
+Create-PluginCheckboxes
+
+# Add tab change event handler to refresh plugin list
+$mainTabControl.Add_SelectedIndexChanged({
+    if ($mainTabControl.SelectedTab.Text -eq "Plugin Options") {
+        # Refresh plugin list when switching to plugin options tab
+        Refresh-PluginList
+    }
+})
 
 # Decklists Title
 $decklistsTitleLabel = New-Object System.Windows.Forms.Label
@@ -1961,43 +2590,93 @@ $fetchCardsButton.Add_Click({
                 if ($yugiohOption4.Checked) { $pythonArgs += "--skip_errata " }
             }
             'Altered' {
-                $pythonArgs = "plugins/altered/fetch.py `"$decklistPath`" $format "
+                $pythonArgs = "plugins/altered/altered_cli.py --deck-path `"$decklistPath`" --format $format "
+                if ($fetchImagesCheck.Checked) { $pythonArgs += "--fetch-images " }
             }
             'Digimon' {
-                $pythonArgs = "plugins/digimon/fetch.py `"$decklistPath`" $format "
-                if ($digimonOption1.Checked) { $pythonArgs += "-a " }
+                $pythonArgs = "plugins/digimon/digimon_cli.py --deck-path `"$decklistPath`" --format $format "
+                if ($fetchImagesCheck.Checked) { $pythonArgs += "--fetch-images " }
+                if ($digimonOption1.Checked) { $pythonArgs += "--alternate-art " }
             }
             'Dragon Ball Super' {
                 # Dragon Ball Super uses Gundam's deckplanet format
                 $pythonArgs = "plugins/gundam/fetch.py `"$decklistPath`" deckplanet "
             }
             'Flesh and Blood' {
-                $pythonArgs = "plugins/flesh_and_blood/fetch.py `"$decklistPath`" $format "
+                $pythonArgs = "plugins/flesh_and_blood/fab_cli.py --deck-path `"$decklistPath`" --format $format "
+                if ($fetchImagesCheck.Checked) { $pythonArgs += "--fetch-images " }
             }
             'Grand Archive' {
                 $pythonArgs = "plugins/grand_archive/fetch.py `"$decklistPath`" $format "
             }
             'Gundam' {
                 $pythonArgs = "plugins/gundam/fetch.py `"$decklistPath`" $format "
-                if ($gundamOption1.Checked) { $pythonArgs += "-a " }
             }
             'Lorcana' {
-                $pythonArgs = "plugins/lorcana/fetch.py `"$decklistPath`" $format "
-                if ($lorcanaOption1.Checked) { $pythonArgs += "-e " }
+                $pythonArgs = "plugins/lorcana/lorcana_cli.py --deck-path `"$decklistPath`" --format $format "
+                if ($fetchImagesCheck.Checked) { $pythonArgs += "--fetch-images " }
+                if ($lorcanaOption1.Checked) { $pythonArgs += "--enchanted " }
             }
             'Netrunner' {
                 $pythonArgs = "plugins/netrunner/fetch.py `"$decklistPath`" $format "
+                if ($fetchImagesCheck.Checked) { $pythonArgs += "--fetch-images " }
             }
             'One Piece' {
                 $pythonArgs = "plugins/one_piece/fetch.py `"$decklistPath`" $format "
+                if ($fetchImagesCheck.Checked) { $pythonArgs += "--fetch-images " }
             }
             'Riftbound' {
                 $pythonArgs = "plugins/riftbound/fetch.py `"$decklistPath`" $format "
+                if ($fetchImagesCheck.Checked) { $pythonArgs += "--fetch-images " }
                 if ($riftboundOption1.Checked) { $pythonArgs += "-e " }
             }
             'Star Wars Unlimited' {
                 $pythonArgs = "plugins/star_wars_unlimited/fetch.py `"$decklistPath`" $format "
+                if ($fetchImagesCheck.Checked) { $pythonArgs += "--fetch-images " }
                 if ($swuOption1.Checked) { $pythonArgs += "-h " }
+            }
+            'Cards Against Humanity' {
+                $pythonArgs = "plugins/cards_against_humanity/cah_cli.py `"$decklistPath`" $format "
+            }
+            'CCGTrader' {
+                $pythonArgs = "plugins/ccgtrader/ccgt_cli.py `"$decklistPath`" $format "
+            }
+            'CF Vanguard' {
+                $pythonArgs = "plugins/cfvanguard/cfv_cli.py `"$decklistPath`" $format "
+            }
+            'Fluxx' {
+                $pythonArgs = "plugins/fluxx/fluxx_cli.py `"$decklistPath`" $format "
+            }
+            'Force of Will' {
+                $pythonArgs = "plugins/force_of_will/fow_cli.py `"$decklistPath`" $format "
+            }
+            'Marvel Champions' {
+                $pythonArgs = "plugins/marvel_champions/mc_cli.py `"$decklistPath`" $format "
+            }
+            'MetaZoo' {
+                $pythonArgs = "plugins/metazoo/mz_cli.py `"$decklistPath`" $format "
+            }
+            'Munchkin' {
+                $pythonArgs = "plugins/munchkin/munchkin_cli.py `"$decklistPath`" $format "
+            }
+            'Pokemon' {
+                $pythonArgs = "plugins/Pokemon/pokemon_cli.py --deck-path `"$decklistPath`" --format $format "
+                if ($fetchImagesCheck.Checked) { $pythonArgs += "--fetch-images " }
+            }
+            'Shadowverse Evolve' {
+                $pythonArgs = "plugins/shadowverse_evolve/sve_cli.py `"$decklistPath`" $format "
+            }
+            'Star Realms' {
+                $pythonArgs = "plugins/star_realms/sr_cli.py `"$decklistPath`" $format "
+            }
+            'Union Arena' {
+                $pythonArgs = "plugins/union_arena/ua_cli.py `"$decklistPath`" $format "
+            }
+            'Universus' {
+                $pythonArgs = "plugins/universus/uvs_cli.py `"$decklistPath`" $format "
+            }
+            'Weiss Schwarz' {
+                $pythonArgs = "plugins/weiss_schwarz/ws_cli.py `"$decklistPath`" $format "
             }
         }
         
