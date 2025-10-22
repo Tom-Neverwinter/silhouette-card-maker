@@ -1,0 +1,61 @@
+Collection: Sample Magi-Nation Collection
+Player: Collection Owner
+Collection ID: mnd_collection_5707716e
+Hash: d7ab835dfd4a06111548ae4142efac52
+Regions: Arderial, Cald, Naroom, Orothe, Underneath, Universal
+
+Cards (10 total):
+------------------------------------------------------------
+Tony Jones (Magi)
+  Region: Arderial, Cost: 0, Energy: 15
+  Set: BASE, Rarity: Common
+  Ability: Sample magi ability for Tony Jones
+
+Firefly (Creature)
+  Region: Cald, Cost: 3
+  Attack: 2, Defense: 1
+  Set: BASE, Rarity: Uncommon
+  Ability: Sample creature ability for Firefly
+
+Grow (Spell)
+  Region: Naroom, Cost: 3
+  Set: BASE, Rarity: Rare
+  Ability: Sample spell ability for Grow
+
+Nightmare Stone (Relic)
+  Region: Orothe, Cost: 2
+  Set: BASE, Rarity: Common
+  Ability: Sample relic ability for Nightmare Stone
+
+Yaki (Magi)
+  Region: Underneath, Cost: 0, Energy: 19
+  Set: BASE, Rarity: Uncommon
+  Ability: Sample magi ability for Yaki
+
+Xyx (Creature)
+  Region: Universal, Cost: 3
+  Attack: 3, Defense: 1
+  Set: BASE, Rarity: Rare
+  Ability: Sample creature ability for Xyx
+
+Heal (Spell)
+  Region: Arderial, Cost: 1
+  Set: BASE, Rarity: Common
+  Ability: Sample spell ability for Heal
+
+Dream Stone (Relic)
+  Region: Cald, Cost: 2
+  Set: BASE, Rarity: Uncommon
+  Ability: Sample relic ability for Dream Stone
+
+Tony Jones (Magi)
+  Region: Naroom, Cost: 0, Energy: 18
+  Set: BASE, Rarity: Rare
+  Ability: Sample magi ability for Tony Jones
+
+Firefly (Creature)
+  Region: Orothe, Cost: 3
+  Attack: 1, Defense: 1
+  Set: BASE, Rarity: Common
+  Ability: Sample creature ability for Firefly
+

@@ -1,0 +1,134 @@
+Collection: DemoCollection
+Games: Digimon, Dragon Ball Super, Magic: The Gathering, Pokémon, Yu-Gi-Oh!
+Total Cards: 15
+
+Magic: The Gathering (3 cards):
+----------------------------------------
+Card 1 from Magic: The Gathering Set 1
+  Set: Magic: The Gathering Set 1 (MAG)
+  Number: 001, Rarity: Common
+  Type: Creature
+  Cost: 1
+  Attack: 1, Defense: 0
+  Description: Sample card from Magic: The Gathering
+
+Card 2 from Magic: The Gathering Set 1
+  Set: Magic: The Gathering Set 1 (MAG)
+  Number: 002, Rarity: Uncommon
+  Type: Spell
+  Cost: 2
+  Attack: 2, Defense: 1
+  Description: Sample card from Magic: The Gathering
+
+Card 3 from Magic: The Gathering Set 1
+  Set: Magic: The Gathering Set 1 (MAG)
+  Number: 003, Rarity: Rare
+  Type: Artifact
+  Cost: 3
+  Attack: 3, Defense: 0
+  Description: Sample card from Magic: The Gathering
+
+Pokémon (3 cards):
+----------------------------------------
+Card 1 from Pokémon Set 1
+  Set: Pokémon Set 1 (POK)
+  Number: 001, Rarity: Common
+  Type: Creature
+  Cost: 1
+  Attack: 1, Defense: 0
+  Description: Sample card from Pokémon
+
+Card 2 from Pokémon Set 1
+  Set: Pokémon Set 1 (POK)
+  Number: 002, Rarity: Uncommon
+  Type: Spell
+  Cost: 2
+  Attack: 2, Defense: 1
+  Description: Sample card from Pokémon
+
+Card 3 from Pokémon Set 1
+  Set: Pokémon Set 1 (POK)
+  Number: 003, Rarity: Rare
+  Type: Artifact
+  Cost: 3
+  Attack: 3, Defense: 0
+  Description: Sample card from Pokémon
+
+Yu-Gi-Oh! (3 cards):
+----------------------------------------
+Card 1 from Yu-Gi-Oh! Set 1
+  Set: Yu-Gi-Oh! Set 1 (YU-)
+  Number: 001, Rarity: Common
+  Type: Creature
+  Cost: 1
+  Attack: 1, Defense: 0
+  Description: Sample card from Yu-Gi-Oh!
+
+Card 2 from Yu-Gi-Oh! Set 1
+  Set: Yu-Gi-Oh! Set 1 (YU-)
+  Number: 002, Rarity: Uncommon
+  Type: Spell
+  Cost: 2
+  Attack: 2, Defense: 1
+  Description: Sample card from Yu-Gi-Oh!
+
+Card 3 from Yu-Gi-Oh! Set 1
+  Set: Yu-Gi-Oh! Set 1 (YU-)
+  Number: 003, Rarity: Rare
+  Type: Artifact
+  Cost: 3
+  Attack: 3, Defense: 0
+  Description: Sample card from Yu-Gi-Oh!
+
+Digimon (3 cards):
+----------------------------------------
+Card 1 from Digimon Set 1
+  Set: Digimon Set 1 (DIG)
+  Number: 001, Rarity: Common
+  Type: Creature
+  Cost: 1
+  Attack: 1, Defense: 0
+  Description: Sample card from Digimon
+
+Card 2 from Digimon Set 1
+  Set: Digimon Set 1 (DIG)
+  Number: 002, Rarity: Uncommon
+  Type: Spell
+  Cost: 2
+  Attack: 2, Defense: 1
+  Description: Sample card from Digimon
+
+Card 3 from Digimon Set 1
+  Set: Digimon Set 1 (DIG)
+  Number: 003, Rarity: Rare
+  Type: Artifact
+  Cost: 3
+  Attack: 3, Defense: 0
+  Description: Sample card from Digimon
+
+Dragon Ball Super (3 cards):
+----------------------------------------
+Card 1 from Dragon Ball Super Set 1
+  Set: Dragon Ball Super Set 1 (DRA)
+  Number: 001, Rarity: Common
+  Type: Creature
+  Cost: 1
+  Attack: 1, Defense: 0
+  Description: Sample card from Dragon Ball Super
+
+Card 2 from Dragon Ball Super Set 1
+  Set: Dragon Ball Super Set 1 (DRA)
+  Number: 002, Rarity: Uncommon
+  Type: Spell
+  Cost: 2
+  Attack: 2, Defense: 1
+  Description: Sample card from Dragon Ball Super
+
+Card 3 from Dragon Ball Super Set 1
+  Set: Dragon Ball Super Set 1 (DRA)
+  Number: 003, Rarity: Rare
+  Type: Artifact
+  Cost: 3
+  Attack: 3, Defense: 0
+  Description: Sample card from Dragon Ball Super
+

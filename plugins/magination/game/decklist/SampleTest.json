@@ -1,0 +1,85 @@
+{
+  "name": "SampleTest",
+  "player": "Collection Owner",
+  "id": "mnd_collection_577e0d7b",
+  "hash": "b1aac4dd2aaa8521a8d862fa41cf45cb",
+  "regions": [
+    "Arderial",
+    "Cald",
+    "Naroom",
+    "Orothe",
+    "Underneath"
+  ],
+  "cards": [
+    {
+      "name": "Tony Jones",
+      "card_type": "Magi",
+      "region": "Arderial",
+      "cost": 1,
+      "energy": 10,
+      "attack": 0,
+      "defense": 0,
+      "ability": "Sample ability for card 1",
+      "set_code": "BASE",
+      "rarity": "Common",
+      "image_url": "https://example.com/sample_cards/mnd_1.png",
+      "magi_name": null
+    },
+    {
+      "name": "Arboll",
+      "card_type": "Creature",
+      "region": "Cald",
+      "cost": 2,
+      "energy": 0,
+      "attack": 2,
+      "defense": 1,
+      "ability": "Sample ability for card 2",
+      "set_code": "BASE",
+      "rarity": "Uncommon",
+      "image_url": "https://example.com/sample_cards/mnd_2.png",
+      "magi_name": null
+    },
+    {
+      "name": "Lightning",
+      "card_type": "Spell",
+      "region": "Naroom",
+      "cost": 3,
+      "energy": 0,
+      "attack": 0,
+      "defense": 0,
+      "ability": "Sample ability for card 3",
+      "set_code": "BASE",
+      "rarity": "Rare",
+      "image_url": "https://example.com/sample_cards/mnd_3.png",
+      "magi_name": null
+    },
+    {
+      "name": "Ancient Staff",
+      "card_type": "Relic",
+      "region": "Orothe",
+      "cost": 4,
+      "energy": 0,
+      "attack": 0,
+      "defense": 0,
+      "ability": "Sample ability for card 4",
+      "set_code": "BASE",
+      "rarity": "Common",
+      "image_url": "https://example.com/sample_cards/mnd_4.png",
+      "magi_name": null
+    },
+    {
+      "name": "Korg",
+      "card_type": "Magi",
+      "region": "Underneath",
+      "cost": 1,
+      "energy": 14,
+      "attack": 0,
+      "defense": 0,
+      "ability": "Sample ability for card 5",
+      "set_code": "BASE",
+      "rarity": "Uncommon",
+      "image_url": "https://example.com/sample_cards/mnd_5.png",
+      "magi_name": null
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+Collection: SampleTest
+Player: Collection Owner
+Collection ID: mnd_collection_577e0d7b
+Hash: b1aac4dd2aaa8521a8d862fa41cf45cb
+Regions: Arderial, Cald, Naroom, Orothe, Underneath
+
+Cards (5 total):
+------------------------------------------------------------
+Tony Jones (Magi)
+  Region: Arderial, Cost: 1, Energy: 10
+  Set: BASE, Rarity: Common
+  Ability: Sample ability for card 1
+
+Arboll (Creature)
+  Region: Cald, Cost: 2
+  Attack: 2, Defense: 1
+  Set: BASE, Rarity: Uncommon
+  Ability: Sample ability for card 2
+
+Lightning (Spell)
+  Region: Naroom, Cost: 3
+  Set: BASE, Rarity: Rare
+  Ability: Sample ability for card 3
+
+Ancient Staff (Relic)
+  Region: Orothe, Cost: 4
+  Set: BASE, Rarity: Common
+  Ability: Sample ability for card 4
+
+Korg (Magi)
+  Region: Underneath, Cost: 1, Energy: 14
+  Set: BASE, Rarity: Uncommon
+  Ability: Sample ability for card 5
+
