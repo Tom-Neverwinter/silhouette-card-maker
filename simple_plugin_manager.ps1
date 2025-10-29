@@ -1,4 +1,4 @@
-﻿# Simplified Plugin Manager for Silhouette Card Maker
+# Simplified Plugin Manager for Silhouette Card Maker
 # ===================================================
 
 # Plugin configuration file path
@@ -620,7 +620,8 @@ function Initialize-PluginSystem {
     $config.lastScan = Get-Date
     Save-PluginConfig -config $config
     
-    Write-Host "Simple plugin system initialized. Found $(Get-AllPlugins).Count plugins."
+    $pluginCount = (Get-AllPlugins).Count
+    Write-Host "Simple plugin system initialized. Found $pluginCount plugins."
 }
 
 # Enable a plugin
