@@ -5,7 +5,7 @@ import requests
 import time
 from urllib.parse import quote
 
-double_sided_layouts = ['transform', 'modal_dfc', 'double_faced_token']
+double_sided_layouts = ['transform', 'modal_dfc', 'double_faced_token', 'reversible_card']
 
 def request_scryfall(
     query: str,
