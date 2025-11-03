@@ -319,3 +319,17 @@ Options:
                           300; x>=0]
   --help                  Show this message and exit.
 ```
+
+### GUI 
+
+<img width="1102" height="1013" alt="image" src="https://github.com/user-attachments/assets/8a1bdb31-2529-4fb6-a576-6dbb06e8e742" />
+<img width="1102" height="1009" alt="image" src="https://github.com/user-attachments/assets/da8679f8-d005-480b-92da-830168b53a57" />
+<img width="1103" height="1013" alt="image" src="https://github.com/user-attachments/assets/b0acdedd-d10f-492c-8694-f70526836a90" />
+<img width="1098" height="1008" alt="image" src="https://github.com/user-attachments/assets/a0b70787-e887-470a-8f2f-bd214ec86ca2" />
+<img width="1103" height="1003" alt="image" src="https://github.com/user-attachments/assets/32710a67-d374-4d63-9071-a66e834e5577" />
+<img width="1092" height="1002" alt="image" src="https://github.com/user-attachments/assets/379c67fd-869d-4f0d-9efd-1ef8109cfd05" /> [WIP]
+
+
+
+
+
