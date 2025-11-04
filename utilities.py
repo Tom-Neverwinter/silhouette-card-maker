@@ -1,3 +1,4 @@
+from dataclasses import dataclass, asdict
 from enum import Enum
 import itertools
 import json
@@ -5,12 +6,240 @@ import math
 import os
 from pathlib import Path
 import re
-from typing import Dict, List
+from typing import Dict, List, Optional, Tuple, Any
 from xml.dom import ValidationErr
 
 from natsort import natsorted
-from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps, ImageCms
 from pydantic import BaseModel
+import hashlib
+from io import BytesIO
+
+# Card Back Management
+@dataclass
+class CardBack:
+    """Represents a card back with metadata."""
+    id: str
+    name: str
+    game: str
+    variant: str
+    file_path: str
+    file_hash: str = ""
+    width: int = 0
+    height: int = 0
+    file_size: int = 0
+    is_default: bool = False
+    tags: List[str] = None
+    
+    def __post_init__(self):
+        if self.tags is None:
+            self.tags = []
+    
+    @classmethod
+    def from_image(cls, image_path: Path, game: str, variant: str = "default", is_default: bool = False) -> 'CardBack':
+        """Create a CardBack from an image file."""
+        try:
+            with Image.open(image_path) as img:
+                width, height = img.size
+                file_size = image_path.stat().st_size
+                file_hash = cls.calculate_hash(image_path)
+                
+                return cls(
+                    id=f"{game.lower().replace(' ', '_')}_{variant.lower().replace(' ', '_')}",
+                    name=f"{game} - {variant}",
+                    game=game,
+                    variant=variant,
+                    file_path=str(image_path.relative_to(Path(__file__).parent) if image_path.is_absolute() else image_path),
+                    file_hash=file_hash,
+                    width=width,
+                    height=height,
+                    file_size=file_size,
+                    is_default=is_default,
+                    tags=[game.lower(), variant.lower()]
+                )
+        except Exception as e:
+            print(f"Error creating CardBack from {image_path}: {e}")
+            return None
+    
+    @staticmethod
+    def calculate_hash(file_path: Path) -> str:
+        """Calculate MD5 hash of a file."""
+        hash_md5 = hashlib.md5()
+        with open(file_path, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5.update(chunk)
+        return hash_md5.hexdigest()
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization."""
+        return asdict(self)
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'CardBack':
+        """Create from dictionary."""
+        return cls(**data)
+
+
+class CardBackManager:
+    """Manages card backs with PNG prioritization and metadata."""
+    
+    def __init__(self, backs_dir: Path):
+        self.backs_dir = Path(backs_dir).resolve()
+        self.config_file = self.backs_dir / "card_backs_meta.json"
+        self.card_backs: Dict[str, List[CardBack]] = {}
+        self._load_config()
+    
+    def _load_config(self) -> None:
+        """Load card backs configuration from JSON file or scan directory."""
+        if self.config_file.exists():
+            try:
+                with open(self.config_file, 'r', encoding='utf-8') as f:
+                    config = json.load(f)
+                    self.card_backs = {
+                        game: [CardBack.from_dict(back) for back in backs]
+                        for game, backs in config.items()
+                    }
+                # Verify all files still exist
+                self._verify_files()
+            except Exception as e:
+                print(f"Error loading card backs config: {e}")
+                self.card_backs = {}
+        
+        # If no config or error, scan directory
+        if not self.card_backs:
+            self.scan_directory()
+    
+    def _verify_files(self) -> None:
+        """Verify that all referenced files still exist."""
+        valid_backs = {}
+        for game, backs in self.card_backs.items():
+            valid_backs[game] = []
+            for back in backs:
+                full_path = self.backs_dir / back.file_path
+                if full_path.exists():
+                    valid_backs[game].append(back)
+                else:
+                    print(f"Warning: Missing card back file: {full_path}")
+        self.card_backs = {k: v for k, v in valid_backs.items() if v}
+    
+    def scan_directory(self) -> None:
+        """Scan the directory for card back images and build metadata."""
+        self.card_backs = {}
+        
+        # First pass: Find all image files
+        image_paths = []
+        for ext in ['*.png', '*.jpg', '*.jpeg', '*.webp']:
+            image_paths.extend(self.backs_dir.glob(f'**/{ext}'))
+        
+        # Group by game and variant
+        game_variants = {}
+        for path in image_paths:
+            rel_path = path.relative_to(self.backs_dir)
+            parts = rel_path.parts
+            
+            if len(parts) == 1:
+                # Directly in BACKS directory
+                game_name = path.stem.replace('_back', '').replace('_', ' ').title()
+                variant = 'default'
+            else:
+                # In a subdirectory (game folder)
+                game_name = parts[0].replace('_', ' ').title()
+                variant = parts[-1].replace('_back', '').replace('_', ' ').title()
+            
+            if game_name not in game_variants:
+                game_variants[game_name] = {}
+            
+            # Prefer PNG over other formats
+            base_name = path.stem
+            if base_name not in game_variants[game_name] or path.suffix.lower() == '.png':
+                game_variants[game_name][base_name] = path
+        
+        # Create CardBack objects
+        for game, variants in game_variants.items():
+            self.card_backs[game] = []
+            for base_name, path in variants.items():
+                variant = base_name.replace('_back', '').replace('_', ' ').title()
+                if variant.lower() == 'default':
+                    variant = 'Standard'
+                
+                card_back = CardBack.from_image(
+                    path, 
+                    game=game,
+                    variant=variant,
+                    is_default=variant.lower() in ['standard', 'default']
+                )
+                
+                if card_back:
+                    self.card_backs[game].append(card_back)
+        
+        self._save_config()
+    
+    def _save_config(self) -> None:
+        """Save current configuration to file."""
+        config = {
+            game: [back.to_dict() for back in backs]
+            for game, backs in self.card_backs.items()
+        }
+        try:
+            with open(self.config_file, 'w', encoding='utf-8') as f:
+                json.dump(config, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"Error saving card backs config: {e}")
+    
+    def get_games(self) -> List[str]:
+        """Get list of all available games."""
+        return sorted(self.card_backs.keys())
+    
+    def get_backs_for_game(self, game_name: str) -> List[CardBack]:
+        """Get all card backs for a specific game."""
+        return sorted(
+            self.card_backs.get(game_name, []),
+            key=lambda x: (not x.is_default, x.variant.lower())
+        )
+    
+    def get_default_back(self, game_name: str) -> Optional[CardBack]:
+        """Get the default card back for a game."""
+        if game_name in self.card_backs:
+            # Try to find a default first
+            for back in self.card_backs[game_name]:
+                if back.is_default:
+                    return back
+            # Fall back to first available
+            if self.card_backs[game_name]:
+                return self.card_backs[game_name][0]
+        return None
+    
+    def find_backs(self, search_term: str = "", tags: List[str] = None) -> List[CardBack]:
+        """Find card backs matching search term and/or tags."""
+        results = []
+        search_term = search_term.lower()
+        
+        for game, backs in self.card_backs.items():
+            for back in backs:
+                # Match search term in name, game, or variant
+                matches_search = (
+                    not search_term or
+                    search_term in back.name.lower() or
+                    search_term in back.game.lower() or
+                    search_term in back.variant.lower()
+                )
+                
+                # Match all tags if provided
+                matches_tags = True
+                if tags:
+                    back_tags = {t.lower() for t in back.tags}
+                    matches_tags = all(tag.lower() in back_tags for tag in tags)
+                
+                if matches_search and matches_tags:
+                    results.append(back)
+        
+        return sorted(results, key=lambda x: (x.game.lower(), not x.is_default, x.variant.lower()))
+
+
+# Initialize card back manager
+card_back_manager = CardBackManager(
+    Path(__file__).parent / 'ART' / 'BACKS'
+)
 
 # Specify directory locations
 asset_directory = 'assets'
@@ -172,6 +401,32 @@ def get_back_card_image_path(back_dir_path) -> str | None:
 
     return os.path.join(back_dir_path, files[index])
 
+def pair_double_sided_images(front_files: List[str], ds_files: List[str]) -> dict[str, str]:
+    auto_pairs = {f: f for f in ds_files if f in front_files}
+    remaining_fronts = [f for f in front_files if f not in auto_pairs]
+    remaining_backs = [b for b in ds_files if b not in auto_pairs.values()]
+    pairs: dict[str, str] = {}
+    if len(remaining_fronts) == 0 or len(remaining_backs) == 0:
+        return auto_pairs
+    for f in natsorted(list(remaining_fronts)):
+        print(f'Select a back for: {f}')
+        for i, b in enumerate(remaining_backs):
+            print(f'[{i + 1}] {b}')
+        while True:
+            choice = input("Enter number to pair, or press Enter to skip: ")
+            if choice == "":
+                break
+            if not choice.isdigit():
+                continue
+            index = int(choice) - 1
+            if index < 0 or index >= len(remaining_backs):
+                continue
+            selected = remaining_backs.pop(index)
+            pairs[f] = selected
+            break
+    auto_pairs.update(pairs)
+    return auto_pairs
+
 def draw_card_with_bleed(card_image: Image, base_image: Image, box: tuple[int, int, int, int], print_bleed: tuple[int, int]):
     origin_x, origin_y, _, _ = box
 
@@ -211,6 +466,37 @@ def draw_card_with_bleed(card_image: Image, base_image: Image, box: tuple[int, i
                     base_image.paste(card_image.crop((crop_x, crop_y, crop_x + 1, crop_y + 1)), (pos_x + x_bleed_i, pos_y + y_bleed_i))
 
     return base_image
+
+def convert_to_srgb(img: Image.Image) -> Image.Image:
+    """
+    Convert an image to sRGB using ICC profiles when present to avoid oversaturation
+    when exporting to PDF. Falls back to plain RGB conversion if ICC is unavailable.
+    """
+    try:
+        icc = img.info.get("icc_profile")
+        # Ensure working in a non-palette mode for conversion
+        working = img
+        if working.mode == "P":
+            working = working.convert("RGB")
+
+        if icc:
+            src_profile = ImageCms.ImageCmsProfile(BytesIO(icc)) if isinstance(icc, (bytes, bytearray)) else None
+            # Some files store an empty or invalid icc_profile; guard accordingly
+            if src_profile is not None:
+                dst_profile = ImageCms.createProfile("sRGB")
+                intent = ImageCms.INTENT_PERCEPTUAL
+                converted = ImageCms.profileToProfile(working, src_profile, dst_profile, outputMode="RGB", renderingIntent=intent)
+                return converted
+        # No usable ICC profile
+        if working.mode != "RGB":
+            return working.convert("RGB")
+        return working
+    except Exception:
+        # On any error, ensure at least RGB
+        try:
+            return img.convert("RGB")
+        except Exception:
+            return img
 
 def draw_card_layout(
     card_images: List[Image.Image | None],
@@ -308,7 +594,8 @@ def generate_pdf(
     quality: int,
     skip_indices: List[int],
     load_offset: bool,
-    name: str
+    name: str,
+    normalize_color: bool = False
 ):
     # Sanity checks for the different directories
     f_path = Path(front_dir_path)
@@ -346,15 +633,12 @@ def generate_pdf(
 
     front_image_filenames = get_image_file_paths(front_dir_path)
     ds_image_filenames = get_image_file_paths(double_sided_dir_path)
-
-    # Check if double-sided back images has matching front images
     front_set = set(front_image_filenames)
-    ds_set = set(ds_image_filenames)
-    if not ds_set.issubset(front_set):
-        raise Exception(f'Double-sided backs "{ds_set - front_set}" do not have matching fronts. Add the missing fronts to front image directory "{front_dir_path}".')
+    ds_pairs = pair_double_sided_images(front_image_filenames, ds_image_filenames)
+    ds_set = set(ds_pairs.keys())
 
     if only_fronts:
-        if len(ds_set) > 0:
+        if len(ds_pairs) > 0:
             raise Exception(f'Cannot use "--only_fronts" with double-sided cards. Remove cards from double-side image directory "{double_sided_dir_path}".')
 
     with open(layouts_path, 'r') as layouts_file:
@@ -421,6 +705,8 @@ def generate_pdf(
                 # Load the card back image
                 with Image.open(back_card_image_path) as back_im:
                     back_im = ImageOps.exif_transpose(back_im)
+                    if normalize_color:
+                        back_im = convert_to_srgb(back_im)
 
                     back_images = [back_im] * num_cards
                     for s in clean_skip_indices:
@@ -469,6 +755,8 @@ def generate_pdf(
                     front_image_path = os.path.join(front_dir_path, file)
                     front_image = Image.open(front_image_path)
                     front_image = ImageOps.exif_transpose(front_image)
+                    if normalize_color:
+                        front_image = convert_to_srgb(front_image)
                     front_card_images.append(front_image)
 
                 single_sided_front_page = reg_im.copy()
@@ -503,7 +791,7 @@ def generate_pdf(
                 )
 
             # Create double-sided card layout
-            it = iter(natsorted(list(ds_set)))
+            it = iter(natsorted(list(ds_pairs.keys())))
             while True:
                 file_group = list(itertools.islice(it, num_cards - len(clean_skip_indices)))
                 if not file_group:
@@ -530,11 +818,15 @@ def generate_pdf(
                     front_image_path = os.path.join(front_dir_path, file)
                     front_image = Image.open(front_image_path)
                     front_image = ImageOps.exif_transpose(front_image)
+                    if normalize_color:
+                        front_image = convert_to_srgb(front_image)
                     front_card_images.append(front_image)
 
-                    ds_image_path = os.path.join(double_sided_dir_path, file)
+                    ds_image_path = os.path.join(double_sided_dir_path, ds_pairs[file])
                     ds_image = Image.open(ds_image_path)
                     ds_image = ImageOps.exif_transpose(ds_image)
+                    if normalize_color:
+                        ds_image = convert_to_srgb(ds_image)
                     back_card_images.append(ds_image)
 
                 double_sided_front_page = reg_im.copy()
