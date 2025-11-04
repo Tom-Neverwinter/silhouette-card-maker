@@ -28,6 +28,7 @@ default_output_path = os.path.join(output_directory, 'game.pdf')
 @click.option("--load_offset", default=False, is_flag=True, help="Apply saved offsets. See `offset_pdf.py` for more information.")
 @click.option("--skip", type=click.IntRange(min=0), multiple=True, help="Skip a card based on its index. Useful for registration issues. Examples: 0, 4.")
 @click.option("--name", help="Label each page of the PDF with a name.")
+@click.option("--normalize_color", default=False, is_flag=True, help="Normalize all images to sRGB to avoid oversaturation from non-sRGB color profiles.")
 @click.version_option("1.5.1")
 
 def cli(
@@ -46,7 +47,8 @@ def cli(
     quality,
     skip,
     load_offset,
-    name
+    name,
+    normalize_color
 ):
     generate_pdf(
         front_dir_path,
@@ -64,7 +66,8 @@ def cli(
         quality,
         skip,
         load_offset,
-        name
+        name,
+        normalize_color
     )
 
 if __name__ == '__main__':
