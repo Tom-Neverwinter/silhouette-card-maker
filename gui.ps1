@@ -2950,11 +2950,11 @@ $clearFoldersButton.Add_Click({
     # Confirm with user
     $result = [System.Windows.Forms.MessageBox]::Show(
         "This will delete all files in the following folders:`n`n" +
-        "• game/front`n" +
-        "• game/back`n" +
-        "• game/double_sided`n" +
-        "• game/output`n" +
-        "• game/decklist`n`n" +
+        "- game/front`n" +
+        "- game/back`n" +
+        "- game/double_sided`n" +
+        "- game/output`n" +
+        "- game/decklist`n`n" +
         "Are you sure you want to continue?",
         "Confirm Clear Game Folders",
         [System.Windows.Forms.MessageBoxButtons]::YesNo,
