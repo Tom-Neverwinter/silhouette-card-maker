@@ -608,13 +608,10 @@ def generate_pdf(
 
                 print(f'Generated images: {output_path}')
 
-            else:
-                pages[0].save(output_path, format='PDF', save_all=True, append_images=pages[1:], resolution=math.floor(300 * ppi_ratio), speed=0, subsampling=0, quality=quality)
-                print(f'Generated PDF: {output_path}')
 
 class OffsetData(BaseModel):
-    x_offset: int
-    y_offset: int
+    x_offset: float
+    y_offset: float
 
 def save_offset(x_offset, y_offset) -> None:
     # Create the directory if it doesn't exist
@@ -641,13 +638,15 @@ def load_saved_offset() -> OffsetData:
 
     return None
 
-def offset_images(images: List[Image.Image], x_offset: int, y_offset: int, ppi: int) -> List[Image.Image]:
+def offset_images(images: List[Image.Image], x_offset: float, y_offset: float, ppi: int) -> List[Image.Image]:
     offset_images = []
 
     add_offset = False
     for image in images:
         if add_offset:
-            offset_images.append(ImageChops.offset(image, math.floor(x_offset * ppi / 300), math.floor(y_offset * ppi / 300)))
+            x_pixels = math.floor(x_offset * ppi / 300)
+            y_pixels = math.floor(y_offset * ppi / 300)
+            offset_images.append(ImageChops.offset(image, x_pixels, y_pixels))
         else:
             offset_images.append(image)
 
