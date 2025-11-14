@@ -1503,48 +1503,47 @@ $loadOffsetCheck = New-Object System.Windows.Forms.CheckBox
 $loadOffsetCheck.Location = New-Object System.Drawing.Point(10, 140)
 $loadOffsetCheck.Size = New-Object System.Drawing.Size(680, 18)
 $loadOffsetCheck.Text = "Auto-apply saved offset when creating PDFs (--load_offset)"
-$loadOffsetCheck.ForeColor = [System.Drawing.Color]::LightGray
 $offsetPdfTab.Controls.Add($loadOffsetCheck)
 
 # Helper function to save offset to both GUI settings and Python JSON file
 function Save-OffsetData {
-    # Save to GUI settings
-    Save-Settings -defaultDecklistFolders $script:defaultDecklistFolders -targetFolder $targetTextBox.Text -generalDecklistLocation $script:generalDecklistLocation -backImages $script:backImages -outputPath $script:outputPath -xOffset $xOffsetTextBox.Text -yOffset $yOffsetTextBox.Text -loadOffset $loadOffsetCheck.Checked -pluginOptions $script:pluginOptions
-    
-    # Also save to data/offset_data.json for Python scripts
-    if ($targetTextBox.Text) {
-        try {
-            # Parse offset values, default to 0 if empty or invalid
-            $xOffset = 0
-            $yOffset = 0
-            
-            if ($xOffsetTextBox.Text -and [int]::TryParse($xOffsetTextBox.Text, [ref]$xOffset)) {
-                # Successfully parsed X offset
-            } else {
-                $xOffset = 0
-            }
-            
-            if ($yOffsetTextBox.Text -and [int]::TryParse($yOffsetTextBox.Text, [ref]$yOffset)) {
-                # Successfully parsed Y offset
-            } else {
-                $yOffset = 0
-            }
-            
-            $dataDir = Join-Path $targetTextBox.Text "data"
-            if (-not (Test-Path $dataDir)) {
-                New-Item -ItemType Directory -Path $dataDir -Force | Out-Null
-            }
-            
-            # Create JSON with proper integer values (UTF8 without BOM)
-            $offsetFile = Join-Path $dataDir "offset_data.json"
-            $jsonContent = "{`"x_offset`":$xOffset,`"y_offset`":$yOffset}"
-            $utf8NoBom = New-Object System.Text.UTF8Encoding $false
-            [System.IO.File]::WriteAllText($offsetFile, $jsonContent, $utf8NoBom)
-        }
-        catch {
-            # Silently continue if offset file can't be saved
-        }
-    }
+	# Save to GUI settings
+	Save-Settings -defaultDecklistFolders $script:defaultDecklistFolders -targetFolder $targetTextBox.Text -generalDecklistLocation $script:generalDecklistLocation -backImages $script:backImages -outputPath $script:outputPath -xOffset $xOffsetTextBox.Text -yOffset $yOffsetTextBox.Text -loadOffset $loadOffsetCheck.Checked -pluginOptions $script:pluginOptions
+	
+	# Also save to data/offset_data.json for Python scripts
+	if ($targetTextBox.Text) {
+		try {
+			# Parse offset values, default to 0 if empty or invalid (allow fractional mm)
+			$xOffset = 0.0
+			$yOffset = 0.0
+			
+			if ($xOffsetTextBox.Text -and [double]::TryParse($xOffsetTextBox.Text, [ref]$xOffset)) {
+				# Successfully parsed X offset (can be fractional)
+			} else {
+				$xOffset = 0.0
+			}
+			
+			if ($yOffsetTextBox.Text -and [double]::TryParse($yOffsetTextBox.Text, [ref]$yOffset)) {
+				# Successfully parsed Y offset (can be fractional)
+			} else {
+				$yOffset = 0.0
+			}
+			
+			$dataDir = Join-Path $targetTextBox.Text "data"
+			if (-not (Test-Path $dataDir)) {
+				New-Item -ItemType Directory -Path $dataDir -Force | Out-Null
+			}
+			
+			# Create JSON with numeric values (UTF8 without BOM)
+			$offsetFile = Join-Path $dataDir "offset_data.json"
+			$jsonContent = "{`"x_offset`":$xOffset,`"y_offset`":$yOffset}"
+			$utf8NoBom = New-Object System.Text.UTF8Encoding $false
+			[System.IO.File]::WriteAllText($offsetFile, $jsonContent, $utf8NoBom)
+		}
+		catch {
+			# Silently continue if offset file can't be saved
+		}
+	}
 }
 
 # Event handlers for offset controls to save settings
