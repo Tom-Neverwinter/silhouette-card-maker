@@ -338,3 +338,9 @@ Options:
 
 
 
+
+## Acknowledgments
+
+Special thanks to [hchoki](https://github.com/hchoki) for their contributions to this project, including:
+*   **Image Upscaling**: Integration of Waifu2x for high-quality card upscaling.
+*   **Offset Profiles**: Enhanced system for managing printer and cutter offsets.

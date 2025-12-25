@@ -3,23 +3,30 @@
 venv
 __pycache__
 
-out/back/*
-!out/back/EMPTY.md
-out/front/*
-!out/front/EMPTY.md
-out/double_sided/*
-!out/double_sided/EMPTY.md
-out/output/*
-!out/output/EMPTY.md
-out/decklist/*
-!out/decklist/EMPTY.md
+game/back/*
+!game/back/EMPTY.md
+game/front/*
+!game/front/EMPTY.md
+game/double_sided/*
+!game/double_sided/EMPTY.md
+game/output/*
+!game/output/EMPTY.md
+game/decklist/*
+!game/decklist/EMPTY.md
 
-data/*
-!data/games_index.json
+data
 
 images/*.xcf
 
+<<<<<<< Updated upstream
 # Waifu2x AI upscaling binaries
 waifu2x-minimal/
 
 hugo/public/
+=======
+test/*/output/*
+!test/*/output/EMPTY.md
+
+hugo/public/
+.vscode/launch.json
+>>>>>>> Stashed changes

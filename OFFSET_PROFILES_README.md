@@ -2,6 +2,8 @@
 
 The offset profile system allows you to save and manage multiple offset configurations for different paper sizes and printer setups. This is useful when you print on different printers or paper sizes that require different alignment adjustments.
 
+*System design and implementation by [hchoki](https://github.com/hchoki).*
+
 ## Overview
 
 **What are offsets?**
