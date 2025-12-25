@@ -3,6 +3,7 @@
 venv
 __pycache__
 
+# Old output structure (keeping for safety)
 game/back/*
 !game/back/EMPTY.md
 game/front/*
@@ -14,19 +15,18 @@ game/output/*
 game/decklist/*
 !game/decklist/EMPTY.md
 
+out/
+
 data
 
 images/*.xcf
 
-<<<<<<< Updated upstream
 # Waifu2x AI upscaling binaries
 waifu2x-minimal/
 
 hugo/public/
-=======
+
 test/*/output/*
 !test/*/output/EMPTY.md
 
-hugo/public/
 .vscode/launch.json
->>>>>>> Stashed changes
