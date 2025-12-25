@@ -1,9 +1,14 @@
 import os
+import sys
 from typing import List, Set, Tuple
 import re
 import requests
 import time
 from urllib.parse import quote
+
+# Add the root directory to the path to import utilities
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+from utilities import upscale_image_with_waifu2x
 
 double_sided_layouts = ['transform', 'modal_dfc', 'double_faced_token', 'reversible_card']
 
@@ -30,7 +35,11 @@ def fetch_card_art(
     layout: str,
 
     front_img_dir: str,
-    double_sided_dir: str
+    double_sided_dir: str,
+    
+    upscale: bool = False,
+    upscale_factor: int = 2,
+    noise_level: int = 1
 ) -> None:
     # Query for the front side
     card_front_image_query = f'https://api.scryfall.com/cards/{card_set}/{card_collector_number}/?format=image&version=png'
@@ -43,6 +52,10 @@ def fetch_card_art(
 
             with open(image_path, 'wb') as f:
                 f.write(card_art)
+            
+            # Upscale the image if requested
+            if upscale:
+                upscale_image_with_waifu2x(image_path, upscale_factor, noise_level)
 
     # Get backside of card, if it exists
     if layout in double_sided_layouts:
@@ -56,6 +69,10 @@ def fetch_card_art(
 
                 with open(image_path, 'wb') as f:
                     f.write(card_art)
+                
+                # Upscale the image if requested
+                if upscale:
+                    upscale_image_with_waifu2x(image_path, upscale_factor, noise_level)
 
 def remove_nonalphanumeric(s: str) -> str:
     return re.sub(r'[^\w]', '', s)
@@ -103,6 +120,10 @@ def fetch_card(
     prefer_showcase: bool,
     prefer_extra_art: bool,
 
+    upscale: bool,
+    upscale_factor: int,
+    noise_level: int,
+
     front_img_dir: str,
     double_sided_dir: str
 ):
@@ -112,7 +133,7 @@ def fetch_card(
         # Query for card info
         card_json = request_scryfall(card_info_query).json()
 
-        fetch_card_art(index, quantity, remove_nonalphanumeric(card_json['name']), card_set, card_collector_number, card_json['layout'], front_img_dir, double_sided_dir)
+        fetch_card_art(index, quantity, remove_nonalphanumeric(card_json['name']), card_set, card_collector_number, card_json['layout'], front_img_dir, double_sided_dir, upscale, upscale_factor, noise_level)
 
     else:
         if name == "":
@@ -194,7 +215,10 @@ def fetch_card(
             collector_number,
             card_json['layout'],
             front_img_dir,
-            double_sided_dir
+            double_sided_dir,
+            upscale,
+            upscale_factor,
+            noise_level
         )
 
 def get_handle_card(
@@ -205,6 +229,10 @@ def get_handle_card(
 
     prefer_showcase: bool,
     prefer_extra_art: bool,
+
+    upscale: bool,
+    upscale_factor: int,
+    noise_level: int,
 
     front_img_dir: str,
     double_sided_dir: str
@@ -225,6 +253,10 @@ def get_handle_card(
 
             prefer_showcase,
             prefer_extra_art,
+
+            upscale,
+            upscale_factor,
+            noise_level,
 
             front_img_dir,
             double_sided_dir
