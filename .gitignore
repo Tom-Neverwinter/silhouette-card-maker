@@ -15,7 +15,17 @@ game/output/*
 game/decklist/*
 !game/decklist/EMPTY.md
 
-out/
+# New output structure
+out/back/*
+!out/back/.gitkeep
+out/decklist/*
+!out/decklist/.gitkeep
+out/double_sided/*
+!out/double_sided/.gitkeep
+out/front/*
+!out/front/.gitkeep
+out/output/*
+!out/output/.gitkeep
 
 data
 

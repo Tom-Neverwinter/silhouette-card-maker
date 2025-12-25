@@ -2493,7 +2493,7 @@ function Remove-OldDecklists {
     $decklistDir = Join-Path $targetFolder "out\decklist"
     if (Test-Path $decklistDir) {
         try {
-            Get-ChildItem -Path $decklistDir -File | Remove-Item -Force -ErrorAction SilentlyContinue
+            Get-ChildItem -Path $decklistDir -File -Exclude ".*" | Remove-Item -Force -ErrorAction SilentlyContinue
             return $true
         }
         catch {
@@ -2540,7 +2540,7 @@ $fetchCardsButton.Add_Click({
                 $fullPath = Join-Path $script:targetFolder $folder
                 if (Test-Path $fullPath) {
                     try {
-                        Get-ChildItem -Path $fullPath -File -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
+                        Get-ChildItem -Path $fullPath -File -Exclude ".*" -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
                     }
                     catch {
                         # Continue even if some files can't be deleted
@@ -3084,7 +3084,7 @@ $clearFoldersButton.Add_Click({
 
                 try {
                     # Delete all files (recursive)
-                    $files = Get-ChildItem -LiteralPath $fullPath -File -Recurse -ErrorAction Stop
+                    $files = Get-ChildItem -LiteralPath $fullPath -File -Recurse -Exclude ".*" -ErrorAction Stop
                     foreach ($file in $files) {
                         try {
                             if ($file.Attributes -band [System.IO.FileAttributes]::ReadOnly) {
