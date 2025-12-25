@@ -26,50 +26,13 @@ def search_universal_cards(card_name: str, games_filter=None, max_results=50) ->
     Returns:
         List of matching UniversalCard objects
     """
-    print(f"Searching for '{card_name}' across CCGTrader.net...")
-
-    # For demo purposes, return sample cards that match the search
-    # In a real implementation, this would call the scraper functions
-
-    sample_cards = []
-
-    # Simulate finding cards in different games
-    popular_games = [
-        "Magic: The Gathering", "Pokémon", "Yu-Gi-Oh!", "Digimon",
-        "Dragon Ball Super", "One Piece", "My Hero Academia"
-    ]
-
-    if games_filter:
-        popular_games = [g for g in popular_games if g in games_filter]
-
-    card_counter = 0
-    for game in popular_games:
-        if card_counter >= max_results:
-            break
-
-        # Create sample cards that match the search
-        for i in range(2):  # 2 cards per game
-            if card_counter >= max_results:
-                break
-
-            card = UniversalCard(
-                name=f"{card_name} - {game} Version {i+1}",
-                game=game,
-                set_name=f"{game} Base Set",
-                set_code="BASE",
-                card_number=f"{card_counter+1:03d}",
-                rarity=["Common", "Uncommon", "Rare"][card_counter % 3],
-                card_type="Creature" if i == 0 else "Spell",
-                cost=2 + (card_counter % 3),
-                attack=1 + (card_counter % 3) if i == 0 else None,
-                defense=card_counter % 2 if i == 0 else None,
-                description=f"Sample card matching '{card_name}' from {game}",
-                image_url=f"https://example.com/cards/{game.lower().replace(' ', '_')}_{card_counter+1}.png"
-            )
-            sample_cards.append(card)
-            card_counter += 1
-
-    return sample_cards
+    from ccgt_scraper import search_cards
+    
+    # If we have multiple games in filter, we might need a more complex search
+    # but for now, we'll just search using the first game or across all
+    game_name = games_filter[0] if games_filter and len(games_filter) > 0 else None
+    
+    return search_cards(card_name, game_name, max_results)
 
 
 def get_game_cards(game_name: str, max_cards=100) -> List[UniversalCard]:

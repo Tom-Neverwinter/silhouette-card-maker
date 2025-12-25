@@ -232,54 +232,181 @@ def get_set_cards(set_url: str, game_name: str, set_name: str) -> List[Universal
     return sample_cards
 
 
-def search_cards_across_games(card_name: str, games_filter=None) -> List[UniversalCard]:
+# Mapping of game names to CCGTrader codes
+GAME_CODES = {
+    "Magic: The Gathering": "MTG",
+    "Pokémon": "POK",
+    "Yu-Gi-Oh!": "YGO",
+    "Dragon Ball Super": "DBS",
+    "Final Fantasy": "FFT",
+    "Star Wars: Destiny": "SWD",
+    "Lord of the Rings": "LTR",
+    "Harry Potter": "HPT",
+    "World of Warcraft": "WOW",
+    "Digimon": "DIG",
+    "Duel Masters": "DUE",
+    "Legend of the Five Rings": "L5R",
+    "NetRunner": "NET",
+    "Vampire the Eternal Struggle": "VES",
+    "Warhammer 40,000": "WHC",
+    "VS System": "VSS",
+    "Star Trek First Edition": "ST1",
+    "My Little Pony": "MLP",
+    "Transformers": "TRT",
+    "Star Wars": "SWC",
+    "One Piece": "OPC",
+    "My Hero Academia": "MHA",
+    "Flesh and Blood": "FAB",
+    "Altered": "ALT",
+    "Lorcana": "LOR",
+    "Star Wars: Unlimited": "SWU"
+}
+
+def search_cards(card_name: str, game_name: str = None, max_results: int = 20) -> List[UniversalCard]:
     """
-    Search for cards across multiple games.
+    Search for cards on CCGTrader.net.
 
     Args:
         card_name: Name to search for
-        games_filter: Optional list of game names to limit search to
+        game_name: Optional game name to limit search
+        max_results: Maximum results to return
 
     Returns:
-        List of matching UniversalCard objects
+        List of UniversalCard objects
     """
-    print(f"Searching for '{card_name}' across CCGTrader.net...")
+    game_code = ""
+    if game_name:
+        # Try to find the closest match in GAME_CODES
+        for name, code in GAME_CODES.items():
+            if game_name.lower() in name.lower() or name.lower() in game_name.lower():
+                game_code = code
+                game_name = name # Standardize name
+                break
 
-    games = get_games_list()
+    print(f"Searching CCGTrader for '{card_name}'" + (f" in {game_name}" if game_name else "") + "...")
 
-    if games_filter:
-        games = [g for g in games if g.name in games_filter]
+    try:
+        url = f"https://www.ccgtrader.net/search?q={card_name}"
+        if game_code:
+            url += f"&g={game_code}"
 
-    all_cards = []
+        page = requests.get(url, timeout=10)
+        tree = html.fromstring(page.content)
 
-    for game in games[:5]:  # Limit to first 5 games for demo
-        try:
-            sets = get_game_sets(game.url)
-            for set_info in sets[:2]:  # Limit to first 2 sets per game
-                cards = get_set_cards(set_info['url'], game.name, set_info['name'])
+        # Updated selector based on analysis
+        card_elements = tree.xpath('//a[contains(@href, "/card/")]')
+        
+        cards = []
+        for el in card_elements:
+            if len(cards) >= max_results:
+                break
 
-                # Filter cards by name
-                matching_cards = [c for c in cards if card_name.lower() in c.name.lower()]
-                all_cards.extend(matching_cards)
+            name_el = el.xpath('.//h3')
+            set_el = el.xpath('.//h6')
+            img_el = el.xpath('.//img')
 
-        except Exception as e:
-            print(f"Error searching in {game.name}: {e}")
+            if name_el and set_el:
+                name = name_el[0].text_content().strip()
+                # Clean up set name: "Set: [Name]" or "Rare\nSet: [Name]"
+                set_raw = set_el[0].text_content().strip()
+                set_name = set_raw
+                if "Set:" in set_raw:
+                    set_name = set_raw.split("Set:")[-1].strip()
+                    # Further cleanup if it has newlines
+                    set_name = set_name.split('\n')[-1].strip()
+                
+                image_url = img_el[0].get('src') if img_el else None
+                
+                # Try to get game name if not provided
+                current_game = game_name or "Unknown Game"
 
-    return all_cards
+                card = UniversalCard(
+                    name=name,
+                    game=current_game,
+                    set_name=set_name,
+                    set_code="", # We don't have code easily from search
+                    card_number="",
+                    rarity="",
+                    image_url=image_url
+                )
+                cards.append(card)
 
+        return cards
+
+    except Exception as e:
+        print(f"Error searching CCGTrader: {e}")
+        return []
+
+def search_cards_across_games(card_name: str, games_filter=None) -> List[UniversalCard]:
+    """
+    Search for cards across multiple games.
+    """
+    return search_cards(card_name, max_results=50)
+
+
+def import_decklist(file_path: str, game_name: str = None) -> List[UniversalCard]:
+    """
+    Import a decklist from a text file and find matching cards on CCGTrader.
+
+    Args:
+        file_path: Path to the decklist text file
+        game_name: Optional game name to limit search
+
+    Returns:
+        List of UniversalCard objects (one per card in decklist)
+    """
+    import re
+    print(f"Importing decklist from {file_path}...")
+    
+    deck_cards = []
+    
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+            
+        for line in lines:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+                
+            # Pattern: [Count] [Name] or [Name] [xCount]
+            # Example: "4 Lightning Bolt" or "Lightning Bolt x4"
+            match = re.search(r'^(\d+)\s+(.+)$|^(.*?)\s+x(\d+)$|^(.*?)$', line)
+            
+            if match:
+                groups = match.groups()
+                if groups[0]: # Count Name
+                    count = int(groups[0])
+                    name = groups[1].strip()
+                elif groups[3]: # Name xCount
+                    count = int(groups[3])
+                    name = groups[2].strip()
+                else: # Name only
+                    count = 1
+                    name = groups[4].strip()
+                    if not name: continue
+
+                # Search for the card
+                results = search_cards(name, game_name, max_results=1)
+                if results:
+                    found_card = results[0]
+                    print(f"  Found: {found_card.name} ({found_card.set_name})")
+                    for _ in range(count):
+                        deck_cards.append(found_card)
+                else:
+                    print(f"  Warning: Card not found: {name}")
+
+        return deck_cards
+
+    except Exception as e:
+        print(f"Error importing decklist: {e}")
+        return []
 
 def create_multi_game_collection(card_name: str, collection_name: str) -> UniversalCollection:
     """
     Create a collection from cards found across multiple games.
-
-    Args:
-        card_name: Name pattern to search for
-        collection_name: Name for the collection
-
-    Returns:
-        UniversalCollection object
     """
-    cards = search_cards_across_games(card_name)
+    cards = search_cards(card_name, max_results=20)
     return UniversalCollection(collection_name, cards)
 
 

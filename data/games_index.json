@@ -1,0 +1,1567 @@
+{
+    ".Hack//ENEMY": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/hackenemy-ccg",
+        "type": "universal"
+    },
+    ".Hack//G.U": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/hack-g-u",
+        "type": "universal"
+    },
+    ".css-vubbuv{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;width:1em;height:1em;display:inline-block;fill:currentColor;-webkit-flex-shrink:0;-ms-flex-negative:0;flex-shrink:0;-webkit-transition:fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;transition:fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;font-size:1.5rem;}CCG Database": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/",
+        "type": "universal"
+    },
+    "007 Spy Cards": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/007-spy-cards-ccg",
+        "type": "universal"
+    },
+    "24": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/24-tcg",
+        "type": "universal"
+    },
+    "7th Sea": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/7th-sea-ccg",
+        "type": "universal"
+    },
+    "A Game of Thrones": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/a-game-of-thrones-ccg",
+        "type": "universal"
+    },
+    "Adrenalyn XL": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/adrenalyn-xl",
+        "type": "universal"
+    },
+    "Age of Empires II Expandable Card Game": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/age-of-empires-ii-expandable-card-game",
+        "type": "universal"
+    },
+    "Alien Attax": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/alien-attax",
+        "type": "universal"
+    },
+    "Aliens Vs Predator": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/aliens-vs-predator-ccg",
+        "type": "universal"
+    },
+    "Allegiance: War of Factions": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/allegiance-war-of-factions-ccg",
+        "type": "universal"
+    },
+    "Altered": {
+        "plugin": "altered",
+        "url": null,
+        "type": "specialized"
+    },
+    "American Idol": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/american-idol-ccg",
+        "type": "universal"
+    },
+    "Anachronism": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/anachronism",
+        "type": "universal"
+    },
+    "Angry Birds": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/angry-birds",
+        "type": "universal"
+    },
+    "Ani-Mayhem": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/ani-mayhem-ccg",
+        "type": "universal"
+    },
+    "Anio\u0142owie": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/aniolowie-ccg",
+        "type": "universal"
+    },
+    "Arcadia": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/arcadia-ccg",
+        "type": "universal"
+    },
+    "Argent Saga": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/argent-saga",
+        "type": "universal"
+    },
+    "Arkna:": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/arkna-tcg",
+        "type": "universal"
+    },
+    "Austin Powers": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/austin-powers-ccg",
+        "type": "universal"
+    },
+    "Avatar: The Last Airbender": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/avatar-the-last-airbender-tcg",
+        "type": "universal"
+    },
+    "Babylon 5": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/babylon-5-ccg",
+        "type": "universal"
+    },
+    "Bakugan": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/bakugan-tcg",
+        "type": "universal"
+    },
+    "BaneMaster: The Adventure": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/banemaster-the-adventure-ccg",
+        "type": "universal"
+    },
+    "Battle Cards": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/battle-cards-tcg",
+        "type": "universal"
+    },
+    "Battlelords of the 23rd Century": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/battlelords-ccg",
+        "type": "universal"
+    },
+    "Battlestar Galactica": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/battlestar-galactica-ccg",
+        "type": "universal"
+    },
+    "Battletech": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/battletech-ccg",
+        "type": "universal"
+    },
+    "Behind": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/behind-tcg",
+        "type": "universal"
+    },
+    "Bella Sara": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/bella-sara-tcg",
+        "type": "universal"
+    },
+    "Ben 10": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/ben-10-ccg",
+        "type": "universal"
+    },
+    "Ben 10 Alien Force": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/ben-10-alien-force-tcg",
+        "type": "universal"
+    },
+    "Beyblade": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/beyblade-ccg",
+        "type": "universal"
+    },
+    "Bible Battles": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/bible-battles-tcg",
+        "type": "universal"
+    },
+    "Bleach": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/bleach-tcg",
+        "type": "universal"
+    },
+    "Blood Wars": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/blood-wars-ccg",
+        "type": "universal"
+    },
+    "Blue Dragon RPCG": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/blue-dragon-rpcg",
+        "type": "universal"
+    },
+    "Boy Crazy": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/boy-crazy",
+        "type": "universal"
+    },
+    "Buffy the Vampire Slayer": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/buffy-the-vampire-slayer-ccg",
+        "type": "universal"
+    },
+    "C-23": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/c-23-tcg",
+        "type": "universal"
+    },
+    "Call of Cthulhu": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/call-of-cthulhu-ccg",
+        "type": "universal"
+    },
+    "Cardcaptors": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/cardcaptors-tcg",
+        "type": "universal"
+    },
+    "Cards Against Humanity": {
+        "plugin": "cards_against_humanity",
+        "url": null,
+        "type": "specialized"
+    },
+    "Case Closed": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/case-closed-tcg",
+        "type": "universal"
+    },
+    "Caster Chronicles": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/caster-chronicles-tcg",
+        "type": "universal"
+    },
+    "Cfvanguard": {
+        "plugin": "cfvanguard",
+        "url": null,
+        "type": "specialized"
+    },
+    "Chaotic": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/chaotic-tcg",
+        "type": "universal"
+    },
+    "City of Heroes": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/city-of-heroes-ccg",
+        "type": "universal"
+    },
+    "Clone Wars Adventures": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/clone-wars-adventures",
+        "type": "universal"
+    },
+    "Club Penguin": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/club-penguin-tcg",
+        "type": "universal"
+    },
+    "Codename: Kids Next Door": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/codename-kids-next-door-tcg",
+        "type": "universal"
+    },
+    "Conan": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/conan-ccg",
+        "type": "universal"
+    },
+    "Corunea": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/corunea",
+        "type": "universal"
+    },
+    "Cosplay Deviants": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/cosplay-deviants-tcg",
+        "type": "universal"
+    },
+    "Crown of the Emperor": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/crown-of-the-emperor",
+        "type": "universal"
+    },
+    "Crystalicum: Kryszta\u0142owa Gra Karciana": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/crystalicum-krysztalowa-gra-karciana",
+        "type": "universal"
+    },
+    "Cyberpunk": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/cyberpunk-ccg",
+        "type": "universal"
+    },
+    "Dark Age: Feudal Lords": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dark-age-feudal-lords-ccg",
+        "type": "universal"
+    },
+    "Dark Eden": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dark-eden-ccg",
+        "type": "universal"
+    },
+    "Dark Force": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dark-force-ccg",
+        "type": "universal"
+    },
+    "Deadlands: Lost Colony - Showdown": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/deadlands-lost-colony-showdown-ccg",
+        "type": "universal"
+    },
+    "Death Note": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/death-note-tcg",
+        "type": "universal"
+    },
+    "Deus": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/deus-tcg",
+        "type": "universal"
+    },
+    "Dice Masters": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dice-masters",
+        "type": "universal"
+    },
+    "Digimon": {
+        "plugin": "digimon",
+        "url": "https://www.ccgtrader.net/games/digimon-ccg",
+        "type": "specialized"
+    },
+    "Digimon D-Tector": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/digimon-d-tector-ccg",
+        "type": "universal"
+    },
+    "Digimon Fusion": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/digimon-fusion-ccg",
+        "type": "universal"
+    },
+    "Digimon: Digi-Battle": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/digi-battle-ccg",
+        "type": "universal"
+    },
+    "Dino Hunt": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dino-hunt",
+        "type": "universal"
+    },
+    "Dinosaur King": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dinosaur-king-tcg",
+        "type": "universal"
+    },
+    "Disney Princess": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/disney-princess",
+        "type": "universal"
+    },
+    "Dixie": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dixie-ccg",
+        "type": "universal"
+    },
+    "Doctor Who: Alien Armies": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/doctor-who-alien-armies",
+        "type": "universal"
+    },
+    "Doctor Who: Battles in Time": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/doctor-who-battles-in-time",
+        "type": "universal"
+    },
+    "Doctor Who: The": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/doctor-who-the-ccg",
+        "type": "universal"
+    },
+    "Doomtown": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/doomtown-ccg",
+        "type": "universal"
+    },
+    "Doomtrooper": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/doomtrooper-ccg",
+        "type": "universal"
+    },
+    "Dragoborne: Rise to Supremacy": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dragoborne-rise-to-supremacy",
+        "type": "universal"
+    },
+    "Dragon Ball GT": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dragon-ball-gt-tcg",
+        "type": "universal"
+    },
+    "Dragon Ball Super Card Game": {
+        "plugin": "dragon_ball_super",
+        "url": "https://www.ccgtrader.net/games/dragon-ball-super-card-game",
+        "type": "specialized"
+    },
+    "Dragon Ball Z CCG /": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dragon-ball-z-ccg-tcg",
+        "type": "universal"
+    },
+    "Dragon Booster": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dragon-booster-tcg",
+        "type": "universal"
+    },
+    "Dragon Quest": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dragon-quest-tcg",
+        "type": "universal"
+    },
+    "Dragon Storm": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dragon-storm-ccg",
+        "type": "universal"
+    },
+    "Dreadnought": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dreadnought-tcg",
+        "type": "universal"
+    },
+    "Dredd": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dredd-ccg",
+        "type": "universal"
+    },
+    "Duel Masters": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/duel-masters-tcg",
+        "type": "universal"
+    },
+    "Dune": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/dune-ccg",
+        "type": "universal"
+    },
+    "EVE: The Second Genesis": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/eve-the-second-genesis-ccg",
+        "type": "universal"
+    },
+    "Eagles": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/eagles-ccg",
+        "type": "universal"
+    },
+    "Echelons of Fire": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/echelons-of-fire-ccg",
+        "type": "universal"
+    },
+    "Echelons of Fury": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/echelons-of-fury-ccg",
+        "type": "universal"
+    },
+    "Echoes Of Astra": {
+        "plugin": "echoes_of_astra",
+        "url": null,
+        "type": "specialized"
+    },
+    "El Mundo de \u00c1guila-Roja": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/el-mundo-de-aguila-roja-ccg",
+        "type": "universal"
+    },
+    "Epic": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/epic-tcg",
+        "type": "universal"
+    },
+    "Epic Battles": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/epic-battles-tcg",
+        "type": "universal"
+    },
+    "Exodus": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/exodus-tcg",
+        "type": "universal"
+    },
+    "Fantasy Adventures": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/fantasy-adventures-ccg",
+        "type": "universal"
+    },
+    "Fast Break: One-on-One Basketball": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/fastbreak-ccg",
+        "type": "universal"
+    },
+    "Fight Klub": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/fight-klub-tcg",
+        "type": "universal"
+    },
+    "Final Fantasy TCG (Opus)": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/final-fantasy-tcg-opus",
+        "type": "universal"
+    },
+    "Fire Emblem": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/fire-emblem-tcg",
+        "type": "universal"
+    },
+    "Fire Emblem Cipher": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/fire-emblem-cipher-tcg",
+        "type": "universal"
+    },
+    "Firestorm": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/firestorm-tcg",
+        "type": "universal"
+    },
+    "Flesh And Blood": {
+        "plugin": "flesh_and_blood",
+        "url": null,
+        "type": "specialized"
+    },
+    "Flights of Fantasy": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/flights-of-fantasy-ccg",
+        "type": "universal"
+    },
+    "Fluxx": {
+        "plugin": "fluxx",
+        "url": null,
+        "type": "specialized"
+    },
+    "Force Of Will": {
+        "plugin": "force_of_will",
+        "url": null,
+        "type": "specialized"
+    },
+    "Fullmetal Alchemist": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/fullmetal-alchemist-tcg",
+        "type": "universal"
+    },
+    "Future Card Buddyfight": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/future-card-buddyfight",
+        "type": "universal"
+    },
+    "G.I. Joe": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/g-i-joe-tcg",
+        "type": "universal"
+    },
+    "Galactic Empires": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/galactic-empires-ccg",
+        "type": "universal"
+    },
+    "Gate Ruler": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/gate-ruler",
+        "type": "universal"
+    },
+    "Genio Cards - Marvel": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/genio-cards-marvel",
+        "type": "universal"
+    },
+    "Gogo's Crazy Bones": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/gogos-crazy-bones-tcg",
+        "type": "universal"
+    },
+    "Gormiti": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/gormiti-tcg",
+        "type": "universal"
+    },
+    "Grand Archive": {
+        "plugin": "grand_archive",
+        "url": null,
+        "type": "specialized"
+    },
+    "Gridiron Fantasy Football": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/gridiron-fantasy-football-ccg",
+        "type": "universal"
+    },
+    "Guardians": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/guardians-ccg",
+        "type": "universal"
+    },
+    "Gundam M.S. War": {
+        "plugin": "gundam",
+        "url": "https://www.ccgtrader.net/games/gundam-ms-war-tcg",
+        "type": "specialized"
+    },
+    "Gundam War CCG (2005)": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/gundam-war-ccg-new-version",
+        "type": "universal"
+    },
+    "Gwiezdna Kohorta CCG (Star Cohort)": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/gwiezdna-kohorta-ccg",
+        "type": "universal"
+    },
+    "Harry Potter": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/harry-potter-tcg",
+        "type": "universal"
+    },
+    "Hecatomb": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/hecatomb-ccg",
+        "type": "universal"
+    },
+    "Hercules: The Legendary Journeys": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/hercules-the-legendary-journeys-tcg",
+        "type": "universal"
+    },
+    "Heresy: Kingdom Come": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/heresy-kingdom-come-ccg",
+        "type": "universal"
+    },
+    "Hero Attax": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/hero-attax",
+        "type": "universal"
+    },
+    "High Stakes Drifter": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/high-stakes-drifter-ccg",
+        "type": "universal"
+    },
+    "Highlander: The Card Game": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/highlander-the-card-game-ccg",
+        "type": "universal"
+    },
+    "HumAliens": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/humaliens-ccg",
+        "type": "universal"
+    },
+    "Huntik": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/huntik-tcg",
+        "type": "universal"
+    },
+    "Hyborian Gates": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/hyborian-gates-ccg",
+        "type": "universal"
+    },
+    "Illuminati: New World Order": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/illuminati-nwo-ccg",
+        "type": "universal"
+    },
+    "Imajica": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/imajica-ccg",
+        "type": "universal"
+    },
+    "Inazuma Eleven": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/inazuma-eleven-tcg",
+        "type": "universal"
+    },
+    "Inferno JCC": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/inferno-jcc",
+        "type": "universal"
+    },
+    "Initial-D": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/initial-d-ccg",
+        "type": "universal"
+    },
+    "Intervention Divine": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/intervention-divine-fr",
+        "type": "universal"
+    },
+    "Inuyasha": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/inuyasha-tcg",
+        "type": "universal"
+    },
+    "Jackie Chan Adventures": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/jackie-chan-adventures",
+        "type": "universal"
+    },
+    "James Bond 007": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/james-bond-007-ccg",
+        "type": "universal"
+    },
+    "Jedi Knights": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/jedi-knights-tcg",
+        "type": "universal"
+    },
+    "Kaijudo": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/kaijudo-tcg",
+        "type": "universal"
+    },
+    "Kartazma": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/kartazma-ccg",
+        "type": "universal"
+    },
+    "Killer Instinct": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/killer-instinct-ccg",
+        "type": "universal"
+    },
+    "Kingdom Hearts": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/kingdom-hearts-tcg",
+        "type": "universal"
+    },
+    "Knights of the Zodiac": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/knights-of-the-zodiac-ccg",
+        "type": "universal"
+    },
+    "Kult": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/kult-ccg",
+        "type": "universal"
+    },
+    "Legend of the Burning Sands": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/legend-of-the-burning-sands-ccg",
+        "type": "universal"
+    },
+    "Legend of the Five Rings": {
+        "plugin": "legend_of_the_five_rings",
+        "url": "https://www.ccgtrader.net/games/legend-of-the-five-rings-ccg",
+        "type": "specialized"
+    },
+    "Lego Bionicle: Bohrok Swarm": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/lego-bionicle-bohrok-swarm-tcg",
+        "type": "universal"
+    },
+    "Lego Bionicle: Quest for the Masks": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/lego-bionicle-quest-for-the-masks",
+        "type": "universal"
+    },
+    "Lego: Batman": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/lego-batman-tcg",
+        "type": "universal"
+    },
+    "Lego: Legends of Chima": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/lego-legends-of-chima",
+        "type": "universal"
+    },
+    "Lego: Nexo Knights": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/lego-nexo-knights",
+        "type": "universal"
+    },
+    "Lego: Ninjago": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/lego-ninjago",
+        "type": "universal"
+    },
+    "Lego: Ninjago Spinjitzu": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/lego-ninjago-spinjitzu-card-game",
+        "type": "universal"
+    },
+    "Lego: Star Wars": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/lego-star-wars-tcg",
+        "type": "universal"
+    },
+    "Lightseekers": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/lightseekers-tcg",
+        "type": "universal"
+    },
+    "Looney Tunes": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/looney-tunes-tcg",
+        "type": "universal"
+    },
+    "Lorcana": {
+        "plugin": "lorcana",
+        "url": null,
+        "type": "specialized"
+    },
+    "Lord of the Rings": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/lord-of-the-rings-tcg",
+        "type": "universal"
+    },
+    "MLB Showdown": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/mlb-showdown-ccg",
+        "type": "universal"
+    },
+    "Magination": {
+        "plugin": "magination",
+        "url": null,
+        "type": "specialized"
+    },
+    "MapleStory iTCG": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/maplestory-itcg",
+        "type": "universal"
+    },
+    "Marvel Champions": {
+        "plugin": "marvel_champions",
+        "url": null,
+        "type": "specialized"
+    },
+    "Marvel ReCharge": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/marvel-recharge-ccg",
+        "type": "universal"
+    },
+    "Marvel Super Hero Squad": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/marvel-super-hero-squad",
+        "type": "universal"
+    },
+    "Marvel Ultimate Battles": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/marvel-ultimate-battles-tcg",
+        "type": "universal"
+    },
+    "Medabots": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/medabots-tcg",
+        "type": "universal"
+    },
+    "MegaMan: NT Warrior": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/megaman-nt-warrior-tcg",
+        "type": "universal"
+    },
+    "Meta X": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/meta-x-tcg",
+        "type": "universal"
+    },
+    "Metazoo": {
+        "plugin": "metazoo",
+        "url": null,
+        "type": "specialized"
+    },
+    "Middle Earth": {
+        "plugin": "middle_earth_ccg",
+        "url": "https://www.ccgtrader.net/games/middle-earth-ccg",
+        "type": "specialized"
+    },
+    "Monster Hunter Hunting Card": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/monster-hunter-hunting-card-tcg",
+        "type": "universal"
+    },
+    "Monster Rancher": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/monster-rancher-ccg",
+        "type": "universal"
+    },
+    "Monster Tykes": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/monster-tykes-ccg",
+        "type": "universal"
+    },
+    "Monsuno": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/monsuno-tcg",
+        "type": "universal"
+    },
+    "Monty Python and the Holy Grail": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/monty-python-and-the-holy-grail-ccg",
+        "type": "universal"
+    },
+    "Mortal Kombat Kard Game": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/mortal-kombat-kard-game-ccg",
+        "type": "universal"
+    },
+    "Mtg": {
+        "plugin": "mtg",
+        "url": null,
+        "type": "specialized"
+    },
+    "Munchkin": {
+        "plugin": "munchkin",
+        "url": "https://www.ccgtrader.net/games/munchkin-ccg",
+        "type": "specialized"
+    },
+    "My Hero Academia": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/my-hero-academia-ccg",
+        "type": "universal"
+    },
+    "My Little Pony": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/my-little-pony-ccg",
+        "type": "universal"
+    },
+    "Mystical Empire": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/mystical-empire-ccg",
+        "type": "universal"
+    },
+    "Mythos": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/mythos-ccg",
+        "type": "universal"
+    },
+    "Myths and Legends": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/myths-and-legends-ccg",
+        "type": "universal"
+    },
+    "NASCAR Racing Challenge": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/racing-challenge-tcg-nascar",
+        "type": "universal"
+    },
+    "NBA Showdown": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/nba-showdown-tcg",
+        "type": "universal"
+    },
+    "NFL Five": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/nfl-five-tcg",
+        "type": "universal"
+    },
+    "NFL Showdown": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/nfl-showdown-ccg",
+        "type": "universal"
+    },
+    "Naruto": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/naruto-ccg",
+        "type": "universal"
+    },
+    "Nascar Race Day 2006 CRG": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/nascar-race-day-2006-crg",
+        "type": "universal"
+    },
+    "Neopets": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/neopets-tcg",
+        "type": "universal"
+    },
+    "Nerve": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/nerve-ccg",
+        "type": "universal"
+    },
+    "NetRunner": {
+        "plugin": "netrunner",
+        "url": "https://www.ccgtrader.net/games/netrunner-ccg",
+        "type": "specialized"
+    },
+    "On The Edge": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/on-the-edge-ccg",
+        "type": "universal"
+    },
+    "One Piece": {
+        "plugin": "one_piece",
+        "url": "https://www.ccgtrader.net/games/one-piece-collectible-card-game",
+        "type": "specialized"
+    },
+    "One-On-One Hockey Challenge": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/one-on-one-hockey-challenge-ccg",
+        "type": "universal"
+    },
+    "Ophidian": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/ophidian-ccg",
+        "type": "universal"
+    },
+    "Over Power": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/overpower-ccg",
+        "type": "universal"
+    },
+    "PEZ": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/pez-ccg",
+        "type": "universal"
+    },
+    "Pirates of the Caribbean": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/pirates-of-the-caribbean-tcg",
+        "type": "universal"
+    },
+    "Pirates of the Spanish Main": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/pirates-of-the-spanish-main",
+        "type": "universal"
+    },
+    "Pokemon": {
+        "plugin": "Pokemon",
+        "url": null,
+        "type": "specialized"
+    },
+    "Pok\u00e9mon": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/pokemon-tcg",
+        "type": "universal"
+    },
+    "Power Cardz": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/power-cardz-ccg",
+        "type": "universal"
+    },
+    "Power Rangers": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/power-rangers-ccg",
+        "type": "universal"
+    },
+    "Power Rangers Action Card Game": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/power-rangers-action-card-game",
+        "type": "universal"
+    },
+    "Quest for the Grail": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/quest-for-the-grail-ccg",
+        "type": "universal"
+    },
+    "Rage: Apocalypse": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/rage-apocalypse-ccg",
+        "type": "universal"
+    },
+    "Rage: Tribal War": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/rage-tribal-war-ccg",
+        "type": "universal"
+    },
+    "Red Zone": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/red-zone-ccg",
+        "type": "universal"
+    },
+    "Redakai: Conquer the Kairu": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/redakai-conquer-the-kairu-tcg",
+        "type": "universal"
+    },
+    "Redemption": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/redemption-ccg",
+        "type": "universal"
+    },
+    "Riftbound": {
+        "plugin": "riftbound",
+        "url": null,
+        "type": "specialized"
+    },
+    "Rifts": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/rifts-ccg",
+        "type": "universal"
+    },
+    "Rocketmen": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/rocketmen",
+        "type": "universal"
+    },
+    "Ruins World": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/ruins-world-ccg",
+        "type": "universal"
+    },
+    "Sailor Moon": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/sailor-moon-ccg",
+        "type": "universal"
+    },
+    "Scooby Doo Expandable Card Game": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/scooby-doo-expandable-card-game",
+        "type": "universal"
+    },
+    "Shadowfist": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/shadowfist-ccg",
+        "type": "universal"
+    },
+    "Shadowrun: The": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/shadowrun-the-tcg",
+        "type": "universal"
+    },
+    "Shadowverse Evolve": {
+        "plugin": "shadowverse_evolve",
+        "url": null,
+        "type": "specialized"
+    },
+    "Shaman King": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/shaman-king-tcg",
+        "type": "universal"
+    },
+    "Sim City": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/sim-city-ccg",
+        "type": "universal"
+    },
+    "Sonic X": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/sonic-x-tcg",
+        "type": "universal"
+    },
+    "Sorcerers of the Magic Kingdom": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/sorcerers-of-the-magic-kingdom",
+        "type": "universal"
+    },
+    "Spacix": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/spacix-tcg",
+        "type": "universal"
+    },
+    "Speed Racer": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/speed-racer-ccg",
+        "type": "universal"
+    },
+    "Spellfire": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/spellfire-ccg",
+        "type": "universal"
+    },
+    "SpongeBob Squarepants": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/spongebob-squarepants-tcg",
+        "type": "universal"
+    },
+    "Spycraft": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/spycraft-ccg",
+        "type": "universal"
+    },
+    "Star Quest": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/star-quest-ccg",
+        "type": "universal"
+    },
+    "Star Realms": {
+        "plugin": "star_realms",
+        "url": null,
+        "type": "specialized"
+    },
+    "Star Trek CCG First Edition": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/star-trek-ccg-first-edition",
+        "type": "universal"
+    },
+    "Star Trek CCG Second Edition": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/star-trek-ccg-second-edition",
+        "type": "universal"
+    },
+    "Star Trek: The Card Game": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/star-trek-the-card-game-ccg",
+        "type": "universal"
+    },
+    "Star Wars": {
+        "plugin": "star_wars_unlimited",
+        "url": "https://www.ccgtrader.net/games/star-wars-tcg",
+        "type": "specialized"
+    },
+    "Star Wars Force Attax": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/star-wars-force-attax",
+        "type": "universal"
+    },
+    "Star Wars Pocketmodel": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/star-wars-pocketmodel-tcg",
+        "type": "universal"
+    },
+    "Star Wars Rebel Attax": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/star-wars-rebel-attax",
+        "type": "universal"
+    },
+    "Star Wars: Destiny": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/star-wars-destiny",
+        "type": "universal"
+    },
+    "Star of the Guardians": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/star-of-the-guardians",
+        "type": "universal"
+    },
+    "Stargate": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/stargate-tcg",
+        "type": "universal"
+    },
+    "Super Deck!": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/super-deck-tcg",
+        "type": "universal"
+    },
+    "Super Nova": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/super-nova-ccg",
+        "type": "universal"
+    },
+    "Survivor": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/survivor-tcg",
+        "type": "universal"
+    },
+    "Tank Commander": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/tank-commander-ccg",
+        "type": "universal"
+    },
+    "Teen Titans": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/teen-titans-ccg",
+        "type": "universal"
+    },
+    "Teenage Mutant Ninja Turtles": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/teenage-mutant-ninja-turtles-tcg",
+        "type": "universal"
+    },
+    "Teenage Mutant Ninja Turtles: Turtle Power": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/teenage-mutant-ninja-turtles-turtle-power",
+        "type": "universal"
+    },
+    "Tempest of the Gods": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/tempest-of-the-gods-ccg",
+        "type": "universal"
+    },
+    "Terror": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/terror-ccg",
+        "type": "universal"
+    },
+    "The Condemned": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/the-condemned-ccg",
+        "type": "universal"
+    },
+    "The Crow": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/the-crow-ccg",
+        "type": "universal"
+    },
+    "The Dragon's Wrath": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/the-dragons-wrath-ccg",
+        "type": "universal"
+    },
+    "The Eye of Judgment": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/the-eye-of-judgment",
+        "type": "universal"
+    },
+    "The Last Crusade": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/the-last-crusade-ccg",
+        "type": "universal"
+    },
+    "The Nightmare Before Christmas": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/the-nightmare-before-christmas-tcg",
+        "type": "universal"
+    },
+    "The Simpsons": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/the-simpsons-tcg",
+        "type": "universal"
+    },
+    "The Spoils": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/the-spoils-tcg",
+        "type": "universal"
+    },
+    "The Terminator": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/the-terminator-ccg",
+        "type": "universal"
+    },
+    "The X-Files": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/the-x-files-ccg",
+        "type": "universal"
+    },
+    "Thorgal Kolekcjonerska Gra Karciana": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/thorgal-kolekcjonerska-gra-karciana-ccg-pl",
+        "type": "universal"
+    },
+    "Timestream: The Remnant": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/timestream-the-remnant-ccg",
+        "type": "universal"
+    },
+    "Tomb Raider": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/tomb-raider-ccg",
+        "type": "universal"
+    },
+    "Top of the Order": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/top-of-the-order-ccg",
+        "type": "universal"
+    },
+    "Torchwood": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/torchwood-tcg",
+        "type": "universal"
+    },
+    "Towers in Time": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/towers-in-time-ccg",
+        "type": "universal"
+    },
+    "Transformers": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/transformers-tcg",
+        "type": "universal"
+    },
+    "Transformers TCG EU": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/transformers-tcg-eu",
+        "type": "universal"
+    },
+    "Ultimate Combat": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/ultimate-combat-ccg",
+        "type": "universal"
+    },
+    "Union Arena": {
+        "plugin": "union_arena",
+        "url": null,
+        "type": "specialized"
+    },
+    "Universus": {
+        "plugin": "universus",
+        "url": "https://www.ccgtrader.net/games/universal-fighting-system-ccg",
+        "type": "specialized"
+    },
+    "VS System": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/vs-system-ccg",
+        "type": "universal"
+    },
+    "Vampire the Eternal Struggle": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/vampire-the-eternal-struggle-ccg",
+        "type": "universal"
+    },
+    "Veto! Nobleman Card Game": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/veto-ccg",
+        "type": "universal"
+    },
+    "Veto: Second Edition": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/veto-second-edition",
+        "type": "universal"
+    },
+    "Vroom": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/vrooom-ccg",
+        "type": "universal"
+    },
+    "WCW Nitro": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/wcw-nitro-tcg",
+        "type": "universal"
+    },
+    "WWE Raw Deal": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/wwe-raw-deal",
+        "type": "universal"
+    },
+    "WarCry": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/warcry-ccg",
+        "type": "universal"
+    },
+    "Warhammer 40,000": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/warhammer-40000-ccg",
+        "type": "universal"
+    },
+    "Warhammer Age of Sigmar: Champions": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/warhammer-age-of-sigmar-champions-tcg",
+        "type": "universal"
+    },
+    "Warlord: Saga of the Storm": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/warlord-saga-of-the-storm-ccg",
+        "type": "universal"
+    },
+    "Warlords": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/warlords-ccg",
+        "type": "universal"
+    },
+    "Wars": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/wars-tcg",
+        "type": "universal"
+    },
+    "Webkinz": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/webkinz-tcg",
+        "type": "universal"
+    },
+    "Weiss Schwarz": {
+        "plugin": "weiss_schwarz",
+        "url": null,
+        "type": "specialized"
+    },
+    "Wheel of Time": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/wheel-of-time-ccg",
+        "type": "universal"
+    },
+    "WildStorms": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/wildstorms-ccg",
+        "type": "universal"
+    },
+    "Wing Commander Collectible": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/wing-commander-collectible-tcg",
+        "type": "universal"
+    },
+    "Winx Club": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/winx-club-ccg",
+        "type": "universal"
+    },
+    "Wizard in Training": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/wizard-in-training",
+        "type": "universal"
+    },
+    "Wizards of Mickey": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/wizards-of-mickey",
+        "type": "universal"
+    },
+    "World of Warcraft": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/world-of-warcraft-tcg",
+        "type": "universal"
+    },
+    "Wyvern": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/wyvern-ccg",
+        "type": "universal"
+    },
+    "X-Men": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/x-men-tcg",
+        "type": "universal"
+    },
+    "XXXenophile": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/xxxenophile-ccg",
+        "type": "universal"
+    },
+    "Xeko": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/xeko",
+        "type": "universal"
+    },
+    "Xena: Warrior Princess": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/xena-warrior-princess-tcg",
+        "type": "universal"
+    },
+    "Xiaolin Showdown": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/xiaolin-showdown-tcg",
+        "type": "universal"
+    },
+    "Young Jedi": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/young-jedi-ccg",
+        "type": "universal"
+    },
+    "Yu Yu Hakusho": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/yu-yu-hakusho-tcg",
+        "type": "universal"
+    },
+    "Yu-Gi-Oh!": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/yu-gi-oh-tcg",
+        "type": "universal"
+    },
+    "Yugioh": {
+        "plugin": "yugioh",
+        "url": null,
+        "type": "specialized"
+    },
+    "Z-G": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/z-g",
+        "type": "universal"
+    },
+    "Zatch Bell! The Card Battle": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/zatch-bell-the-card-battle",
+        "type": "universal"
+    },
+    "Zombie World Order": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/zombie-world-order",
+        "type": "universal"
+    },
+    "Zu Tiles: Hime": {
+        "plugin": "ccgtrader",
+        "url": "https://www.ccgtrader.net/games/zu-tiles-hime",
+        "type": "universal"
+    }
+}

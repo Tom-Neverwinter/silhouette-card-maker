@@ -1,5 +1,6 @@
 import json
 import re
+import xml.etree.ElementTree as ET
 
 from enum import Enum
 from typing import Callable, Tuple
@@ -206,6 +207,34 @@ def parse_scryfall_json(deck_text, handle_card: Callable) -> None:
         print(f'Index: {index}, quantity: {quantity}, set code: {set_code}, collector number: {collector_number}, name: {name}')
         handle_card(index, name, set_code, collector_number, quantity)
 
+# .dek XML format (MTGO XML)
+def parse_dek(deck_text, handle_card: Callable) -> None:
+    try:
+        root = ET.fromstring(deck_text)
+        index = 0
+        # Find all Cards elements
+        # Usually: <Cards CatID="..." Quantity="..." Sideboard="..." Name="..." ... />
+        for card in root.findall('.//Cards'):
+            quantity_str = card.get('Quantity')
+            name = card.get('Name')
+            sideboard_str = card.get('Sideboard')
+
+            if not name or not quantity_str:
+                continue
+
+            quantity = int(quantity_str)
+            # We treat sideboard cards as normal cards for fetching purposes, unless logic dictates otherwise.
+            # Usually we don't differentiate in handle_card unless it has a param.
+            # handle_card signature: (index, name, set_code, collector_number, quantity)
+            
+            index += 1
+            print(f'Index: {index}, quantity: {quantity}, name: {name} (DEK)')
+            handle_card(index, name, "", "", quantity)
+            
+    except Exception as e:
+        print(f"Error parsing .dek XML: {e}")
+
+
 class DeckFormat(str, Enum):
     SIMPLE = "simple"
     MTGA = "mtga"
@@ -214,6 +243,7 @@ class DeckFormat(str, Enum):
     DECKSTATS = "deckstats"
     MOXFIELD = "moxfield"
     SCRYFALL_JSON = "scryfall_json"
+    DEK = "dek"
 
 def parse_deck(deck_text: str, format: DeckFormat, handle_card: Callable) -> None:
     if format == DeckFormat.SIMPLE:
@@ -230,5 +260,7 @@ def parse_deck(deck_text: str, format: DeckFormat, handle_card: Callable) -> Non
         parse_moxfield(deck_text, handle_card)
     elif format == DeckFormat.SCRYFALL_JSON:
         parse_scryfall_json(deck_text, handle_card)
+    elif format == DeckFormat.DEK:
+        parse_dek(deck_text, handle_card)
     else:
         raise ValueError("Unrecognized deck format")

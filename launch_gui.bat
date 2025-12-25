@@ -21,7 +21,7 @@ echo Found Python %PYTHON_VERSION%
 
 REM Run the PowerShell GUI
 echo Launching application...
-powershell -ExecutionPolicy Bypass -File "gui.ps1"
+powershell -ExecutionPolicy Bypass -File "scripts/gui.ps1"
 
 REM Check if launch was successful
 if errorlevel 1 (

@@ -16,7 +16,8 @@ from ccgt_scraper import (
     search_cards_across_games,
     create_multi_game_collection,
     save_universal_collection_to_file,
-    process_universal_cards_batch
+    process_universal_cards_batch,
+    import_decklist
 )
 from ccgt_api import (
     search_universal_cards,
@@ -76,13 +77,13 @@ def games(max_games, popular_only):
 @click.argument('game_name')
 @click.option('--max-cards', '-n', default=20,
               help='Maximum number of cards to fetch')
-@click.option('--output-dir', '-o', default='game/front',
+@click.option('--output-dir', '-o', default='out/front',
               help='Directory to save card images')
 @click.option('--save-collection', '-c', default=None,
               help='Name of collection to save cards to')
 @click.option('--fetch-images/--no-fetch-images', default=False,
               help='Fetch card images for the game')
-def game(game_name, max_cards, output_dir, save_collection, fetch_images):
+def output(game_name, max_cards, output_dir, save_collection, fetch_images):
     """
     Get cards from a specific CCG.
 
@@ -125,7 +126,7 @@ def game(game_name, max_cards, output_dir, save_collection, fetch_images):
     # Save collection if specified
     if save_collection:
         collection = create_game_collection(game_name, save_collection)
-        save_universal_collection_to_file(collection, f"game/decklist/{save_collection.replace(' ', '_')}.txt")
+        save_universal_collection_to_file(collection, f"out/decklist/{save_collection.replace(' ', '_')}.txt")
         click.echo(f"\nSaved collection '{save_collection}' with {len(cards)} cards")
 
     # Fetch images if requested
@@ -143,7 +144,7 @@ def game(game_name, max_cards, output_dir, save_collection, fetch_images):
               help='Specific games to search in (can specify multiple)')
 @click.option('--max-results', '-n', default=20,
               help='Maximum number of results to return')
-@click.option('--output-dir', '-o', default='game/front',
+@click.option('--output-dir', '-o', default='out/front',
               help='Directory to save card images')
 @click.option('--save-collection', '-c', default=None,
               help='Name of collection to save found cards to')
@@ -197,7 +198,7 @@ def search(card_name, games, max_results, output_dir, save_collection, fetch_ima
     # Save collection if specified
     if save_collection:
         collection = api_create_multi_game(card_name, save_collection, games_filter)
-        save_universal_collection_to_file(collection, f"game/decklist/{save_collection.replace(' ', '_')}.txt")
+        save_universal_collection_to_file(collection, f"out/decklist/{save_collection.replace(' ', '_')}.txt")
         click.echo(f"\nSaved collection '{save_collection}' with {len(cards)} cards")
 
     # Fetch images if requested
@@ -207,12 +208,41 @@ def search(card_name, games, max_results, output_dir, save_collection, fetch_ima
         click.echo(f"Successfully processed {processed} card images")
 
     click.echo("\nSearch completed!")
+@cli.command()
+@click.argument('file_path')
+@click.option('--game', '-g', default=None,
+              help='Game name to limit search')
+@click.option('--output-dir', '-o', default='out/front',
+              help='Directory to save card images')
+@click.option('--fetch-images/--no-fetch-images', default=True,
+              help='Fetch card images for the decklist')
+def import_decklist_cmd(file_path, game, output_dir, fetch_images):
+    """
+    Import a decklist and fetch card images from CCGTrader.
+
+    Example:
+    python ccgt_cli.py import-decklist "my_deck.txt" --game "Magic: The Gathering"
+    """
+    click.echo(f"Importing decklist from {file_path}...")
+    
+    cards = import_decklist(file_path, game)
+    
+    if not cards:
+        click.echo("No cards found in decklist.")
+        return
+        
+    click.echo(f"Found {len(cards)} cards.")
+    
+    if fetch_images:
+        click.echo(f"Fetching images to {output_dir}...")
+        processed = process_universal_cards_batch(cards, output_dir)
+        click.echo(f"Successfully processed {processed} card images")
 
 
 @cli.command()
 @click.option('--input-file', '-i', required=True,
               help='JSON file to load collection from')
-@click.option('--output-dir', '-o', default='game/front',
+@click.option('--output-dir', '-o', default='out/front',
               help='Directory to save card images')
 @click.option('--fetch-images/--no-fetch-images', default=True,
               help='Fetch card images for loaded collection')
@@ -267,7 +297,7 @@ def load_collection(input_file, output_dir, fetch_images):
 
 
 @cli.command()
-@click.option('--output-dir', '-o', default='game/front',
+@click.option('--output-dir', '-o', default='out/front',
               help='Directory to save card images')
 @click.option('--collection-name', '-c', default='Popular CCGs Collection',
               help='Name for the collection')
@@ -299,7 +329,7 @@ def popular(output_dir, collection_name, num_cards_per_game):
         collection = UniversalCollection(collection_name, all_cards)
 
         # Save collection
-        save_universal_collection_to_file(collection, f"game/decklist/{collection_name.replace(' ', '_')}.txt")
+        save_universal_collection_to_file(collection, f"out/decklist/{collection_name.replace(' ', '_')}.txt")
 
         # Fetch images if requested
         click.echo(f"\nFetching images to {output_dir}...")
@@ -356,7 +386,7 @@ def cross_game(card_name, collection_name, max_results):
                 click.echo(f"    {card.description[:50]}...")
 
     # Save collection
-    save_universal_collection_to_file(collection, f"game/decklist/{collection_name.replace(' ', '_')}.txt")
+    save_universal_collection_to_file(collection, f"out/decklist/{collection_name.replace(' ', '_')}.txt")
 
     click.echo(f"\nSaved cross-game collection '{collection_name}'")
     click.echo("Cross-game search completed!")
@@ -369,7 +399,7 @@ def cross_game(card_name, collection_name, max_results):
               help='Number of games to sample from')
 @click.option('--cards-per-game', '-m', default=5,
               help='Number of cards per game')
-@click.option('--output-dir', '-o', default='game/front',
+@click.option('--output-dir', '-o', default='out/front',
               help='Directory to save card images')
 @click.option('--fetch-images/--no-fetch-images', default=False,
               help='Fetch card images for sample cards')
@@ -402,7 +432,7 @@ def sample(collection_name, num_games, cards_per_game, output_dir, fetch_images)
         collection = UniversalCollection(collection_name, all_cards)
 
         # Save collection
-        save_universal_collection_to_file(collection, f"game/decklist/{collection_name.replace(' ', '_')}.txt")
+        save_universal_collection_to_file(collection, f"out/decklist/{collection_name.replace(' ', '_')}.txt")
 
         click.echo(f"\nCreated sample collection with {len(all_cards)} cards from {len(games)} games")
 

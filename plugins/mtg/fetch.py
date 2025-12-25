@@ -6,8 +6,12 @@ from scryfall import get_handle_card
 
 from typing import Set
 
-front_directory = os.path.join('game', 'front')
-double_sided_directory = os.path.join('game', 'double_sided')
+front_directory = os.path.join('out', 'front')
+double_sided_directory = os.path.join('out', 'double_sided')
+
+# Ensure directories exist
+os.makedirs(front_directory, exist_ok=True)
+os.makedirs(double_sided_directory, exist_ok=True)
 
 @click.command()
 @click.argument('deck_path')

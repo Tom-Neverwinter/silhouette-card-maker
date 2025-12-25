@@ -3,17 +3,17 @@
 # This module creates the Plugin Options tab for managing plugins
 
 # Import plugin manager
-. "$PSScriptRoot\plugin_manager.ps1"
+. "$PSScriptRoot\scripts\plugin_manager.ps1"
 
 # Create Plugin Options Tab
-function Create-PluginOptionsTab {
+function New-PluginOptionsTab {
     param([System.Windows.Forms.TabControl]$tabControl)
     
     # Create the Plugin Options tab
     $pluginOptionsTab = New-Object System.Windows.Forms.TabPage
-    $pluginOptionsTab.Text = "Plugin Options"
+    $pluginOptionsTab.Text = "Game Options"
     $pluginOptionsTab.BackColor = [System.Drawing.Color]::FromArgb(45, 45, 48)
-    $tabControl.TabPages.Add($pluginOptionsTab)
+    [void]$tabControl.TabPages.Add($pluginOptionsTab)
     
     # Main container panel
     $mainPanel = New-Object System.Windows.Forms.Panel
@@ -21,25 +21,25 @@ function Create-PluginOptionsTab {
     $mainPanel.Size = New-Object System.Drawing.Size(720, 620)
     $mainPanel.BackColor = [System.Drawing.Color]::FromArgb(45, 45, 48)
     $mainPanel.AutoScroll = $true
-    $pluginOptionsTab.Controls.Add($mainPanel)
+    [void]$pluginOptionsTab.Controls.Add($mainPanel)
     
     # Title
     $titleLabel = New-Object System.Windows.Forms.Label
     $titleLabel.Location = New-Object System.Drawing.Point(10, 10)
     $titleLabel.Size = New-Object System.Drawing.Size(700, 30)
-    $titleLabel.Text = "Plugin Management"
+    $titleLabel.Text = "Game Management"
     $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 14, [System.Drawing.FontStyle]::Bold)
     $titleLabel.ForeColor = [System.Drawing.Color]::White
-    $mainPanel.Controls.Add($titleLabel)
+    [void]$mainPanel.Controls.Add($titleLabel)
     
     # Description
     $descLabel = New-Object System.Windows.Forms.Label
     $descLabel.Location = New-Object System.Drawing.Point(10, 45)
     $descLabel.Size = New-Object System.Drawing.Size(700, 40)
-    $descLabel.Text = "Enable or disable plugins to customize your Silhouette Card Maker experience. Disabled plugins will not appear in the main interface."
+    $descLabel.Text = "Enable or disable games to customize your Silhouette Card Maker experience. Disabled games will not appear in the main interface."
     $descLabel.ForeColor = [System.Drawing.Color]::FromArgb(200, 200, 200)
     $descLabel.Font = New-Object System.Drawing.Font("Segoe UI", 9)
-    $mainPanel.Controls.Add($descLabel)
+    [void]$mainPanel.Controls.Add($descLabel)
     
     # Statistics panel
     $statsPanel = New-Object System.Windows.Forms.Panel
@@ -47,7 +47,7 @@ function Create-PluginOptionsTab {
     $statsPanel.Size = New-Object System.Drawing.Size(700, 60)
     $statsPanel.BackColor = [System.Drawing.Color]::FromArgb(62, 62, 66)
     $statsPanel.BorderStyle = 'FixedSingle'
-    $mainPanel.Controls.Add($statsPanel)
+    [void]$mainPanel.Controls.Add($statsPanel)
     
     # Statistics labels
     $statsTitleLabel = New-Object System.Windows.Forms.Label
@@ -56,23 +56,23 @@ function Create-PluginOptionsTab {
     $statsTitleLabel.Text = "Statistics:"
     $statsTitleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
     $statsTitleLabel.ForeColor = [System.Drawing.Color]::White
-    $statsPanel.Controls.Add($statsTitleLabel)
+    [void]$statsPanel.Controls.Add($statsTitleLabel)
     
     $statsLabel = New-Object System.Windows.Forms.Label
     $statsLabel.Location = New-Object System.Drawing.Point(10, 30)
     $statsLabel.Size = New-Object System.Drawing.Size(680, 25)
-    $statsLabel.Text = "Loading plugin statistics..."
+    $statsLabel.Text = "Loading game statistics..."
     $statsLabel.ForeColor = [System.Drawing.Color]::FromArgb(200, 200, 200)
     $statsLabel.Font = New-Object System.Drawing.Font("Segoe UI", 9)
-    $statsPanel.Controls.Add($statsLabel)
+    [void]$statsPanel.Controls.Add($statsLabel)
     
     # Search box
     $searchLabel = New-Object System.Windows.Forms.Label
     $searchLabel.Location = New-Object System.Drawing.Point(10, 170)
     $searchLabel.Size = New-Object System.Drawing.Size(100, 20)
-    $searchLabel.Text = "Search Plugins:"
+    $searchLabel.Text = "Search Games:"
     $searchLabel.ForeColor = [System.Drawing.Color]::White
-    $mainPanel.Controls.Add($searchLabel)
+    [void]$mainPanel.Controls.Add($searchLabel)
     
     $searchTextBox = New-Object System.Windows.Forms.TextBox
     $searchTextBox.Location = New-Object System.Drawing.Point(120, 168)
@@ -80,7 +80,7 @@ function Create-PluginOptionsTab {
     $searchTextBox.BackColor = [System.Drawing.Color]::FromArgb(51, 51, 55)
     $searchTextBox.ForeColor = [System.Drawing.Color]::White
     $searchTextBox.BorderStyle = 'FixedSingle'
-    $mainPanel.Controls.Add($searchTextBox)
+    [void]$mainPanel.Controls.Add($searchTextBox)
     
     # Filter buttons
     $filterAllButton = New-Object System.Windows.Forms.Button
@@ -90,7 +90,7 @@ function Create-PluginOptionsTab {
     $filterAllButton.BackColor = [System.Drawing.Color]::FromArgb(62, 62, 66)
     $filterAllButton.ForeColor = [System.Drawing.Color]::White
     $filterAllButton.FlatStyle = 'Flat'
-    $mainPanel.Controls.Add($filterAllButton)
+    [void]$mainPanel.Controls.Add($filterAllButton)
     
     $filterEnabledButton = New-Object System.Windows.Forms.Button
     $filterEnabledButton.Location = New-Object System.Drawing.Point(395, 168)
@@ -99,7 +99,7 @@ function Create-PluginOptionsTab {
     $filterEnabledButton.BackColor = [System.Drawing.Color]::FromArgb(62, 62, 66)
     $filterEnabledButton.ForeColor = [System.Drawing.Color]::White
     $filterEnabledButton.FlatStyle = 'Flat'
-    $mainPanel.Controls.Add($filterEnabledButton)
+    [void]$mainPanel.Controls.Add($filterEnabledButton)
     
     $filterDisabledButton = New-Object System.Windows.Forms.Button
     $filterDisabledButton.Location = New-Object System.Drawing.Point(470, 168)
@@ -108,7 +108,7 @@ function Create-PluginOptionsTab {
     $filterDisabledButton.BackColor = [System.Drawing.Color]::FromArgb(62, 62, 66)
     $filterDisabledButton.ForeColor = [System.Drawing.Color]::White
     $filterDisabledButton.FlatStyle = 'Flat'
-    $mainPanel.Controls.Add($filterDisabledButton)
+    [void]$mainPanel.Controls.Add($filterDisabledButton)
     
     # Refresh button
     $refreshButton = New-Object System.Windows.Forms.Button
@@ -118,7 +118,7 @@ function Create-PluginOptionsTab {
     $refreshButton.BackColor = [System.Drawing.Color]::FromArgb(0, 120, 215)
     $refreshButton.ForeColor = [System.Drawing.Color]::White
     $refreshButton.FlatStyle = 'Flat'
-    $mainPanel.Controls.Add($refreshButton)
+    [void]$mainPanel.Controls.Add($refreshButton)
     
     # Plugin list view
     $pluginListView = New-Object System.Windows.Forms.ListView
@@ -130,22 +130,23 @@ function Create-PluginOptionsTab {
     $pluginListView.BackColor = [System.Drawing.Color]::FromArgb(51, 51, 55)
     $pluginListView.ForeColor = [System.Drawing.Color]::White
     $pluginListView.BorderStyle = 'FixedSingle'
-    $mainPanel.Controls.Add($pluginListView)
+    [void]$mainPanel.Controls.Add($pluginListView)
     
     # Add columns to list view
-    $pluginListView.Columns.Add("Plugin", 200)
-    $pluginListView.Columns.Add("Status", 80)
-    $pluginListView.Columns.Add("Version", 80)
-    $pluginListView.Columns.Add("Category", 100)
-    $pluginListView.Columns.Add("Card Size", 80)
-    $pluginListView.Columns.Add("Features", 150)
+    [void]$pluginListView.Columns.Add("Game", 200)
+    [void]$pluginListView.Columns.Add("Abbr", 60)
+    [void]$pluginListView.Columns.Add("Status", 80)
+    [void]$pluginListView.Columns.Add("Version", 80)
+    [void]$pluginListView.Columns.Add("Category", 100)
+    [void]$pluginListView.Columns.Add("Card Size", 80)
+    [void]$pluginListView.Columns.Add("Features", 150)
     
     # Action buttons panel
     $actionPanel = New-Object System.Windows.Forms.Panel
     $actionPanel.Location = New-Object System.Drawing.Point(10, 560)
     $actionPanel.Size = New-Object System.Drawing.Size(700, 50)
     $actionPanel.BackColor = [System.Drawing.Color]::FromArgb(45, 45, 48)
-    $mainPanel.Controls.Add($actionPanel)
+    [void]$mainPanel.Controls.Add($actionPanel)
     
     # Enable/Disable button
     $toggleButton = New-Object System.Windows.Forms.Button
@@ -156,7 +157,7 @@ function Create-PluginOptionsTab {
     $toggleButton.ForeColor = [System.Drawing.Color]::White
     $toggleButton.FlatStyle = 'Flat'
     $toggleButton.Enabled = $false
-    $actionPanel.Controls.Add($toggleButton)
+    [void]$actionPanel.Controls.Add($toggleButton)
     
     # Enable All button
     $enableAllButton = New-Object System.Windows.Forms.Button
@@ -166,7 +167,7 @@ function Create-PluginOptionsTab {
     $enableAllButton.BackColor = [System.Drawing.Color]::FromArgb(0, 150, 0)
     $enableAllButton.ForeColor = [System.Drawing.Color]::White
     $enableAllButton.FlatStyle = 'Flat'
-    $actionPanel.Controls.Add($enableAllButton)
+    [void]$actionPanel.Controls.Add($enableAllButton)
     
     # Disable All button
     $disableAllButton = New-Object System.Windows.Forms.Button
@@ -176,7 +177,7 @@ function Create-PluginOptionsTab {
     $disableAllButton.BackColor = [System.Drawing.Color]::FromArgb(200, 0, 0)
     $disableAllButton.ForeColor = [System.Drawing.Color]::White
     $disableAllButton.FlatStyle = 'Flat'
-    $actionPanel.Controls.Add($disableAllButton)
+    [void]$actionPanel.Controls.Add($disableAllButton)
     
     # Reset to Defaults button
     $resetButton = New-Object System.Windows.Forms.Button
@@ -186,7 +187,7 @@ function Create-PluginOptionsTab {
     $resetButton.BackColor = [System.Drawing.Color]::FromArgb(120, 120, 120)
     $resetButton.ForeColor = [System.Drawing.Color]::White
     $resetButton.FlatStyle = 'Flat'
-    $actionPanel.Controls.Add($resetButton)
+    [void]$actionPanel.Controls.Add($resetButton)
     
     # Plugin details panel
     $detailsPanel = New-Object System.Windows.Forms.Panel
@@ -195,26 +196,26 @@ function Create-PluginOptionsTab {
     $detailsPanel.BackColor = [System.Drawing.Color]::FromArgb(62, 62, 66)
     $detailsPanel.BorderStyle = 'FixedSingle'
     $detailsPanel.Visible = $false
-    $pluginOptionsTab.Controls.Add($detailsPanel)
+    [void]$pluginOptionsTab.Controls.Add($detailsPanel)
     
     # Plugin details title
     $detailsTitleLabel = New-Object System.Windows.Forms.Label
     $detailsTitleLabel.Location = New-Object System.Drawing.Point(10, 10)
     $detailsTitleLabel.Size = New-Object System.Drawing.Size(280, 25)
-    $detailsTitleLabel.Text = "Plugin Details"
+    $detailsTitleLabel.Text = "Game Details"
     $detailsTitleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
     $detailsTitleLabel.ForeColor = [System.Drawing.Color]::White
-    $detailsPanel.Controls.Add($detailsTitleLabel)
+    [void]$detailsPanel.Controls.Add($detailsTitleLabel)
     
     # Plugin details text
     $detailsLabel = New-Object System.Windows.Forms.Label
     $detailsLabel.Location = New-Object System.Drawing.Point(10, 40)
     $detailsLabel.Size = New-Object System.Drawing.Size(280, 550)
-    $detailsLabel.Text = "Select a plugin to view details"
+    $detailsLabel.Text = "Select a game to view details"
     $detailsLabel.ForeColor = [System.Drawing.Color]::FromArgb(200, 200, 200)
     $detailsLabel.Font = New-Object System.Drawing.Font("Segoe UI", 9)
     $detailsLabel.AutoSize = $false
-    $detailsPanel.Controls.Add($detailsLabel)
+    [void]$detailsPanel.Controls.Add($detailsLabel)
     
     # Store references for event handlers
     $script:pluginOptionsTab = $pluginOptionsTab
@@ -232,49 +233,49 @@ function Create-PluginOptionsTab {
     
     # Event handlers
     $pluginListView.Add_SelectedIndexChanged({
-        Update-PluginDetails
-        $script:toggleButton.Enabled = ($script:pluginListView.SelectedItems.Count -gt 0)
-    })
+            Update-PluginDetails
+            $script:toggleButton.Enabled = ($script:pluginListView.SelectedItems.Count -gt 0)
+        })
     
     $searchTextBox.Add_TextChanged({
-        Update-PluginList
-    })
+            Update-PluginList
+        })
     
     $filterAllButton.Add_Click({
-        $script:currentFilter = "All"
-        Update-PluginList
-    })
+            $script:currentFilter = "All"
+            Update-PluginList
+        })
     
     $filterEnabledButton.Add_Click({
-        $script:currentFilter = "Enabled"
-        Update-PluginList
-    })
+            $script:currentFilter = "Enabled"
+            Update-PluginList
+        })
     
     $filterDisabledButton.Add_Click({
-        $script:currentFilter = "Disabled"
-        Update-PluginList
-    })
+            $script:currentFilter = "Disabled"
+            Update-PluginList
+        })
     
     $refreshButton.Add_Click({
-        Update-PluginList
-        Update-PluginStats
-    })
+            Update-PluginList
+            Update-PluginStats
+        })
     
     $toggleButton.Add_Click({
-        Toggle-SelectedPlugin
-    })
+            Invoke-ToggleSelectedPlugin
+        })
     
     $enableAllButton.Add_Click({
-        Enable-AllPlugins
-    })
+            Enable-AllPlugins
+        })
     
     $disableAllButton.Add_Click({
-        Disable-AllPlugins
-    })
+            Disable-AllPlugins
+        })
     
     $resetButton.Add_Click({
-        Reset-ToDefaults
-    })
+            Reset-ToDefaults
+        })
     
     return $pluginOptionsTab
 }
@@ -302,23 +303,24 @@ function Update-PluginList {
         
         # Create list view item
         $item = New-Object System.Windows.Forms.ListViewItem($plugin.DisplayName)
+        [void]$item.SubItems.Add($plugin.Abbreviation)
         $statusText = if ($isEnabled) { "Enabled" } else { "Disabled" }
-        $item.SubItems.Add($statusText)
-        $item.SubItems.Add($plugin.Version)
-        $item.SubItems.Add($plugin.Category)
-        $item.SubItems.Add($plugin.CardSize)
+        [void]$item.SubItems.Add($statusText)
+        [void]$item.SubItems.Add($plugin.Version)
+        [void]$item.SubItems.Add($plugin.Category)
+        [void]$item.SubItems.Add($plugin.CardSize)
         
         $features = @()
         if ($plugin.HasGUI) { $features += "GUI" }
         if ($plugin.HasCLI) { $features += "CLI" }
         if ($plugin.HasAPI) { $features += "API" }
         if ($plugin.HasScraper) { $features += "Scraper" }
-        $item.SubItems.Add($features -join ", ")
+        [void]$item.SubItems.Add($features -join ", ")
         
         $item.Tag = $plugin
         $item.BackColor = if ($isEnabled) { [System.Drawing.Color]::FromArgb(0, 100, 0) } else { [System.Drawing.Color]::FromArgb(100, 0, 0) }
         
-        $script:pluginListView.Items.Add($item)
+        [void]$script:pluginListView.Items.Add($item)
     }
 }
 
@@ -327,7 +329,8 @@ function Update-PluginStats {
     $stats = Get-PluginStats
     $statsText = "Total: $($stats.TotalPlugins) | Enabled: $($stats.EnabledPlugins) | Disabled: $($stats.DisabledPlugins)"
     if ($stats.LastScan) {
-        $statsText += " | Last Scan: $($stats.LastScan.ToString('MM/dd/yyyy HH:mm'))"
+        $lastScanDate = Get-Date $stats.LastScan
+        $statsText += " | Last Scan: $($lastScanDate.ToString('MM/dd/yyyy HH:mm'))"
     }
     $script:statsLabel.Text = $statsText
 }
@@ -345,6 +348,7 @@ function Update-PluginDetails {
     
     $detailsText = @"
 Name: $($plugin.DisplayName)
+Abbreviation: $($plugin.Abbreviation)
 Version: $($plugin.Version)
 Author: $($plugin.Author)
 Category: $($plugin.Category)
@@ -366,7 +370,7 @@ $($plugin.SupportedFormats -join ", ")
 Dependencies:
 $($plugin.Dependencies -join ", ")
 
-Last Updated: $($plugin.LastUpdated.ToString('MM/dd/yyyy HH:mm'))
+Last Updated: $((Get-Date $plugin.LastUpdated).ToString('MM/dd/yyyy HH:mm'))
 Priority: $($plugin.Priority)
 "@
     
@@ -374,41 +378,51 @@ Priority: $($plugin.Priority)
     $script:detailsPanel.Visible = $true
 }
 
+# Helper to update the main UI game list if it exists
+function Update-MainGameList {
+    if (Get-Command "Update-MainPluginList" -ErrorAction SilentlyContinue) {
+        Update-MainPluginList
+    }
+}
+
 # Toggle selected plugin
-function Toggle-SelectedPlugin {
+function Invoke-ToggleSelectedPlugin {
     if ($script:pluginListView.SelectedItems.Count -eq 0) { return }
     
     $plugin = $script:pluginListView.SelectedItems[0].Tag
-    $result = Toggle-Plugin -pluginName $plugin.Name
+    $result = Update-PluginState -pluginName $plugin.Name
     
     if ($result) {
         Update-PluginList
         Update-PluginStats
-        Write-Host "Toggled plugin: $($plugin.DisplayName)"
+        Update-MainGameList
+        Write-Host "Toggled game: $($plugin.DisplayName)"
     }
 }
 
 # Enable all plugins
 function Enable-AllPlugins {
     $allPlugins = Get-AllPlugins
-    $config = Load-PluginConfig
+    $config = Import-PluginConfig
     $config.enabledPlugins = $allPlugins.Name
     Save-PluginConfig -config $config
     
     Update-PluginList
     Update-PluginStats
-    Write-Host "Enabled all plugins"
+    Update-MainGameList
+    Write-Host "Enabled all games"
 }
 
 # Disable all plugins
 function Disable-AllPlugins {
-    $config = Load-PluginConfig
+    $config = Import-PluginConfig
     $config.enabledPlugins = @()
     Save-PluginConfig -config $config
     
     Update-PluginList
     Update-PluginStats
-    Write-Host "Disabled all plugins"
+    Update-MainGameList
+    Write-Host "Disabled all games"
 }
 
 # Reset to defaults
@@ -418,7 +432,8 @@ function Reset-ToDefaults {
     
     Update-PluginList
     Update-PluginStats
-    Write-Host "Reset plugin settings to defaults"
+    Update-MainGameList
+    Write-Host "Reset game settings to defaults"
 }
 
 # Functions are available for direct use when script is dot-sourced

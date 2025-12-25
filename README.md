@@ -105,16 +105,16 @@ Download Python packages.
 pip install -r requirements.txt
 ```
 
-Put your front images in the `game/front/` folder.
+Put your front images in the `out/front/` folder.
 
-Put your back image in the `game/back/` folder.
+Put your back image in the `out/back/` folder.
 
 Run the script.
 ```sh
 python create_pdf.py
 ```
 
-Get your PDF at `game/output/game.pdf`.
+Get your PDF at `out/output/game.pdf`.
 
 ### Plugins
 
@@ -146,7 +146,7 @@ The [Star Wars Unlimited plugin](plugins/star_wars_unlimited/README.md) supports
 
 ### Double-Sided Cards
 
-To create double-sided cards, put front images in the `game/front/` folder and back images in the `game/double_sided/` folder. The filenames (and file extensions) must match for each pair.
+To create double-sided cards, put front images in the `out/front/` folder and back images in the `out/double_sided/` folder. The filenames (and file extensions) must match for each pair.
 
 ### Corner Artifacts
 
@@ -187,14 +187,14 @@ Usage: create_pdf.py [OPTIONS]
 
 Options:
   --front_dir_path TEXT           The path to the directory containing the
-                                  card fronts.  [default: game/front]
+                                  card fronts.  [default: out/front]
   --back_dir_path TEXT            The path to the directory containing one or
-                                  more card backs.  [default: game/back]
+                                  more card backs.  [default: out/back]
   --double_sided_dir_path TEXT    The path to the directory containing card
                                   backs for double-sided cards.  [default:
-                                  game/double_sided]
+                                  out/double_sided]
   --output_path TEXT              The desired path to the output PDF.
-                                  [default: game/output/game.pdf]
+                                  [default: out/output/game.pdf]
   --output_images                 Create images instead of a PDF.
   --card_size [standard|standard_double|japanese|poker|poker_half|bridge|bridge_square|tarot|domino|domino_square]
                                   The desired card size.  [default: standard]
