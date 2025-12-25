@@ -83,6 +83,11 @@ If you enjoyed using Silhouette Card Maker, consider [donating](https://www.payp
 
 ### Basic Usage
 
+**Windows Users:**
+Simply double-click `launch_gui.bat`. It will automatically set up the environment and launch the application.
+
+**Manual Setup (macOS/Linux):**
+
 Create a Python virtual environment.
 ```sh
 python -m venv venv
@@ -95,7 +100,7 @@ Activate the Python virtual environment.
 . venv/bin/activate
 ```
 
-**PowerShell (Windows):**
+**PowerShell (Windows - Manual):**
 ```powershell
 .\venv\Scripts\Activate.ps1
 ```

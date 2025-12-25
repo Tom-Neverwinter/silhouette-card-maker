@@ -1,41 +1,66 @@
 @echo off
-REM Silhouette Card Maker - Improved Launcher
-REM =========================================
-REM This launcher provides better error handling and setup
+setlocal enabledelayedexpansion
+cd /d "%~dp0"
 
-echo Starting Silhouette Card Maker...
+echo ==========================================
+echo Silhouette Card Maker - Installer Launcher
+echo ==========================================
 echo.
 
-REM Check if Python is available
+REM 1. Check for Python
 python --version >nul 2>&1
 if errorlevel 1 (
-    echo ERROR: Python is not installed or not in PATH
-    echo Please install Python 3.8 or later from https://python.org
+    echo [ERROR] Python is not installed or not found in PATH.
+    echo Please install Python 3.8+ from https://python.org/downloads/
+    echo Make sure to check "Add Python to PATH" during installation.
     pause
     exit /b 1
 )
 
-REM Check Python version
-for /f "tokens=2" %%i in ('python --version 2^>^&1') do set PYTHON_VERSION=%%i
-echo Found Python %PYTHON_VERSION%
+REM 2. Check/Create Virtual Environment
+if not exist "venv" (
+    echo [INFO] Virtual environment not found. Creating 'venv'...
+    python -m venv venv
+    if errorlevel 1 (
+        echo [ERROR] Failed to create virtual environment.
+        pause
+        exit /b 1
+    )
+    echo [SUCCESS] Virtual environment created.
+) else (
+    echo [INFO] Virtual environment found.
+)
 
-REM Run the PowerShell GUI
-echo Launching application...
-powershell -ExecutionPolicy Bypass -File "scripts/gui.ps1"
+REM 3. Install/Update Dependencies
+echo [INFO] Checking dependencies...
+if not exist "requirements.txt" (
+    echo [WARNING] requirements.txt not found! Skipping dependency install.
+) else (
+    REM Upgrade pip first to avoid annoying warnings
+    ".\venv\Scripts\python.exe" -m pip install --upgrade pip >nul 2>&1
+    
+    REM Install requirements
+    ".\venv\Scripts\pip.exe" install -r requirements.txt
+    if errorlevel 1 (
+        echo [ERROR] Failed to install dependencies.
+        pause
+        exit /b 1
+    )
+    echo [SUCCESS] Dependencies are up to date.
+)
 
-REM Check if launch was successful
+echo.
+echo [INFO] Launching Application...
+echo.
+
+REM 4. Launch PowerShell GUI
+REM We execute with Bypass policy to ensure the script runs
+powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/gui.ps1"
+
 if errorlevel 1 (
     echo.
-    echo ERROR: Application failed to start
-    echo.
-    echo Troubleshooting:
-    echo 1. Make sure Python is installed and in PATH
-    echo 2. Make sure PowerShell execution policy allows scripts
-    echo 3. Try running: powershell -ExecutionPolicy Bypass -File "gui.ps1"
-    echo.
+    echo [ERROR] Application crashed or failed to start.
     pause
-    exit /b 1
 )
 
-echo Application closed.
-pause
+endlocal

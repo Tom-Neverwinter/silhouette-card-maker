@@ -3,7 +3,7 @@ Add-Type -AssemblyName System.Drawing
 
 # Import plugin management system
 . "$PSScriptRoot\plugin_manager.ps1"
-. (Join-Path (Split-Path -Parent $PSScriptRoot) "plugin_options_tab.ps1")
+. "$PSScriptRoot\plugin_options_tab.ps1"
 
 # Create the main form
 $form = New-Object System.Windows.Forms.Form
