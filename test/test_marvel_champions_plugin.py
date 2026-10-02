@@ -160,9 +160,67 @@ class TestFetchCardArt:
         assert back == []
         assert "no back image available yet" in capsys.readouterr().out.lower()
 
-    def test_missing_image_raises(self, tmp_path):
-        with pytest.raises(ValueError):
+    def test_missing_image_raises_clear_message(self, tmp_path):
+        not_found = requests.HTTPError(response=MagicMock(status_code=404))
+        with patch.object(api, "fetch_card_image", side_effect=not_found),              pytest.raises(ValueError, match="MarvelCDB has no image for 99002 Ghost yet"):
             self._run(tmp_path, {"code": "99002", "name": "Ghost"}, b"")
+
+
+class TestFetchCardFace:
+    """Test the image fallbacks for cards without an imagesrc."""
+
+    def test_reprint_uses_original_card_image(self):
+        with patch.object(api, "fetch_card_json", return_value={"imagesrc": "/bundles/cards/01052.png"}) as mock_json,              patch.object(api, "fetch_card_image", return_value="img") as mock_image:
+            assert api.fetch_card_face({"code": "16041", "duplicate_of_code": "01052"}) == "img"
+
+        mock_json.assert_called_once_with("01052")
+        mock_image.assert_called_once_with("https://marvelcdb.com/bundles/cards/01052.png")
+
+    def test_falls_back_to_cerebro_with_upper_case_code(self):
+        with patch.object(api, "fetch_card_image", return_value="img") as mock_image:
+            assert api.fetch_card_face({"code": "29002a"}) == "img"
+
+        mock_image.assert_called_once_with(
+            "https://cerebrodatastorage.blob.core.windows.net/cerebro-cards/official/29002A.jpg")
+
+    def test_returns_none_when_no_source_has_it(self):
+        not_found = requests.HTTPError(response=MagicMock(status_code=404))
+        with patch.object(api, "fetch_card_image", side_effect=not_found):
+            assert api.fetch_card_face({"code": "61017"}) is None
+
+
+class TestRequestRetry:
+    """Test retry/backoff in request_marvelcdb."""
+
+    def _response(self, status_code, content=b"{}"):
+        r = requests.Response()
+        r.status_code = status_code
+        r._content = content
+        return r
+
+    def test_retries_connection_errors_then_succeeds(self):
+        with patch.object(api.session, "get",
+                          side_effect=[requests.ConnectionError("dropped"), self._response(200)]) as mock_get,              patch.object(api, "sleep") as mock_sleep:
+            assert api.request_marvelcdb("https://marvelcdb.com/x").status_code == 200
+
+        assert mock_get.call_count == 2
+        assert mock_sleep.call_args_list[0].args == (1,)
+
+    def test_retries_server_errors_then_gives_up(self):
+        with patch.object(api.session, "get", return_value=self._response(503)) as mock_get,              patch.object(api, "sleep"),              pytest.raises(requests.HTTPError):
+            api.request_marvelcdb("https://marvelcdb.com/x")
+
+        assert mock_get.call_count == 4
+
+    def test_does_not_retry_client_errors(self):
+        with patch.object(api.session, "get", return_value=self._response(404)) as mock_get,              patch.object(api, "sleep"),              pytest.raises(requests.HTTPError):
+            api.request_marvelcdb("https://marvelcdb.com/x")
+
+        assert mock_get.call_count == 1
+
+    def test_private_deck_redirect_raises_value_error(self):
+        with patch.object(api.session, "get", return_value=self._response(302, b"")),              patch.object(api, "sleep"),              pytest.raises(ValueError, match="private or does not exist"):
+            api.fetch_marvelcdb_deck("12345", is_decklist=False)
 
 
 # --- Integration Tests ---
@@ -184,10 +242,14 @@ class TestMarvelCDBAPI:
 
     def test_private_deck_url_is_not_reachable(self):
         # Private decks redirect to the login page rather than returning an
-        # HTTP error, so the JSON parse itself is what fails. The login page is
-        # occasionally slow/flaky and errors instead, which is also fine here.
-        with pytest.raises((json.JSONDecodeError, requests.HTTPError)):
+        # HTTP error; the redirect is not followed.
+        with pytest.raises(ValueError, match="private or does not exist"):
             fetch_marvelcdb_deck("99999999", is_decklist=False)
+
+    def test_missing_decklist_is_not_reachable(self):
+        # Missing decklists return an empty 200 response.
+        with pytest.raises(ValueError, match="private or does not exist"):
+            fetch_marvelcdb_deck("99999999", is_decklist=True)
 
 
 @pytest.mark.integration

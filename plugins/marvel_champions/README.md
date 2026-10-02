@@ -24,6 +24,8 @@ Now you can create the PDF using [`create_pdf.py`](../../README.md#create_pdfpy)
 
 The hero card is included automatically, with its alter-ego placed in `game/double_sided/`. Landscape cards, such as main schemes, are rotated to portrait.
 
+Reprints use the image of the original printing. If MarvelCDB has no image for a card, the plugin tries the image store of Cerebro, the community Marvel Champions Discord bot, instead. Cards from the newest packs may not have an image anywhere yet; these are skipped and reported at the end of the run.
+
 ## CLI Options
 
 ```
