@@ -20,6 +20,12 @@ class GameTitle(str, Enum):
     SHADOWVERSE_EVOLVE = 'Shadowverse: Evolve'
     GODZILLA = 'Godzilla'
     HOLOLIVE = 'Hololive'
+    BUDDYFIGHT = 'Future Card Buddyfight'
+    REBIRTH = 'Rebirth for you'
+    DREAM_ORDER = 'Dream Order'
+    LOVE_LIVE = 'Love Live'
+    WEISS_SCHWARZ_ROSE = 'Weiss Schwarz Rose'
+    PALWORLD = 'Palworld'
 
 # Game title IDs and image hosts differ between the English and Japanese Deck Log
 # (see https://decklog-en.bushiroad.com/conf/const.js and https://decklog.bushiroad.com/conf/const.js)
@@ -30,13 +36,20 @@ game_title_id_mapping = {
         '6': GameTitle.SHADOWVERSE_EVOLVE,
         '7': GameTitle.GODZILLA,
         '8': GameTitle.HOLOLIVE,
+        '9': GameTitle.PALWORLD,
     },
     'decklog': {
         '1': GameTitle.CARDFIGHT_VANGUARD,
         '2': GameTitle.WEISS_SCHWARZ,
+        '3': GameTitle.BUDDYFIGHT,
+        '5': GameTitle.REBIRTH,
         '6': GameTitle.SHADOWVERSE_EVOLVE,
+        '8': GameTitle.DREAM_ORDER,
         '9': GameTitle.HOLOLIVE,
+        '11': GameTitle.LOVE_LIVE,
+        '12': GameTitle.WEISS_SCHWARZ_ROSE,
         '13': GameTitle.GODZILLA,
+        '14': GameTitle.PALWORLD,
     },
 }
 
@@ -46,14 +59,21 @@ game_image_url_mapping = {
         GameTitle.WEISS_SCHWARZ: 'https://en.ws-tcg.com/wordpress/wp-content/images/cardimages/{card_image}',
         GameTitle.SHADOWVERSE_EVOLVE: 'https://en.shadowverse-evolve.com/wordpress/wp-content/images/cardlist/{card_image}',
         GameTitle.GODZILLA: 'https://en.godzilla-cardgame.com/wordpress/wp-content/images/cardlist/{card_image}',
-        GameTitle.HOLOLIVE: 'https://en.hololive-official-cardgame.com/wp-content/images/cardlist/{card_image}'
+        GameTitle.HOLOLIVE: 'https://en.hololive-official-cardgame.com/wp-content/images/cardlist/{card_image}',
+        GameTitle.PALWORLD: 'https://en.palworld-official-cardgame.com/wordpress/wp-content/images/cardlist/{card_image}',
     },
     'decklog': {
         GameTitle.CARDFIGHT_VANGUARD: 'https://cf-vanguard.com/wordpress/wp-content/images/cardlist/{card_image}',
         GameTitle.WEISS_SCHWARZ: 'https://ws-tcg.com/wordpress/wp-content/images/cardlist/{card_image}',
         GameTitle.SHADOWVERSE_EVOLVE: 'https://shadowverse-evolve.com/wordpress/wp-content/images/cardlist/{card_image}',
         GameTitle.GODZILLA: 'https://godzilla-cardgame.com/wordpress/wp-content/images/cardlist/{card_image}',
-        GameTitle.HOLOLIVE: 'https://hololive-official-cardgame.com/wp-content/images/cardlist/{card_image}'
+        GameTitle.HOLOLIVE: 'https://hololive-official-cardgame.com/wp-content/images/cardlist/{card_image}',
+        GameTitle.BUDDYFIGHT: 'https://fc-buddyfight.com/wordpress/wp-content/images/card/{card_image}',
+        GameTitle.REBIRTH: 'https://rebirth-fy.com/wordpress/wp-content/images/cardlist/{card_image}',
+        GameTitle.DREAM_ORDER: 'https://dreamorder.com/wordpress/wp-content/images/cardlist/{card_image}',
+        GameTitle.LOVE_LIVE: 'https://llofficial-cardgame.com/wordpress/wp-content/images/cardlist/{card_image}',
+        GameTitle.WEISS_SCHWARZ_ROSE: 'https://ws-rose.com/wordpress/wp-content/images/cardlist/{card_image}',
+        GameTitle.PALWORLD: 'https://palworld-official-cardgame.com/wordpress/wp-content/images/cardlist/{card_image}',
     },
 }
 

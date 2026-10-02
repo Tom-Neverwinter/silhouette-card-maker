@@ -105,6 +105,32 @@ class TestBushiroadHostSelection:
         with pytest.raises(ValueError):
             fetch_decklist("ABCDE", "decklog")
 
+    @pytest.mark.parametrize("host,game_title_id,game_title,image_url", [
+        ("decklog", 3, GameTitle.BUDDYFIGHT,
+         "https://fc-buddyfight.com/wordpress/wp-content/images/card/hsd_01_0001.png"),
+        ("decklog", 5, GameTitle.REBIRTH,
+         "https://rebirth-fy.com/wordpress/wp-content/images/cardlist/IMSB/ims001b-057.png"),
+        ("decklog", 8, GameTitle.DREAM_ORDER,
+         "https://dreamorder.com/wordpress/wp-content/images/cardlist/PBP01/PBP01-E_04-R.png"),
+        ("decklog", 11, GameTitle.LOVE_LIVE,
+         "https://llofficial-cardgame.com/wordpress/wp-content/images/cardlist/BP01/PL!HS-bp1-002-R.png"),
+        ("decklog", 12, GameTitle.WEISS_SCHWARZ_ROSE,
+         "https://ws-rose.com/wordpress/wp-content/images/cardlist/os01/r01/os01_r01_033.png"),
+        ("decklog", 14, GameTitle.PALWORLD,
+         "https://palworld-official-cardgame.com/wordpress/wp-content/images/cardlist/BP01/BP01-001SSP.png"),
+        ("decklog-en", 9, GameTitle.PALWORLD,
+         "https://en.palworld-official-cardgame.com/wordpress/wp-content/images/cardlist/EBP01/EBP01-001.png"),
+    ])
+    @patch("plugins.bushiroad.bushiroad.request_bushiroad")
+    def test_additional_games(self, mock_request, host, game_title_id, game_title, image_url):
+        """Games added from each site's const.js map to the right title and image host."""
+        card_image = image_url.split("/images/")[1].split("/", 1)[1]
+        mock_request.return_value = _mock_deck_response(game_title_id, card_image)
+        handle_card = MagicMock()
+        parse_deck(f"https://{host}.bushiroad.com/view/ABCDE", DeckFormat.BUSHIROAD_URL, handle_card)
+        assert fetch_decklist("ABCDE", host)[0] == game_title
+        handle_card.assert_called_once_with(1, "Card", image_url, "", 1)
+
     @pytest.mark.parametrize("url,api_url,image_url", [
         ("https://decklog-en.bushiroad.com/view/1HF6L",
          "https://decklog-en.bushiroad.com/system/app/api/view/1HF6L",
@@ -187,6 +213,21 @@ class TestFullFetchWorkflow:
         for f in files:
             file_path = os.path.join(front_dir, f)
             assert os.path.getsize(file_path) > 0
+
+    def test_fetch_card_from_additional_game(self, temp_dirs):
+        """Test that a Palworld Deck Log deck resolves and its first card image downloads."""
+        front_dir, back_dir = temp_dirs
+
+        game_title, deck = fetch_decklist("45LAK", "decklog-en")
+        assert game_title == GameTitle.PALWORLD
+
+        card = deck[0]
+        handle_card = get_handle_card(front_dir, back_dir)
+        handle_card(1, card["name"], resolve_image_url(game_title, card["img"], "decklog-en"), "", 1)
+
+        files = os.listdir(front_dir)
+        assert len(files) == 1
+        assert os.path.getsize(os.path.join(front_dir, files[0])) > 0
 
     def test_fetch_deck_from_jp_decklog(self, temp_dirs):
         """Test that a Japanese Deck Log URL fetches the Japanese deck and images."""

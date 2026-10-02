@@ -123,7 +123,7 @@ The [Arkham Horror: The Card Game plugin](plugins/arkham_horror_lcg/README.md) s
 
 The [Ashes Reborn plugin](plugins/ashes_reborn/README.md) supports **Ashes** and **Ashes DB** formats.
 
-The [Bushiroad plugin](plugins/bushiroad/README.md) supports **Bushiroad Deck Log** format for Cardfight Vanguard, Shadowverse: Evolve, Weiss Schwarz, Godzilla Card Game, and hololive.
+The [Bushiroad plugin](plugins/bushiroad/README.md) supports **Bushiroad Deck Log** format for Cardfight Vanguard, Shadowverse: Evolve, Weiss Schwarz, Godzilla Card Game, hololive, Palworld, Future Card Buddyfight, Rebirth for you, Dream Order, Love Live! Series Official Card Game, and Weiss Schwarz Rose.
 
 The [Digimon plugin](plugins/digimon/README.md) supports **Digimoncard.app**, **Digimoncard.dev**, **Digimoncard.io**, **DigimonMeta**, **Tabletop Simulator**, and **Untap** formats.
 
