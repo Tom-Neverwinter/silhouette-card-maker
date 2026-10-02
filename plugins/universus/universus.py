@@ -88,7 +88,7 @@ def image_width(content: bytes) -> int:
 def request_largest_image(url: str) -> bytes:
     content = request_image(url)
 
-    # ponytail: downloads both copies to compare; older sets are smaller on uvsultra than on universus.cards
+    # Downloads both copies to compare; older sets are smaller on uvsultra than on universus.cards
     try:
         ultra_content = request_image(url.replace(BASE_URL + '/cards/', ULTRA_IMAGE_URL, 1))
         if image_width(ultra_content) > image_width(content):
