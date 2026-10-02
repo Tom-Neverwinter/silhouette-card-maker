@@ -26,7 +26,7 @@ def request_dtdb(query: str) -> requests.Response:
 def fetch_dtdb_decklist(deck_id: str) -> dict:
     return request_dtdb(f'{API_BASE}/decklist/{deck_id}').json()
 
-# ponytail: one request for the whole card list (~1 MB) instead of one per card.
+# One request for the whole card list (~1 MB) instead of one per card.
 @cache
 def fetch_cards() -> dict:
     return {card['code']: card for card in request_dtdb(f'{API_BASE}/cards').json()}
