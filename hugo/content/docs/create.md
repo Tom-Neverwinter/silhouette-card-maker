@@ -88,7 +88,7 @@ The [Bushiroad]({{% ref "../plugins/bushiroad" %}}) plugin supports **Bushiroad 
 
 The [Digimon]({{% ref "../plugins/digimon" %}}) plugin supports **Digimoncard.app**, **Digimoncard.dev**, **Digimoncard.io**, **DigimonMeta**, **Tabletop Simulator**, and **Untap** formats.
 
-The [Dragon Ball Super Card Game Fusion World]({{% ref "../plugins/dragon_ball_super_fusion_world" %}}) plugin supports **Fusion World Digital** and **Limitless TCG** formats.
+The [Dragon Ball Super Card Game Fusion World]({{% ref "../plugins/dragon_ball_super_fusion_world" %}}) plugin supports **DeckPlanet**, **dragonball.gg**, **Egman Events**, **Fusion World Digital**, and **Limitless TCG** formats.
 
 The [Echoes of Astra]({{% ref "../plugins/echoes_of_astra" %}}) plugin supports **AstraBuilder** format.
 

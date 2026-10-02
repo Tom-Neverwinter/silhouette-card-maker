@@ -7,7 +7,7 @@ This plugin reads a decklist, fetches the card images from the [official card li
 
 Leader cards are double-sided, so their back (awakened) side is put into `game/double_sided/`.
 
-This plugin supports the `fusionworld` decklist format. To learn more, see [here](#formats).
+This plugin supports the `fusionworld` and `deckplanet` decklist formats. To learn more, see [here](#formats).
 
 ## Basic Instructions
 
@@ -30,7 +30,7 @@ Now you can create the PDF using [`create_pdf.py`]({{% ref "../docs/create" %}})
 ## CLI Options
 
 ```
-Usage: fetch.py [OPTIONS] DECK_PATH {fusionworld}
+Usage: fetch.py [OPTIONS] DECK_PATH {fusionworld|deckplanet}
 
 Options:
   --help  Show this message and exit.
@@ -40,7 +40,18 @@ Options:
 
 ### `fusionworld`
 
-The deck code text copied from **Fusion World Digital** (the **Deck Code** button on the **Check Deck** screen), which is also the format used for [Limitless TCG](https://docs.limitlesstcg.com/player/decklists) decklist submissions.
+The deck text exported by **Fusion World Digital**, [Egman Events](https://deckbuilder.egmanevents.com/fusionworld) (**Deck Toolkit** > **Text**), [dragonball.gg](https://dragonball.gg) and [DeckPlanet](https://www.deckplanet.net/fusion_world)'s **Fusion World Digital** and **TCGArena** exports. The leader is the line without a quantity, and the number in parentheses after each name is the Fusion World Digital card ID.
+
+```
+Name (Exported)
+FS01-01 Son Goku(2)
+4 FS01-03 Master Roshi(5)
+4 FS01-02 Whis(4)
+4 FS01-10 Tien Shinhan(12)
+2 FS01-04 Krillin(6)
+```
+
+It also accepts the [Limitless TCG](https://docs.limitlesstcg.com/player/decklists) style of a quantity followed by a card number.
 
 ```
 1 FB01-001
@@ -50,6 +61,21 @@ The deck code text copied from **Fusion World Digital** (the **Deck Code** butto
 4 FB01-014
 ```
 
-Each line is a quantity followed by a card number. The quantity may also be written with an `x` (`4xFB01-005` or `4 x FB01-005`), and any text after the card number (such as the card name) is ignored. Lines that don't match, such as section headers, are skipped.
+The quantity may also be written with an `x` (`4xFB01-005` or `4 x FB01-005`), and any text after the card number (such as the card name) is ignored. Lines that don't match, such as section headers, are skipped.
 
 To use a parallel (alternate art) printing, add its suffix to the card number, such as `FB01-004_p1`.
+
+### `deckplanet`
+
+[DeckPlanet](https://www.deckplanet.net/fusion_world)'s default **Copy to Clipboard** export. The leader is the line without a quantity.
+
+```
+Son Goku [FB01-001]
+4 Son Goku [FB01-005]
+4 Vegeta [FB01-014]
+3 Krillin [FS01-04]
+Sideboard
+2 Piccolo [FB01-008]
+```
+
+Sideboard cards are fetched too.

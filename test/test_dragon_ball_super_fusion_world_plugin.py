@@ -12,7 +12,9 @@ from plugins.dragon_ball_super_fusion_world.deck_formats import (
     DeckFormat,
     parse_deck,
     parse_fusionworld,
+    parse_deckplanet,
 )
+from plugins.dragon_ball_super_fusion_world import dbs_cardgame
 from plugins.dragon_ball_super_fusion_world.dbs_cardgame import (
     card_art_url,
     request_dbs,
@@ -20,9 +22,9 @@ from plugins.dragon_ball_super_fusion_world.dbs_cardgame import (
 )
 
 
-def collect(deck_text):
+def collect(deck_text, parse=parse_fusionworld):
     parsed_cards = []
-    parse_fusionworld(deck_text, lambda index, card_code, quantity: parsed_cards.append((index, card_code, quantity)))
+    parse(deck_text, lambda index, card_code, quantity: parsed_cards.append((index, card_code, quantity)))
     return parsed_cards
 
 
@@ -72,6 +74,96 @@ class TestFusionWorldFormat:
         parsed_cards = []
         parse_deck("2 FB01-005", DeckFormat.FUSIONWORLD, lambda i, c, q: parsed_cards.append((c, q)))
         assert parsed_cards == [('FB01-005', 2)]
+
+
+class TestDigitalExportFormat:
+    """Fusion World Digital / Egman Events / dragonball.gg / DeckPlanet digital exports."""
+
+    def test_parse_egman_export(self):
+        # Egman Events getExportText: leader has no quantity and keeps Egman's -F card code suffix
+        deck_text = """Name (Exported)
+FB01-001-F Son Goku(70)
+4 FB01-005 Bulma(75)
+4 FS01-03 Master Roshi(5)
+
+Other Cards:
+2 FB01-014 Vegeta(84)"""
+
+        assert collect(deck_text) == [
+            (1, 'FB01-001-F', 1),
+            (2, 'FB01-005', 4),
+            (3, 'FS01-03', 4),
+            (4, 'FB01-014', 2),
+        ]
+
+    def test_parse_dragonballgg_export(self):
+        # dragonball.gg textExport: lowercase 'name' header, leader line without quantity
+        deck_text = """name (Goku Aggro)
+FS01-01 Son Goku(2)
+4 FS01-02 Whis(4)
+2 FS01-09 Son Gohan : Adolescence(11)"""
+
+        assert collect(deck_text) == [
+            (1, 'FS01-01-F', 1),
+            (2, 'FS01-02', 4),
+            (3, 'FS01-09', 2),
+        ]
+
+    def test_parse_deckplanet_digital_and_tcgarena_exports(self):
+        digital = "Name (My Deck)\nFB01-001 Son Goku (70)\n4 FB01-005 Bulma (75)"
+        tcgarena = "1 FB01-001\n4 FB01-005"
+
+        assert collect(digital) == [(1, 'FB01-001-F', 1), (2, 'FB01-005', 4)]
+        assert collect(tcgarena) == [(1, 'FB01-001', 1), (2, 'FB01-005', 4)]
+
+
+class TestDeckPlanetFormat:
+    """DeckPlanet default clipboard export: '{quantity} {name} [{card code}]'."""
+
+    def test_parse_deckplanet(self):
+        deck_text = """Son Goku [FB01-001]
+4 Son Goku [FB01-005]
+2 Son Gohan : Adolescence [FS01-09]
+Sideboard
+2 Piccolo [FB01-008]"""
+
+        assert collect(deck_text, parse_deckplanet) == [
+            (1, 'FB01-001-F', 1),
+            (2, 'FB01-005', 4),
+            (3, 'FS01-09', 2),
+            (4, 'FB01-008', 2),
+        ]
+
+    def test_parse_deck_dispatch(self):
+        parsed_cards = []
+        parse_deck("3 Krillin [FS01-04]", DeckFormat.DECKPLANET, lambda i, c, q: parsed_cards.append((c, q)))
+        assert parsed_cards == [('FS01-04', 3)]
+
+
+class TestLeaderFetch:
+    """A -F/-B leader marker skips the plain image probe."""
+
+    def test_marked_leader_requests_only_front_and_back(self, monkeypatch, tmp_path):
+        requested = []
+
+        class FakeResponse:
+            content = b'img'
+
+        def fake_request(url):
+            requested.append(url)
+            return FakeResponse()
+
+        monkeypatch.setattr(dbs_cardgame, 'request_dbs', fake_request)
+        monkeypatch.setattr(dbs_cardgame, 'guess_extension', lambda _: '.webp')
+        front_dir, back_dir = tmp_path / 'front', tmp_path / 'back'
+        front_dir.mkdir()
+        back_dir.mkdir()
+
+        dbs_cardgame.fetch_card_art(1, 'FB01-001-F', 1, str(front_dir), str(back_dir))
+
+        assert [u.rsplit('/', 1)[1] for u in requested] == ['FB01-001_f.webp', 'FB01-001_b.webp']
+        assert os.listdir(front_dir) == ['1FB01-0011.webp']
+        assert os.listdir(back_dir) == ['1FB01-0011.webp']
 
 
 class TestCardArtUrl:
@@ -129,3 +221,11 @@ class TestFullFetchWorkflow:
         assert os.listdir(double_sided_dir) == ['1FB01-0011.webp']
         with Image.open(os.path.join(double_sided_dir, '1FB01-0011.webp')) as img:
             img.verify()
+
+    def test_fetch_marked_leader_from_digital_export(self, temp_dirs):
+        front_dir, double_sided_dir = temp_dirs
+
+        parse_deck("Name (Exported)\nFB01-001 Son Goku(70)",DeckFormat.FUSIONWORLD, get_handle_card(front_dir, double_sided_dir))
+
+        assert os.listdir(front_dir) == ['1FB01-0011.webp']
+        assert os.listdir(double_sided_dir) == ['1FB01-0011.webp']

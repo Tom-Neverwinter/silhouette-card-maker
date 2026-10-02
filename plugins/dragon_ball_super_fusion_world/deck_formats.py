@@ -4,8 +4,15 @@ from typing import Callable, Tuple
 
 card_data_tuple = Tuple[str, str, int] # name, card code, quantity
 
-# Card codes look like FB01-001, FS01-03, or FP-001, optionally with a parallel suffix like _p1
-CARD_CODE = r'[A-Z]+\d*-\d+(?:_p\d+)?'
+# Card codes look like FB01-001, FS01-03, or FP-001, optionally with a parallel suffix like _p1.
+# Egman Events marks leaders with a -F/-B (front/back) suffix: FB01-001-F
+CARD_CODE = r'[A-Z]+\d*-\d+(?:_p\d+)?(?:-[FB])?'
+
+# Appended to a card code to tell the fetcher it's a leader, skipping the 404 probe
+LEADER_SUFFIX = '-F'
+
+def mark_leader(card_code: str) -> str:
+    return card_code if card_code.endswith(('-F', '-B')) else card_code + LEADER_SUFFIX
 
 def parse_deck_helper(
         deck_text: str,
@@ -40,27 +47,51 @@ def parse_deck_helper(
 
 def parse_fusionworld(deck_text: str, handle_card: Callable):
     # '{quantity} {card code}', also accepts '{quantity}x{card code}', '{quantity} x {card code}',
-    # and an optional trailing card name
-    pattern = compile(rf'^(\d+)\s*[xX]?\s*({CARD_CODE})(?:\s+(.*))?$')
+    # and an optional trailing card name. Fusion World Digital, Egman Events and dragonball.gg
+    # export '{quantity} {card code} {name}({digital id})' with the leader line having no quantity.
+    pattern = compile(rf'^(?:(\d+)\s*[xX]?\s*)?({CARD_CODE})(?:\s+(.*))?$')
 
     def is_fusionworld_line(line) -> bool:
         return bool(pattern.match(line))
 
     def extract_fusionworld_card_data(line) -> card_data_tuple:
         match = pattern.match(line)
-        quantity = int(match.group(1))
         card_code = match.group(2)
         name = (match.group(3) or '').strip()
+        if match.group(1) is None:
+            # Only the leader line is exported without a quantity
+            return (name, mark_leader(card_code), 1)
 
-        return (name, card_code, quantity)
+        return (name, card_code, int(match.group(1)))
 
     parse_deck_helper(deck_text, handle_card, is_fusionworld_line, extract_fusionworld_card_data)
 
+def parse_deckplanet(deck_text: str, handle_card: Callable):
+    # '{quantity} {name} [{card code}]', the leader line has no quantity
+    pattern = compile(rf'^(?:(\d+)\s+)?(.+?)\s+\[({CARD_CODE})\]$')
+
+    def is_deckplanet_line(line) -> bool:
+        return bool(pattern.match(line))
+
+    def extract_deckplanet_card_data(line) -> card_data_tuple:
+        match = pattern.match(line)
+        name = match.group(2).strip()
+        card_code = match.group(3)
+        if match.group(1) is None:
+            return (name, mark_leader(card_code), 1)
+
+        return (name, card_code, int(match.group(1)))
+
+    parse_deck_helper(deck_text, handle_card, is_deckplanet_line, extract_deckplanet_card_data)
+
 class DeckFormat(str, Enum):
     FUSIONWORLD = 'fusionworld'
+    DECKPLANET = 'deckplanet'
 
 def parse_deck(deck_text: str, format: DeckFormat, handle_card: Callable):
     if format == DeckFormat.FUSIONWORLD:
         parse_fusionworld(deck_text, handle_card)
+    elif format == DeckFormat.DECKPLANET:
+        parse_deckplanet(deck_text, handle_card)
     else:
         raise ValueError('Unrecognized deck format.')

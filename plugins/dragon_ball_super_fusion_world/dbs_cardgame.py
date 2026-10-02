@@ -35,12 +35,20 @@ def write_copies(card_art: bytes, directory: str, index: int, card_code: str, qu
             f.write(card_art)
 
 def fetch_card_art(index: int, card_code: str, quantity: int, front_img_dir: str, double_sided_dir: str):
-    try:
-        front = request_dbs(card_art_url(card_code)).content
-        back = None
-    except HTTPError as e:
-        if e.response is None or e.response.status_code != 404:
-            raise
+    # A -F/-B suffix marks a known leader, otherwise a 404 on the plain image means it's a leader
+    is_leader = card_code.endswith(('-F', '-B'))
+    if is_leader:
+        card_code = card_code[:-2]
+    else:
+        try:
+            front = request_dbs(card_art_url(card_code)).content
+            back = None
+        except HTTPError as e:
+            if e.response is None or e.response.status_code != 404:
+                raise
+            is_leader = True
+
+    if is_leader:
         # Leaders only exist as _f/_b images
         front = request_dbs(card_art_url(card_code, '_f')).content
         back = request_dbs(card_art_url(card_code, '_b')).content
