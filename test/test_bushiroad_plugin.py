@@ -121,6 +121,31 @@ class TestBushiroadHostSelection:
         assert mock_request.call_args[0][0] == api_url
         handle_card.assert_called_once_with(1, "Card", image_url, "", 1)
 
+    @patch("plugins.bushiroad.bushiroad.request_bushiroad")
+    def test_bare_code_line_is_skipped(self, mock_request):
+        """Bare codes are ambiguous between EN and JP Deck Log, so they are not guessed."""
+        handle_card = MagicMock()
+        parse_deck("1HF6L", DeckFormat.BUSHIROAD_URL, handle_card)
+        mock_request.assert_not_called()
+        handle_card.assert_not_called()
+
+    @pytest.mark.parametrize("name,file_name", [
+        ("妖魔忍竜・黄昏 ハンゾウ", "V-SS10/029"),
+        ("Sealed Blaze of Arbitration", "Sealed Blaze of Arbitration"),
+    ])
+    @patch("plugins.bushiroad.bushiroad.request_bushiroad")
+    def test_jp_name_uses_card_number(self, mock_request, name, file_name):
+        """Names without Latin characters fall back to the card number for filenames."""
+        response = MagicMock()
+        response.json.return_value = {
+            "game_title_id": 1,
+            "list": [{"name": name, "num": 1, "img": "SET/card.png", "card_number": "V-SS10/029"}],
+        }
+        mock_request.return_value = response
+        handle_card = MagicMock()
+        parse_deck("https://decklog.bushiroad.com/view/1HF6L", DeckFormat.BUSHIROAD_URL, handle_card)
+        assert handle_card.call_args[0][1] == file_name
+
 
 # --- Integration Tests ---
 

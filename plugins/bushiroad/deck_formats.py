@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Callable
-from re import compile
+from re import compile, search
 import os
 
 from plugins.bushiroad.bushiroad import fetch_decklist, resolve_image_url
@@ -48,8 +48,11 @@ def parse_bushiroad_url(deck_text: str, handle_card: Callable) -> None:
             if name: parts.append(f'name: {name}')
             print(', '.join(parts))
 
+            # Japanese names have no Latin characters and would sanitize to an empty filename
+            file_name = name if search(r'[A-Za-z0-9]', name) else card.get('card_number', name)
+
             try:
-                handle_card(index, name, front_url, back_url, quantity)
+                handle_card(index, file_name, front_url, back_url, quantity)
             except Exception as e:
                 print(f'Error: {e}')
                 error_lines.append((name, e))

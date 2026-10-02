@@ -41,11 +41,13 @@ Bushiroad Deck Log URL format.
 https://decklog-en.bushiroad.com/view/1HF6L
 ```
 
-Japanese Deck Log URLs are also supported. Note that the same deck code refers to different decks on the English and Japanese sites, so use the full URL.
+Japanese Deck Log URLs are also supported. Note that the same deck code refers to different decks on the English and Japanese sites, so use the full URL. Bare deck codes are skipped rather than guessed.
 
 ```
 https://decklog.bushiroad.com/view/1HF6L
 ```
+
+Japanese card names have no Latin characters, so image filenames use the card number instead (for example, `1V-SS100291.png`).
 
 You can also use a Bushiroad Deck Log URL directly in the command line.
 
