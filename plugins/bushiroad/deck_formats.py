@@ -6,7 +6,7 @@ import os
 from plugins.bushiroad.bushiroad import fetch_decklist, resolve_image_url
 
 def parse_bushiroad_url(deck_text: str, handle_card: Callable) -> None:
-    DECKLOG_URL_PATTERN = compile(r'https?://decklog(?:-en)?\.bushiroad\.com/view/(\w+)\s*')
+    DECKLOG_URL_PATTERN = compile(r'https?://(decklog(?:-en)?)\.bushiroad\.com/view/(\w+)\s*')
 
     if os.path.isfile(deck_text):
         deck_text = open(deck_text, 'r', encoding='utf-8').read()
@@ -24,8 +24,8 @@ def parse_bushiroad_url(deck_text: str, handle_card: Callable) -> None:
             print(f'Skipping: "{line}"')
             continue
 
-        deck_code = match.group(1)
-        game_title, deck = fetch_decklist(deck_code)
+        host, deck_code = match.group(1), match.group(2)
+        game_title, deck = fetch_decklist(deck_code, host)
         print(f'Game: {game_title.value}')
 
         for card in deck:
@@ -37,12 +37,12 @@ def parse_bushiroad_url(deck_text: str, handle_card: Callable) -> None:
             quantity = int(card.get('num'))
 
             front_image = card.get('img', '').strip()
-            front_url = resolve_image_url(game_title, front_image) if front_image else ''
+            front_url = resolve_image_url(game_title, front_image, host) if front_image else ''
 
             back_image = ''
             if card.get('custom_param') is not None and card.get('custom_param').get('is_bothsides'):
                 back_image = card.get('custom_param').get('rev_img', '').strip()
-            back_url = resolve_image_url(game_title, back_image) if back_image else ''
+            back_url = resolve_image_url(game_title, back_image, host) if back_image else ''
 
             parts = [f'Index: {index}', f'quantity: {quantity}']
             if name: parts.append(f'name: {name}')
