@@ -26,7 +26,7 @@ def request_council_of_elrond(url: str) -> requests.Response:
 
     return r
 
-# ponytail: the whole database is one ~4MB file, fetched once per run.
+# The whole database is one ~4MB file, fetched once per run.
 @lru_cache(maxsize=None)
 def fetch_card_database() -> dict:
     return request_council_of_elrond(CARDS_URL).json()
