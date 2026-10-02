@@ -44,7 +44,7 @@ def request_wiki(url: str, params: dict = None) -> Response:
 @lru_cache(maxsize=1)
 def get_card_image_index() -> Dict[str, str]:
     """Map normalized card numbers to image URLs. The wiki has ~400 files, so one request covers it."""
-    # ponytail: single page (ailimit=500); follow 'continue' if the wiki ever grows past 500 files
+    # Single page (ailimit=500); follow 'continue' if the wiki ever grows past 500 files
     json = request_wiki(WIKI_API_URL, {
         'action': 'query',
         'list': 'allimages',
