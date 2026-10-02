@@ -3,6 +3,7 @@ Tests for the Star Wars: The Card Game plugin.
 Tests deck format parsing and image fetching from SWLCGDB.
 """
 import os
+from io import BytesIO
 import shutil
 import tempfile
 from unittest.mock import MagicMock, patch
@@ -92,9 +93,15 @@ class TestParseDeck:
             parse_deck("", "not_a_real_format", lambda *args: None)
 
 
+def jpeg_bytes(width, height):
+    buffer = BytesIO()
+    Image.new("RGB", (width, height)).save(buffer, format="JPEG")
+    return buffer.getvalue()
+
+
 class TestFetchCard:
     def test_image_url_uses_block_number_and_saves_copies(self, tmp_path):
-        image_response = MagicMock(headers={"content-type": "image/jpeg"}, content=b"\xff\xd8\xff\xe0data")
+        image_response = MagicMock(headers={"content-type": "image/jpeg"}, content=jpeg_bytes(344, 480))
 
         with patch.object(swlcgdb, "fetch_card_block", return_value=CARD_BLOCK_JSON), \
              patch.object(swlcgdb, "request_swlcgdb", return_value=image_response) as mock_request:
@@ -102,6 +109,15 @@ class TestFetchCard:
 
         mock_request.assert_called_once_with("https://swlcg-card-images.nyc3.digitaloceanspaces.com/cards/255-2.jpg")
         assert sorted(os.listdir(tmp_path)) == ["3Howlrunner1.jpg", "3Howlrunner2.jpg"]
+
+    def test_landscape_objective_is_rotated_to_portrait(self, tmp_path):
+        image_response = MagicMock(headers={"content-type": "image/jpeg"}, content=jpeg_bytes(669, 480))
+
+        with patch.object(swlcgdb, "fetch_card_block", return_value=CARD_BLOCK_JSON),              patch.object(swlcgdb, "request_swlcgdb", return_value=image_response):
+            swlcgdb.fetch_card(1, 1, DECK_JSON["cards"][0], str(tmp_path))
+
+        with Image.open(tmp_path / "1Howlrunner1.jpg") as img:
+            assert img.size == (480, 669)
 
     def test_non_image_response_raises(self, tmp_path):
         xml_response = MagicMock(headers={"content-type": "application/xml"}, content=b"<Error/>")

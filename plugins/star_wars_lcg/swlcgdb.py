@@ -1,8 +1,10 @@
 from functools import lru_cache
+from io import BytesIO
 from os import path
 from re import sub
 from time import sleep
 
+from PIL import Image
 from requests import Response, Session
 
 from utilities import guess_extension
@@ -35,6 +37,18 @@ def fetch_deck(deck_id: str) -> dict:
 def fetch_card_block(card_block_id: int) -> dict:
     return request_swlcgdb(CARD_BLOCK_API_URL_TEMPLATE.format(card_block_id=card_block_id)).json()
 
+def rotate_landscape(image_bytes: bytes) -> bytes:
+    img = Image.open(BytesIO(image_bytes))
+
+    # Objective cards are printed landscape but need to be laid out
+    # portrait alongside the rest of the deck.
+    if img.width <= img.height:
+        return image_bytes
+
+    buffer = BytesIO()
+    img.rotate(-90, expand=True).save(buffer, format=img.format or 'JPEG')
+    return buffer.getvalue()
+
 def fetch_card(
     index: int,
     quantity: int,
@@ -50,7 +64,7 @@ def fetch_card(
     if not r.headers.get('content-type', '').startswith('image/'):
         raise ValueError(f'No image available for card "{card["name"]}"')
 
-    card_art = r.content
+    card_art = rotate_landscape(r.content)
     extension = guess_extension(card_art, '.jpg')
     clean_name = sub(r'[^\w]', '', card['name'])
 
