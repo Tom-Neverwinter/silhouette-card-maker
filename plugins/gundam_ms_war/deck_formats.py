@@ -42,11 +42,27 @@ def parse_text(deck_text: str, handle_card: Callable) -> None:
 
     parse_deck_helper(deck_text, handle_card, is_text_line, extract_text_card_data)
 
+def parse_names(deck_text: str, handle_card: Callable) -> None:
+    # '{Quantity}[x] {Name}', e.g. '3 Wing Gundam', '2x Zero System'. handle_card receives the name in place of a card number.
+    pattern = compile(r'^\s*(\d+)\s*x?\s+(\S.*?)\s*$', IGNORECASE)
+
+    def is_names_line(line) -> bool:
+        return bool(pattern.match(line))
+
+    def extract_names_card_data(line) -> card_data_tuple:
+        match = pattern.match(line)
+        return (match.group(2), int(match.group(1)), '')
+
+    parse_deck_helper(deck_text, handle_card, is_names_line, extract_names_card_data)
+
 class DeckFormat(str, Enum):
     TEXT = 'text'
+    NAMES = 'names'
 
 def parse_deck(deck_text: str, format: DeckFormat, handle_card: Callable) -> None:
     if format == DeckFormat.TEXT:
         return parse_text(deck_text, handle_card)
+    elif format == DeckFormat.NAMES:
+        return parse_names(deck_text, handle_card)
     else:
         raise ValueError('Unrecognized deck format.')

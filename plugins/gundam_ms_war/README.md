@@ -6,7 +6,7 @@ This plugin reads a decklist and puts the card images into the proper `game/` di
 
 Card images come from the fan-run [Gundam M.S. War wiki](https://gundammswar.fandom.com/wiki/Gundam_M.S_War).
 
-This plugin supports the `text` decklist format. To learn more, see [here](#formats).
+This plugin supports the `text` and `names` decklist formats. To learn more, see [here](#formats).
 
 ## Basic Instructions
 
@@ -29,7 +29,7 @@ Now you can create the PDF using [`create_pdf.py`](../../README.md#create_pdfpy)
 ## CLI Options
 
 ```
-Usage: fetch.py [OPTIONS] DECK_PATH {text}
+Usage: fetch.py [OPTIONS] DECK_PATH {text|names}
 
 Options:
   --help  Show this message and exit.
@@ -53,4 +53,26 @@ One card per line: the quantity (optionally followed by `x`), the card number, a
 1 BF-p03 New York, NY
 ```
 
-Mission cards have no individual scans on the wiki and are not supported.
+### `names`
+
+One card per line: the quantity (optionally followed by `x`) and the card name. Names are looked up on the wiki's [Text Check List](https://gundammswar.fandom.com/wiki/Text_Check_List), ignoring case and spacing. Many names are printed on several cards (for example, `Leo` is MS-011, MS-016, MS-042, and six more, and `Heero Yuy` is PL-001, PL-015, and PL-039); such a line is reported as an error that lists the candidate card numbers, so use the `text` format for those cards. Promos are not on the check list, so they also need the `text` format.
+
+```
+3 Wing Gundam Zero
+2 Gundam Deathscythe Hell
+3x Operation Meteor
+1 Zero System
+1 Liberation Army Village
+```
+
+## Card Backs
+
+The plugin only fetches card fronts. Gundam M.S. War cards share one card back, which you provide in `game/back/`. The wiki has no clean scan of it: its [`Missing_back_side.jpg`](https://gundammswar.fandom.com/wiki/File:Missing_back_side.jpg) is the card back overlaid with "MIA" text, used as a placeholder for missing cards.
+
+## Mission Cards
+
+Mission Objective cards have no card numbers, so neither format can fetch them. The wiki has scans of the four from the Wing Gundam Team and OZ Corps starter sets, which you can save into `game/front/` yourself: [Wing_team_missions_01.jpg](https://gundammswar.fandom.com/wiki/File:Wing_team_missions_01.jpg), [Wing_team_missions_02.jpg](https://gundammswar.fandom.com/wiki/File:Wing_team_missions_02.jpg), [Oz_missions_01.jpg](https://gundammswar.fandom.com/wiki/File:Oz_missions_01.jpg), and [Oz_missions_02.jpg](https://gundammswar.fandom.com/wiki/File:Oz_missions_02.jpg). The Earth Federation and Principality of Zeon mission cards are not on the wiki.
+
+## Image Quality
+
+The plugin downloads the original files uploaded to the wiki, which is the largest version available. Most scans are about 510×703 pixels, roughly 200 DPI at card size. A few promos are smaller (for example, BF-p03 is 365×512 and BF-p07 is 150×211), so they print blurrier.

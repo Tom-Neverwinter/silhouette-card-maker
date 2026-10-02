@@ -8,12 +8,17 @@ import tempfile
 import pytest
 from PIL import Image
 
+from plugins.gundam_ms_war import mswar_wiki
 from plugins.gundam_ms_war.deck_formats import DeckFormat, parse_deck, parse_text
 from plugins.gundam_ms_war.mswar_wiki import (
     FILE_NAME_PATTERN,
     get_card_image_index,
+    get_card_name_index,
+    get_card_number_by_name,
     get_handle_card,
+    get_handle_card_by_name,
     normalize_card_number,
+    parse_checklist,
 )
 
 
@@ -48,6 +53,59 @@ Missions: none
         parsed_cards = []
         parse_deck("1 MS-025", DeckFormat.TEXT, lambda i, c, q: parsed_cards.append(c))
         assert parsed_cards == ['MS-025']
+
+
+class TestNamesFormat:
+    def test_parse_names(self):
+        parsed_cards = []
+        parse_deck("// Wing team\n3 Wing Gundam Zero\n2x  Zero System \nMissions: none", DeckFormat.NAMES,
+                   lambda i, c, q: parsed_cards.append((i, c, q)))
+        assert parsed_cards == [(1, 'Wing Gundam Zero', 3), (2, 'Zero System', 2)]
+
+
+CHECKLIST = """=== Mobile Suits ===
+MS-011 Leo Common
+
+MS-016 Leo Common
+
+MS-017 Aries(flying mode) Common
+
+MS-025 Wing Gundam Zero Holo
+
+=== Battlefields ===
+BF-004 L2 Colony \xa0Common
+[[Category:Cards]]"""
+
+
+class TestCardNames:
+    @pytest.fixture(autouse=True)
+    def checklist(self, monkeypatch):
+        monkeypatch.setattr(mswar_wiki, 'get_card_name_index', lambda: parse_checklist(CHECKLIST))
+
+    def test_parse_checklist(self):
+        assert parse_checklist(CHECKLIST) == {
+            'leo': ['MS-011', 'MS-016'],
+            'aries (flying mode)': ['MS-017'],
+            'wing gundam zero': ['MS-025'],
+            'l2 colony': ['BF-004'],
+        }
+
+    @pytest.mark.parametrize("name,expected", [
+        ('Wing Gundam Zero', 'MS-025'),
+        ('  wing   GUNDAM zero ', 'MS-025'),
+        ('Aries (Flying Mode)', 'MS-017'),
+        ('L2 Colony', 'BF-004'),
+    ])
+    def test_lookup(self, name, expected):
+        assert get_card_number_by_name(name) == expected
+
+    def test_ambiguous_name_lists_candidates(self):
+        with pytest.raises(ValueError, match='MS-011, MS-016'):
+            get_card_number_by_name('Leo')
+
+    def test_unknown_name(self):
+        with pytest.raises(ValueError, match='No card named'):
+            get_card_number_by_name('Zaku III')
 
 
 class TestCardNumbers:
@@ -88,6 +146,12 @@ class TestWiki:
         for card_number in ['MS-001', 'PL-001', 'EV-001', 'BF-001', 'BF-P01']:
             assert card_number in index
 
+    def test_card_name_index(self):
+        index = get_card_name_index()
+        assert sum(len(numbers) for numbers in index.values()) == 300
+        assert index['wing gundam zero'] == ['MS-025']
+        assert len(index['leo']) > 1
+
 
 @pytest.mark.integration
 class TestFullFetchWorkflow:
@@ -105,3 +169,8 @@ class TestFullFetchWorkflow:
         for f in files:
             with Image.open(os.path.join(front_dir, f)) as image:
                 image.verify()
+
+    def test_fetch_by_name(self, front_dir):
+        parse_deck("1 Wing Gundam Zero", DeckFormat.NAMES, get_handle_card_by_name(front_dir))
+
+        assert [f[1:7] for f in os.listdir(front_dir)] == ['MS-025']

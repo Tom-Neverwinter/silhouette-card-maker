@@ -7,7 +7,7 @@ REPO_ROOT = path.abspath(path.join(path.dirname(__file__), '..', '..'))
 sys.path.insert(0, REPO_ROOT)
 
 from plugins.gundam_ms_war.deck_formats import DeckFormat, parse_deck
-from plugins.gundam_ms_war.mswar_wiki import get_handle_card
+from plugins.gundam_ms_war.mswar_wiki import get_handle_card, get_handle_card_by_name
 from utilities import configure_console_encoding, ensure_directory
 
 front_directory = path.join(REPO_ROOT, 'game', 'front')
@@ -27,7 +27,8 @@ def cli(deck_path: str, format: DeckFormat):
     with open(deck_path, 'r') as deck_file:
         deck_text = deck_file.read()
 
-        parse_deck(deck_text, format, get_handle_card(front_directory))
+        handle_card = get_handle_card_by_name(front_directory) if format == DeckFormat.NAMES else get_handle_card(front_directory)
+        parse_deck(deck_text, format, handle_card)
 
 if __name__ == '__main__':
     configure_console_encoding()

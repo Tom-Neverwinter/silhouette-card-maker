@@ -1,8 +1,8 @@
 from functools import lru_cache
 from os import path
-from re import compile, IGNORECASE
+from re import compile, IGNORECASE, MULTILINE
 from time import sleep
-from typing import Dict
+from typing import Dict, List
 
 from requests import Response, Session
 
@@ -17,6 +17,9 @@ OUTPUT_CARD_ART_FILE_TEMPLATE = '{deck_index}{card_number}_{quantity_counter}{ex
 # Wiki file names look like 'MS_001_Wing_Gundam.jpg', 'BF_p02_St_louis,_MO.jpg',
 # 'PL-P09_Kou_Uraki_promo.jpeg', 'Gp_bf-p19-heavyarmscustom.jpg', 'Gundam_card_BF-p01_...'.
 FILE_NAME_PATTERN = compile(r'^(?:gundam_card_|gp_)?(ms|pl|ev|bf)[_-](p?\d+)', IGNORECASE)
+
+# 'MS-011 Leo Common' lines on the wiki's 'Text Check List' page (numbered cards only, no promos or missions)
+CHECKLIST_LINE_PATTERN = compile(r'^((?:MS|PL|EV|BF)-\d{3})\s+(.+?)\s+(?:Common|Uncommon|Rare|Holo|Gold)\s*$', MULTILINE)
 
 def normalize_card_number(card_number: str) -> str:
     """'ms-1', 'MS_001', 'bf-p2' -> 'MS-001', 'MS-001', 'BF-P02'."""
@@ -58,6 +61,38 @@ def get_card_image_index() -> Dict[str, str]:
 
     return index
 
+def normalize_card_name(name: str) -> str:
+    # The check list writes both 'Wing Gundam (Bird mode)' and 'Aries(flying mode)'
+    return ' '.join(name.casefold().replace('(', ' (').split())
+
+def parse_checklist(wikitext: str) -> Dict[str, List[str]]:
+    """Map normalized card names to every card number printed with that name."""
+    index = {}
+    for card_number, name in CHECKLIST_LINE_PATTERN.findall(wikitext):
+        index.setdefault(normalize_card_name(name), []).append(card_number)
+
+    return index
+
+@lru_cache(maxsize=1)
+def get_card_name_index() -> Dict[str, List[str]]:
+    json = request_wiki(WIKI_API_URL, {
+        'action': 'parse',
+        'page': 'Text Check List',
+        'prop': 'wikitext',
+        'format': 'json',
+    }).json()
+
+    return parse_checklist(json['parse']['wikitext']['*'])
+
+def get_card_number_by_name(name: str) -> str:
+    candidates = get_card_name_index().get(normalize_card_name(name), [])
+    if not candidates:
+        raise ValueError(f'No card named "{name}" on the Gundam M.S. War wiki check list; use the text format with a card number')
+    if len(candidates) > 1:
+        raise ValueError(f'Card name "{name}" matches several cards ({", ".join(candidates)}); use the text format with one of these card numbers')
+
+    return candidates[0]
+
 def fetch_card(index: int, card_number: str, quantity: int, front_img_dir: str):
     card_number = normalize_card_number(card_number)
 
@@ -84,5 +119,11 @@ def fetch_card(index: int, card_number: str, quantity: int, front_img_dir: str):
 def get_handle_card(front_img_dir: str):
     def configured_fetch_card(index: int, card_number: str, quantity: int):
         fetch_card(index, card_number, quantity, front_img_dir)
+
+    return configured_fetch_card
+
+def get_handle_card_by_name(front_img_dir: str):
+    def configured_fetch_card(index: int, name: str, quantity: int):
+        fetch_card(index, get_card_number_by_name(name), quantity, front_img_dir)
 
     return configured_fetch_card
