@@ -33,9 +33,9 @@ Options:
 
 ## Formats
 
-Card numbers use the official format printed on the card and shown on the [official card list](https://www.unionarena-tcg.com/na/cardlist/), such as `UE03BT/JJK-1-001`. Parallel (alternate art) cards can be requested by adding the official `_p1` suffix, such as `UE03BT/JJK-1-005_p1`.
+Card numbers use the official format printed on the card and shown on the [official card list](https://www.unionarena-tcg.com/na/cardlist/), such as `UE03BT/JJK-1-001` or `UEPR/JJK-1-001`. The set prefix (`UE03BT/`) is required; short numbers such as `JJK-1-001` are reported as errors because the same number is printed in several sets. Parallel (alternate art) cards can be requested by adding the official `_p1` suffix, such as `UE03BT/JJK-1-005_p1`, or ExBurst's `-ALT1` suffix, such as `UE03BT/JJK-1-005-ALT1`.
 
-Card images are downloaded from the official English (North America) card list.
+Card images are downloaded from the official English (North America) card list for `UE` cards, and from the official Asia English card list for Asia cards (such as `UA53BT/CSM-1-001`), falling back to the Japanese card list.
 
 ### `exburst`
 
@@ -44,7 +44,7 @@ Card images are downloaded from the official English (North America) card list.
 ```
 4 x UE03BT/JJK-1-001
 4 x UE03BT/JJK-1-002
-2 x UE03BT/JJK-1-005_p1
+2 x UE03BT/JJK-1-005-ALT1
 ```
 
 ### `text`

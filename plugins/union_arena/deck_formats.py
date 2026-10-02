@@ -4,8 +4,9 @@ from typing import Callable, Tuple
 
 card_data_tuple = Tuple[str, int, str]  # Card Number, Quantity, Name
 
-# e.g. UE03BT/JJK-1-001, UEX01BT/BLC-2-045, UE03BT/JJK-1-005_p1
-CARD_NUMBER = r'[A-Z0-9]+/[A-Z0-9]+(?:-[A-Z0-9]+)+(?:_p\d+)?'
+# e.g. UE03BT/JJK-1-001, UE03BT/JJK-1-005_p1, UE03BT/JJK-1-005-ALT1, UEPR/2024-AP02, UAPR/IMS_AP04.
+# The set prefix is optional so short numbers (JJK-1-001) are reported as errors instead of skipped.
+CARD_NUMBER = r'(?:[A-Z0-9]+/)?[A-Z0-9]+(?:[-_][A-Z0-9]+)+'
 
 def parse_deck_helper(deck_text: str, handle_card: Callable, is_card_line: Callable[[str], bool], extract_card_data: Callable[[str], card_data_tuple]) -> None:
     error_lines = []
