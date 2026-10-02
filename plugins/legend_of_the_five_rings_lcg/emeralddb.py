@@ -25,7 +25,7 @@ def request_emeralddb(query: str) -> Response:
 def fetch_decklist(decklist_id: str) -> dict:
     return request_emeralddb(f'{API_BASE}/decklists/{decklist_id}').json()
 
-# ponytail: one bulk request (~2 MB) for every card instead of one request per card
+# One bulk request (~2 MB) for every card instead of one request per card
 @cache
 def fetch_all_cards() -> dict:
     return {card['id']: card for card in request_emeralddb(f'{API_BASE}/cards').json()}
