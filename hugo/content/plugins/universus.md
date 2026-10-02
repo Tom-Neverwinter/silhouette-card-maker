@@ -5,9 +5,11 @@ weight: 115
 
 This plugin reads a decklist, fetches the card images from [universus.cards](https://universus.cards), and puts the card images into the proper `game/` directories.
 
-This plugin supports the `universus_url` and `universus_json` formats. To learn more, see [here](#formats).
+This plugin supports the `universus_url`, `universus_json`, and `universus_text` formats. To learn more, see [here](#formats).
 
-The starting character is always included and listed first. Mainboard and sideboard cards are both fetched. Double-sided cards have their back faces put into `game/double_sided/`.
+The starting character is always included and listed first. Mainboard and sideboard cards are both fetched unless `--ignore_sideboard` is used. Maybeboard cards are never fetched. Double-sided cards have their back faces put into `game/double_sided/`.
+
+Images come from [uvsultra.online](https://uvsultra.online) when it has a larger copy of the same card (744x1039 for recent sets), otherwise from universus.cards (358x500). Older sets are only available at about 358x500, which may print slightly soft.
 
 ## Basic Instructions
 
@@ -30,10 +32,12 @@ Now you can create the PDF using [`create_pdf.py`]({{% ref "../docs/create" %}})
 ## CLI Options
 
 ```
-Usage: fetch.py [OPTIONS] DECK_PATH {universus_url|universus_json}
+Usage: fetch.py [OPTIONS] DECK_PATH
+                {universus_url|universus_json|universus_text}
 
 Options:
-  --help  Show this message and exit.
+  --ignore_sideboard  Skip sideboard cards when fetching cards.
+  --help              Show this message and exit.
 ```
 
 ## Formats
@@ -63,4 +67,29 @@ python plugins/universus/fetch.py 'https://universus.cards/deck/e4c57177-8a10-40
   "cards": [[10943, 1, 0], [10405, 1, 1], [10897, 3, 0], [11927, 0, 1]],
   "startingCharacter": 10943
 }
+```
+
+### `universus_text`
+
+[universus.cards](https://universus.cards) decklist text format. Open a deck, set **Display As** to **Decklist**, and copy the text. Each card is `<quantity> <name> | <set>`, and cards are looked up by name and set, so the first printing found in that set is used.
+
+```
+# Starting Character
+
+1 Reiner Braun | Attack on Titan: Battle for Humanity
+
+# Mainboard
+
+## Action
+
+1 Genkai's Guidance | Yu Yu Hakusho: Dark Tournament
+3 Chomp | Attack on Titan: Battle for Humanity
+
+# Sideboard
+
+## Action
+
+1 Filled with Doubt | Attack on Titan: Apocalypse
+
+# Maybeboard
 ```
